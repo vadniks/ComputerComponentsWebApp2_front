@@ -14,14 +14,43 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   static const _itemsCount = 10;
-  late final ScrollController _controller;
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
 
   List<Widget> _makeItems() {
     final list = <Widget>[];
     for (final i in components.entries)
-      list.add(Row(children: [
-        ImageIcon(AssetImage(i.value))
-      ]));
+      list.add(Card(
+        margin: const EdgeInsets.symmetric(
+          vertical: 5,
+          horizontal: 5
+        ),
+        child: Material(child: ListTile(
+          onTap: () {},
+          leading: Image(
+            image: AssetImage(i.value),
+            width: 50,
+            height: 50
+          ),
+          title: const Text(
+            'Title',
+            style: TextStyle(fontWeight: FontWeight.bold)
+          ),
+          subtitle: Text(i.key),
+          trailing: const Text(
+            '0\$',
+            style: TextStyle(fontStyle: FontStyle.italic)
+          ),
+        )),
+      ));
     return list;
   }
 
@@ -41,17 +70,20 @@ class _HomePageState extends State<HomePage> {
             children: const [
               Text(
                 appName,
-                style: TextStyle(fontSize: 16),
+                style: TextStyle(fontSize: 20),
               ),
               Text(
                 appSince,
                 style: TextStyle(fontSize: 12),
               ),
-              Text(
-                appSlogan,
-                style: TextStyle(
+              Padding(
+                padding: EdgeInsets.only(bottom: 5),
+                child: Text(
+                  appSlogan,
+                  style: TextStyle(
                     fontSize: 12,
                     fontStyle: FontStyle.italic
+                  ),
                 ),
               )
             ]
@@ -71,14 +103,50 @@ class _HomePageState extends State<HomePage> {
     ),
     body: Padding(
       padding: const EdgeInsets.all(50),
-      child: Expanded(child: RefreshIndicator(
-        backgroundColor: darkSecondaryColor,
-        onRefresh: () async { },
-        child: ListView(
-          controller: _controller,
-          children: _makeItems()
+      child: Container(
+        decoration: const BoxDecoration(
+          color: Colors.black,
+          boxShadow: [
+            BoxShadow(
+              color: Colors.white10,
+              spreadRadius: 2,
+              blurRadius: 2,
+              offset: Offset(0, 0)
+            )
+          ]
         ),
-      )),
+        child: Column(children: [
+          Row(children: const [Expanded(child: ColoredBox(
+            color: darkSecondaryColor,
+            child: Text(
+              componentsList,
+              style: TextStyle(fontSize: 18)
+            )
+          ))]),
+          Expanded(child: RefreshIndicator(
+            backgroundColor: darkSecondaryColor,
+            onRefresh: () async { },
+            child: ListView(children: _makeItems())
+          )),
+          ColoredBox(
+            color: darkSecondaryColor,
+            child: Flex(direction: Axis.horizontal, mainAxisAlignment: MainAxisAlignment.end, children: [
+              const Text(
+                totalCost,
+                style: TextStyle(fontSize: 16),
+              ),
+              TextButton(
+                onPressed: () {},
+                child: const Text(clearSelection)
+              ),
+              TextButton(
+                onPressed: () {},
+                child: const Text(submitOrder)
+              )
+            ])
+          )
+        ]),
+      )
     ),
   );
 }

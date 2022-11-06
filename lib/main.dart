@@ -6,6 +6,8 @@ import 'consts.dart';
 
 void main() => runApp(const App());
 
+// ~/flutter/bin/flutter run -d web-server
+// ~/flutter/bin/flutter build web --web-renderer canvaskit --base-href /
 class App extends StatelessWidget {
   const App({super.key});
 
