@@ -57,39 +57,40 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) => Scaffold(
     appBar: AppBar(
-      title: Row(children: [
-        SvgPicture.asset(
+      leading: Padding(
+        padding: const EdgeInsets.only(left: 5),
+        child: SvgPicture.asset(
           appIcon,
           width: appIconWidthHeight,
           height: appIconWidthHeight,
-        ),
-        Padding(
-          padding: const EdgeInsets.only(left: defaultPadding),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: const [
-              Text(
-                appName,
-                style: TextStyle(fontSize: 20),
-              ),
-              Text(
-                appSince,
-                style: TextStyle(fontSize: 12),
-              ),
-              Padding(
-                padding: EdgeInsets.only(bottom: 5),
-                child: Text(
-                  appSlogan,
-                  style: TextStyle(
-                    fontSize: 12,
-                    fontStyle: FontStyle.italic
-                  ),
-                ),
-              )
-            ]
-          ),
         )
-      ]),
+      ),
+      title: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 5),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: const [
+            Text(
+              appName,
+              style: TextStyle(fontSize: 20),
+            ),
+            Text(
+              appSince,
+              style: TextStyle(fontSize: 12),
+            ),
+            Padding(
+              padding: EdgeInsets.only(bottom: 5),
+              child: Text(
+                appSlogan,
+                style: TextStyle(
+                  fontSize: 12,
+                  fontStyle: FontStyle.italic
+                ),
+              ),
+            )
+          ]
+        ),
+      ),
       actions: [
         TextButton(
           onPressed: () {},
