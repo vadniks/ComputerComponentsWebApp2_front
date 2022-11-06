@@ -1,4 +1,6 @@
 
+// ignore_for_file: curly_braces_in_flow_control_structures
+
 import 'package:flutter/material.dart';
 import 'consts.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -11,6 +13,17 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  static const _itemsCount = 10;
+  late final ScrollController _controller;
+
+  List<Widget> _makeItems() {
+    final list = <Widget>[];
+    for (final i in components.entries)
+      list.add(Row(children: [
+        ImageIcon(AssetImage(i.value))
+      ]));
+    return list;
+  }
 
   @override
   Widget build(BuildContext context) => Scaffold(
@@ -59,8 +72,12 @@ class _HomePageState extends State<HomePage> {
     body: Padding(
       padding: const EdgeInsets.all(50),
       child: Expanded(child: RefreshIndicator(
+        backgroundColor: darkSecondaryColor,
         onRefresh: () async { },
-        child: ListView(children: []),
+        child: ListView(
+          controller: _controller,
+          children: _makeItems()
+        ),
       )),
     ),
   );

@@ -2,12 +2,11 @@
 import 'package:flutter/services.dart';
 import 'package:flutter/material.dart';
 import 'homePage.dart';
+import 'consts.dart';
 
 void main() => runApp(const App());
 
 class App extends StatelessWidget {
-  static const _darkSecondaryColor = Color(0xFF0F0F0F);
-
   const App({super.key});
 
   @override
@@ -20,17 +19,17 @@ class App extends StatelessWidget {
       backgroundColor: Colors.black,
       scaffoldBackgroundColor: Colors.black,
       canvasColor: Colors.black,
-      dialogBackgroundColor: _darkSecondaryColor,
-      snackBarTheme: const SnackBarThemeData(backgroundColor: _darkSecondaryColor),
+      dialogBackgroundColor: darkSecondaryColor,
+      snackBarTheme: const SnackBarThemeData(backgroundColor: darkSecondaryColor),
       listTileTheme: const ListTileThemeData(tileColor: Colors.transparent),
       cardColor: Colors.black,
       colorScheme: const ColorScheme.dark(
         primary: Colors.cyan,
-        surface: _darkSecondaryColor,
-        onSecondary: _darkSecondaryColor
+        surface: darkSecondaryColor,
+        onSecondary: darkSecondaryColor
       ),
       appBarTheme: const AppBarTheme(
-        backgroundColor: _darkSecondaryColor,
+        backgroundColor: darkSecondaryColor,
         systemOverlayStyle: SystemUiOverlayStyle(
           statusBarColor: Colors.black,
           statusBarBrightness: Brightness.dark,
