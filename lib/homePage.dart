@@ -126,7 +126,10 @@ class _HomePageState extends State<HomePage> {
           Expanded(child: RefreshIndicator(
             backgroundColor: darkSecondaryColor,
             onRefresh: () async { },
-            child: ListView(children: _makeItems())
+            child: ListView(children: ListTile.divideTiles(
+              tiles: _makeItems(),
+              color: Colors.white10
+            ).toList())
           )),
           ColoredBox(
             color: darkSecondaryColor,
