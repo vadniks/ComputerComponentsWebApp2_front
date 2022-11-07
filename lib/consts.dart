@@ -11,7 +11,8 @@ const appName = 'PC Configurator',
   componentsList = 'PC Components List',
   totalCost = 'Total cost: ',
   clearSelection = 'Clear selection',
-  submitOrder = 'Submit order';
+  submitOrder = 'Submit order',
+  copyright = 'Copyright (C) 2022 | All Rights Reserved';
 
 const components = {
   'Processor': 'pc_cpu',

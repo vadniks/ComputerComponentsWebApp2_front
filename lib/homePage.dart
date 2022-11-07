@@ -75,7 +75,10 @@ class _HomePageState extends State<HomePage> {
             ),
             Text(
               appSince,
-              style: TextStyle(fontSize: 12),
+              style: TextStyle(
+                fontSize: 12,
+                color: Colors.white60
+              ),
             ),
             Padding(
               padding: EdgeInsets.only(bottom: 5),
@@ -83,7 +86,8 @@ class _HomePageState extends State<HomePage> {
                 appSlogan,
                 style: TextStyle(
                   fontSize: 12,
-                  fontStyle: FontStyle.italic
+                  fontStyle: FontStyle.italic,
+                  color: Colors.white60
                 ),
               ),
             )
@@ -116,16 +120,18 @@ class _HomePageState extends State<HomePage> {
           ]
         ),
         child: Column(children: [
-          Row(children: const [Expanded(child: ColoredBox(
+          ColoredBox(
             color: darkSecondaryColor,
             child: Padding(
-              padding: EdgeInsets.only(left: 5),
-              child: Text(
-                componentsList,
-                style: TextStyle(fontSize: 20)
-              )
+              padding: const EdgeInsets.only(left: 5),
+              child: Row(children: const [
+                Text(
+                  componentsList,
+                  style: TextStyle(fontSize: 20)
+                )
+              ])
             )
-          ))]),
+          ),
           Expanded(child: RefreshIndicator(
             backgroundColor: darkSecondaryColor,
             onRefresh: () async { },
@@ -150,9 +156,22 @@ class _HomePageState extends State<HomePage> {
                 child: const Text(submitOrder)
               )
             ])
-          )
+          ),
         ]),
       )
+    ),
+    bottomNavigationBar: ColoredBox(
+      color: darkSecondaryColor,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: const [Padding(
+          padding: EdgeInsets.symmetric(vertical: 5),
+          child: Text(
+            copyright,
+            style: TextStyle(color: Colors.white60)
+          ),
+        )],
+      ),
     ),
   );
 }
