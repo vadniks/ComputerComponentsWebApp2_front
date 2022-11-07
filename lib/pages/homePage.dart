@@ -64,10 +64,7 @@ class _HomePageState extends State<HomePage> {
         child: const Text(home),
       ),
       TextButton(
-        onPressed: () => Navigator.pushNamed(
-          context,
-          routeAbout
-        ),
+        onPressed: () => Navigator.of(context).pushNamed(routeAbout),
         child: const Text(about)
       )
     ]),
