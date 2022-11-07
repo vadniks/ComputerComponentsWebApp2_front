@@ -33,7 +33,11 @@ class AboutPage extends StatelessWidget {
               ),
             ),
           ),
-          footerWidgets: const []
+          footerWidgets: const [Text(
+            'EASTER_EGG',
+            style: TextStyle(color: Colors.transparent),
+          )],
+          padding: const EdgeInsets.only(left: 50, top: 50, right: 50),
         )),
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -44,6 +48,7 @@ class AboutPage extends StatelessWidget {
                 hardwareIcon,
                 width: 100,
                 height: 100,
+                color: Colors.white70
               ),
             ),
             Padding(
@@ -52,6 +57,7 @@ class AboutPage extends StatelessWidget {
                 qualityIcon,
                 width: 175,
                 height: 175,
+                color: Colors.white70
               ),
             )
           ]
