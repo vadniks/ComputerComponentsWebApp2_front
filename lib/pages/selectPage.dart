@@ -88,16 +88,14 @@ class _SelectPageState extends State<SelectPage> {
   }
 
   void _resetItemsList() => setState(() {
-    _isFetching = true;
     _items.clear();
     _fetchFrom = 0;
-    _isFetching = false;
     _hasFetched = false;
   });
 
   @Deprecated('test only')
   Future<List<Component>> _testSearch(String query) async {
-    Future.delayed(const Duration(seconds: 3));
+    await Future.delayed(const Duration(seconds: 3));
     return [
       Component(title: 'a+$query', type: _type, description: 'a', cost: 1),
       Component(title: 'b+$query', type: _type, description: 'b', cost: 2),
@@ -106,10 +104,13 @@ class _SelectPageState extends State<SelectPage> {
   }
 
   Future<void> _search() async {
-    _resetItemsList();
-    setState(() => _isFetching = true);
+    final query = _searchController.text;
+    if (query.isEmpty) return;
 
-    _items.addAll(await _testSearch(_searchController.text));
+    setState(() => _isFetching = true);
+    _resetItemsList();
+
+    _items.addAll(await _testSearch(query));
     setState(() {
       _isFetching = false;
       _hasFetched = true;
