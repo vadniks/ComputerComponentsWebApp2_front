@@ -36,15 +36,16 @@ class _SelectPageState extends State<SelectPage> {
   @override
   void initState() {
     super.initState();
-    _controller = ScrollController()..addListener(() {});
-    _searchController = TextEditingController()..addListener(() {});
+    _controller = ScrollController()..addListener(() => _loadItems(false));
+    _searchController = TextEditingController()..addListener(_search);
+    _loadItems(true);
   }
 
   @override
   void dispose() {
+    _controller.removeListener(() => _loadItems(false));
+    _searchController.removeListener(_search);
     super.dispose();
-    _controller.removeListener(() {});
-    _searchController.removeListener(() {});
   }
 
   Image _decodeImage(String base64) =>
@@ -60,6 +61,7 @@ class _SelectPageState extends State<SelectPage> {
     )),
   );
 
+  @Deprecated('test only')
   Future<List<Component>> testFetch([int initial = 0]) async { // TODO: test only
     await Future.delayed(const Duration(seconds: 3));
     final list = <Component>[];
@@ -83,6 +85,32 @@ class _SelectPageState extends State<SelectPage> {
       _fetchFrom += fetchAmount;
       _hasFetched = true;
     });
+  }
+
+  void _resetItemsList() => setState(() {
+    _isFetching = true;
+    _items.clear();
+    _fetchFrom = 0;
+    _isFetching = false;
+    _hasFetched = false;
+  });
+
+  @Deprecated('test only')
+  Future<List<Component>> _testSearch(String query) async {
+    Future.delayed(const Duration(seconds: 3));
+    return [
+      Component(title: 'a+$query', type: _type, description: 'a', cost: 1),
+      Component(title: 'b+$query', type: _type, description: 'b', cost: 2),
+      Component(title: 'c+$query', type: _type, description: 'c', cost: 3)
+    ];
+  }
+
+  Future<void> _search() async {
+    _resetItemsList();
+    setState(() => _isFetching = true);
+
+    _items.addAll(await _testSearch(_searchController.text));
+    setState(() => _isFetching = false);
   }
 
   @override
