@@ -3,9 +3,9 @@ import 'dart:ui';
 
 const darkSecondaryColor = Color(0xFF0F0F0F);
 
-const appName = 'PC Configurator',
+const appName = 'PC Components shop',
   appSince = 'Since 2022',
-  appSlogan = 'Build your own PC with PC Configurator online and free! Choose any components you like and we will do the rest!',
+  appSlogan = 'Build your own PC with PC Configurator online and free! Choose any components you like and buy them!',
   home = 'Home',
   about = 'About',
   componentsList = 'PC Components List',
