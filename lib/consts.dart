@@ -15,17 +15,9 @@ const appName = 'PC Components Shop',
   copyright = 'Copyright (C) 2022 | All Rights Reserved',
   aboutApp = 'About PC Components Shop',
   aboutText = '''We are Leading Company
-Provide our customers with superior products and services at the most reasonable rates available.
-At the time of company formation in 2022, our core business was as a computer parts reseller.
-We initiated our company with the philosophy that “We refuse to compromise quality for profit”
-and have not since changed that guiding principle.
+Provide our customers with superior products and services at the most reasonable rates available. At the time of company formation in 2022, our core business was as a computer parts reseller. We initiated our company with the philosophy that “We refuse to compromise quality for profit” and have not since changed that guiding principle.
 
-The quality of our custom built computers speak for themselves. They are reliable because we use
-brand name components which equals no headaches. PC Configurator sales and services focus on selling
-the best possible product at the best possible price. On a local level, PC Configurator’s exists to
-provide computer hardware and services. PC Configurator’s is very competitive on a national level in
-terms of price, quality and services. PC Configurator’s major market extends to all those with access
-to the internet and a web browser.''';
+The quality of our custom built computers speak for themselves. They are reliable because we use brand name components which equals no headaches. PC Configurator sales and services focus on selling the best possible product at the best possible price. On a local level, PC Configurator’s exists to provide computer hardware and services. PC Configurator’s is very competitive on a national level in terms of price, quality and services. PC Configurator’s major market extends to all those with access to the internet and a web browser.''';
 
 const components = {
   'Processor': 'pc_cpu',

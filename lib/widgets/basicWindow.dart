@@ -11,8 +11,9 @@ class BasicWindow extends Padding {
     super.key,
     required this.titleWidgets,
     required this.content,
-    required this.footerWidgets
-  }) : super(padding: const EdgeInsets.all(50));
+    required this.footerWidgets,
+    super.padding = const EdgeInsets.all(50),
+  });
 
   @override
   Widget? get child => Container(
