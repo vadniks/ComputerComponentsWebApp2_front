@@ -16,22 +16,11 @@ const appName = 'PC Components Shop',
   aboutApp = 'About PC Components Shop',
   componentsSelection = 'PC Components Selection',
   searchByTitle = 'Search by title',
+  empty = 'Empty',
   aboutText = '''We are Leading Company
 Provide our customers with superior products and services at the most reasonable rates available. At the time of company formation in 2022, our core business was as a computer parts reseller. We initiated our company with the philosophy that “We refuse to compromise quality for profit” and have not since changed that guiding principle.
 
 The quality of our custom built computers speak for themselves. They are reliable because we use brand name components which equals no headaches. PC Configurator sales and services focus on selling the best possible product at the best possible price. On a local level, PC Configurator’s exists to provide computer hardware and services. PC Configurator’s is very competitive on a national level in terms of price, quality and services. PC Configurator’s major market extends to all those with access to the internet and a web browser.''';
-
-const components = {
-  'Processor': 'pc_cpu',
-  'Motherboard' : 'pc_mb',
-  'Graphics adapter' : 'pc_gpu',
-  'Operating memory' : 'pc_ram',
-  'Hard drive' : 'pc_hdd',
-  'Solid state drive' : 'pc_ssd',
-  'Power supply unit' : 'pc_psu',
-  'Cooler' : 'pc_fan',
-  'Case' : 'pc_case'
-};
 
 const appIcon = 'pc_icon.svg',
   svgExtension = '.svg',

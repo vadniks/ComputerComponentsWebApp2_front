@@ -1,4 +1,6 @@
 
+// ignore_for_file: curly_braces_in_flow_control_structures
+
 class Component {
   final int? id;
   final String title;
@@ -48,19 +50,21 @@ class Component {
 }
 
 enum Type {
-  cpu (0, "Processor"),
-  mb  (1, "Motherboard"),
-  gpu (2, "Graphics adapter"),
-  ram (3, "Operating memory"),
-  hdd (4, "Hard drive"),
-  ssd (5, "Solid state drive"),
-  psu (6, "Power supply unit"),
-  fan (7, "Cooler"),
-  ca$e(8, "Case");
+  cpu (0, 'Processor', 'pc_cpu'),
+  mb  (1, 'Motherboard', 'pc_mb'),
+  gpu (2, 'Graphics adapter', 'pc_gpu'),
+  ram (3, 'Operating memory', 'pc_ram'),
+  hdd (4, 'Hard drive', 'pc_hdd'),
+  ssd (5, 'Solid state drive', 'pc_ssd'),
+  psu (6, 'Power supply unit', 'pc_psu'),
+  fan (7, 'Cooler', 'pc_fan'),
+  ca$e(8, 'Case', 'pc_case');
 
-  const Type(this.type, this.title);
+  const Type(this.type, this.title, this.icon);
   final int type;
   final String title;
+  final String icon;
+  static const amount = 9;
 
   static Type? create(int type) { switch (type) {
     case 0: return Type.cpu;
@@ -74,4 +78,11 @@ enum Type {
     case 8: return Type.ca$e;
     default: return null;
   } }
+
+  static List<Type> get types {
+    final list = <Type>[];
+    for (var i = 0; i < amount; i++)
+      list.add(create(i)!);
+    return list;
+  }
 }

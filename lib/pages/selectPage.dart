@@ -17,7 +17,7 @@ class SelectPage extends StatefulWidget {
 class _SelectPageState extends State<SelectPage> {
   late final Type _type;
   late final ScrollController _controller;
-  late final List<Component> _items;
+  final List<Component> _items = [];
   var _isFetching = false;
   var _hasFetched = false;
   var _fetchFrom = 0;
@@ -29,8 +29,8 @@ class _SelectPageState extends State<SelectPage> {
     super.didChangeDependencies();
 
     final dynamic args = ModalRoute.of(context)?.settings.arguments;
-    if (args == null || args is! int) throw ArgumentError(null);
-    _type = Type.create(args)!;
+    if (args == null || args is! Type) throw ArgumentError(null);
+    _type = args;
   }
 
   @override
@@ -110,18 +110,24 @@ class _SelectPageState extends State<SelectPage> {
     setState(() => _isFetching = true);
 
     _items.addAll(await _testSearch(_searchController.text));
-    setState(() => _isFetching = false);
+    setState(() {
+      _isFetching = false;
+      _hasFetched = true;
+    });
   }
 
   @override
   Widget build(BuildContext context) => Scaffold(
     appBar: BasicAppBar(buttons: [TextButton(
-      onPressed: () {},
+      onPressed: () => Navigator.of(context).pushNamed(routeHome),
       child: const Text(home)
     )]),
     body: BasicWindow(
       titleWidgets: [
-        Text('$componentsSelection ${_type.title}'),
+        Text(
+          '$componentsSelection ${_type.title}',
+          style: const TextStyle(fontSize: 20)
+        ),
         SizedBox(child: TextFormField(
           keyboardType: TextInputType.text,
           maxLines: 1,
@@ -137,15 +143,16 @@ class _SelectPageState extends State<SelectPage> {
           ),
         ))
       ],
-      content: RefreshIndicator(
-        backgroundColor: darkSecondaryColor,
-        onRefresh: () async {},
-        child: ListView.separated(
+      content: _hasFetched && _items.isEmpty
+        ? const Center(child: Text(
+          empty,
+          style: TextStyle(fontSize: 18),
+        ))
+        : ListView.separated(
           itemBuilder: (_, index) => _makeItem(_items[index], context),
           separatorBuilder: (_, index) => const Divider(),
           itemCount: _items.length
         ),
-      ),
       footerWidgets: const [],
       showLoading: _isFetching,
     ),

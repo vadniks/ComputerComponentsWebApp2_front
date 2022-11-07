@@ -3,11 +3,12 @@ import 'package:flutter/services.dart';
 import 'package:flutter/material.dart';
 import 'pages/aboutPage.dart';
 import 'pages/homePage.dart';
+import 'pages/selectPage.dart';
 import 'consts.dart';
 
 void main() => runApp(const App());
 
-// ~/flutter/bin/flutter run -d web-server
+// ~/flutter/bin/flutter run -d web-server --web-renderer canvaskit
 // ~/flutter/bin/flutter build web --web-renderer canvaskit --base-href /
 class App extends StatelessWidget {
   const App({super.key});
@@ -50,7 +51,7 @@ class App extends StatelessWidget {
     initialRoute: routeHome,
     routes: {
       routeAbout : (context) => const AboutPage(),
-      routeSelect : (context) => const
+      routeSelect : (context) => const SelectPage()
     },
   );
 }

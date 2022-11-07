@@ -6,6 +6,7 @@ import '../widgets/basicAppBar.dart';
 import '../widgets/basicBottomBar.dart';
 import '../widgets/basicWindow.dart';
 import '../consts.dart';
+import '../component.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class HomePage extends StatefulWidget {
@@ -17,15 +18,20 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
 
+  void _onItemClick(Type type) => Navigator.of(context).pushNamed(
+    routeSelect,
+    arguments: type
+  );
+
   List<Widget> _makeItems() {
     final list = <Widget>[];
-    for (final i in components.entries)
+    for (final i in Type.types)
       list.add(Card(
         margin: const EdgeInsets.all(5),
         child: Material(child: ListTile(
-          onTap: () {},
+          onTap: () => _onItemClick(i),
           leading: SvgPicture.asset(
-            i.value + svgExtension,
+            i.icon + svgExtension,
             width: 50,
             height: 50,
           ),
@@ -33,7 +39,7 @@ class _HomePageState extends State<HomePage> {
             'Title',
             style: TextStyle(fontWeight: FontWeight.bold)
           ),
-          subtitle: Text(i.key),
+          subtitle: Text(i.title),
           trailing: const Text(
             '0\$',
             style: TextStyle(fontStyle: FontStyle.italic)
@@ -60,14 +66,10 @@ class _HomePageState extends State<HomePage> {
         componentsList,
         style: TextStyle(fontSize: 20)
       )],
-      content: RefreshIndicator(
-        backgroundColor: darkSecondaryColor,
-        onRefresh: () async { },
-        child: ListView(children: ListTile.divideTiles(
-          tiles: _makeItems(),
-          color: Colors.white10
-        ).toList())
-      ),
+      content: ListView(children: ListTile.divideTiles(
+        tiles: _makeItems(),
+        color: Colors.white10
+      ).toList()),
       footerWidgets: [
         const Text(
           totalCost,
