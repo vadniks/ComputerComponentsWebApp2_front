@@ -61,4 +61,17 @@ enum Type {
   const Type(this.type, this.title);
   final int type;
   final String title;
+
+  static Type? create(int type) { switch (type) {
+    case 0: return Type.cpu;
+    case 1: return Type.mb;
+    case 2: return Type.gpu;
+    case 3: return Type.ram;
+    case 4: return Type.hdd;
+    case 5: return Type.ssd;
+    case 6: return Type.psu;
+    case 7: return Type.fan;
+    case 8: return Type.ca$e;
+    default: return null;
+  } }
 }
