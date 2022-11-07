@@ -16,13 +16,21 @@ class AboutPage extends StatelessWidget {
       child: const Text(home))]
     ),
     body: Column(children: [
-      const Expanded(child: BasicWindow(
-        titleWidgets: [Expanded(child: Text(
+      Expanded(child: BasicWindow(
+        titleWidgets: const [Text(
           aboutApp,
-          style: TextStyle(fontSize: 24)
-        ))],
-        content: Text(aboutText),
-        footerWidgets: [Spacer()],
+          style: TextStyle(fontSize: 20)
+        )],
+        content: SingleChildScrollView(
+          child: Row(children: const [Text(
+            aboutText,
+            style: TextStyle(
+              fontSize: 18,
+              color: Colors.white70
+            ),
+          )])
+        ),
+        footerWidgets: const [],
       )),
       Row(
         mainAxisAlignment: MainAxisAlignment.center,
