@@ -6,6 +6,7 @@ class BasicWindow extends Padding {
   final List<Widget> titleWidgets;
   final Widget content;
   final List<Widget> footerWidgets;
+  final bool showLoading;
 
   const BasicWindow({
     super.key,
@@ -13,6 +14,7 @@ class BasicWindow extends Padding {
     required this.content,
     required this.footerWidgets,
     super.padding = const EdgeInsets.all(50),
+    this.showLoading = false
   });
 
   @override
@@ -33,9 +35,13 @@ class BasicWindow extends Padding {
         color: darkSecondaryColor,
         child: Padding(
           padding: const EdgeInsets.only(left: 5),
-          child: Row(children: titleWidgets)
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: titleWidgets
+          )
         )
       ),
+      if (showLoading) const LinearProgressIndicator(value: null),
       Expanded(child: content),
       ColoredBox(
         color: darkSecondaryColor,

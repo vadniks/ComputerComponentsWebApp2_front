@@ -37,4 +37,5 @@ const appIcon = 'pc_icon.svg',
   qualityIcon = 'qlt_ico.svg';
 
 const routeHome = '/',
-  routeAbout = '/about';
+  routeAbout = '/about',
+  routeSelect = '/select';

@@ -17,24 +17,11 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
 
-  @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-  }
-
   List<Widget> _makeItems() {
     final list = <Widget>[];
     for (final i in components.entries)
       list.add(Card(
-        margin: const EdgeInsets.symmetric(
-          vertical: 5,
-          horizontal: 5
-        ),
+        margin: const EdgeInsets.all(5),
         child: Material(child: ListTile(
           onTap: () {},
           leading: SvgPicture.asset(

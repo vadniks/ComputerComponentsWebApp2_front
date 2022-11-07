@@ -49,7 +49,8 @@ class App extends StatelessWidget {
     home: const HomePage(),
     initialRoute: routeHome,
     routes: {
-      routeAbout : (context) => const AboutPage()
+      routeAbout : (context) => const AboutPage(),
+      routeSelect : (context) => const
     },
   );
 }
