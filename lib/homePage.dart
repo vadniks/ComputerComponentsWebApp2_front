@@ -13,7 +13,6 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  static const _itemsCount = 10;
 
   @override
   void initState() {
@@ -35,10 +34,10 @@ class _HomePageState extends State<HomePage> {
         ),
         child: Material(child: ListTile(
           onTap: () {},
-          leading: Image(
-            image: AssetImage(i.value),
+          leading: SvgPicture.asset(
+            i.value + svgExtension,
             width: 50,
-            height: 50
+            height: 50,
           ),
           title: const Text(
             'Title',
@@ -61,8 +60,8 @@ class _HomePageState extends State<HomePage> {
         padding: const EdgeInsets.only(left: 5),
         child: SvgPicture.asset(
           appIcon,
-          width: appIconWidthHeight,
-          height: appIconWidthHeight,
+          width: 50,
+          height: 50,
         )
       ),
       title: Padding(
@@ -119,9 +118,12 @@ class _HomePageState extends State<HomePage> {
         child: Column(children: [
           Row(children: const [Expanded(child: ColoredBox(
             color: darkSecondaryColor,
-            child: Text(
-              componentsList,
-              style: TextStyle(fontSize: 18)
+            child: Padding(
+              padding: EdgeInsets.only(left: 5),
+              child: Text(
+                componentsList,
+                style: TextStyle(fontSize: 20)
+              )
             )
           ))]),
           Expanded(child: RefreshIndicator(

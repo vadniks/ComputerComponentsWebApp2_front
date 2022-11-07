@@ -62,18 +62,17 @@ flutter:
 
   # To add assets to your application, add an assets section, like this:
   assets:
-    - pc_case.jpg
-    - pc_cpu.jpg
-    - pc_fan.jpg
-    - pc_gpu.jpg
-    - pc_hdd.jpg
+    - pc_case.svg
+    - pc_cpu.svg
+    - pc_fan.svg
+    - pc_gpu.svg
+    - pc_hdd.svg
     - pc_icon.svg
-    - pc_mb.jpg
-    - pc_os.jpg
-    - pc_psu.jpg
-    - pc_ram.jpg
-    - pc_ssd.jpg
-    - pc_water.jpg
+    - pc_mb.svg
+    - pc_os.svg
+    - pc_psu.svg
+    - pc_ram.svg
+    - pc_ssd.svg
 
   #   - images/a_dot_burr.jpeg
   #   - images/a_dot_ham.jpeg

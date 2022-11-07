@@ -14,19 +14,15 @@ const appName = 'PC Configurator',
   submitOrder = 'Submit order';
 
 const components = {
-  'Processor': 'pc_cpu.jpg',
-  'Motherboard' : 'pc_mb.jpg',
-  'Graphics adapter' : 'pc_gpu.jpg',
-  'Operating memory' : 'pc_ram.jpg',
-  'Hard drive' : 'pc_hdd.jpg',
-  'Solid state drive' : 'pc_ssd.jpg',
-  'Power supply unit' : 'pc_psu.jpg',
-  'Cooler' : 'pc_fan.jpg',
-  'Water colling system' : 'pc_water.jpg',
-  'Case' : 'pc_case.jpg'
+  'Processor': 'pc_cpu',
+  'Motherboard' : 'pc_mb',
+  'Graphics adapter' : 'pc_gpu',
+  'Operating memory' : 'pc_ram',
+  'Hard drive' : 'pc_hdd',
+  'Solid state drive' : 'pc_ssd',
+  'Power supply unit' : 'pc_psu',
+  'Cooler' : 'pc_fan',
+  'Case' : 'pc_case'
 };
 
-const appIcon = 'pc_icon.svg';
-
-const appIconWidthHeight = 50.0,
-  defaultPadding = 5.0;
+const appIcon = 'pc_icon.svg', svgExtension = '.svg';
