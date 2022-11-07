@@ -1,6 +1,6 @@
 
 import 'package:flutter/material.dart';
-import 'consts.dart';
+import '../consts.dart';
 
 class BasicWindow extends Padding {
   final List<Widget> titleWidgets;

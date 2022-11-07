@@ -3,7 +3,7 @@ import 'dart:ui';
 
 const darkSecondaryColor = Color(0xFF0F0F0F);
 
-const appName = 'PC Components shop',
+const appName = 'PC Components Shop',
   appSince = 'Since 2022',
   appSlogan = 'Build your own PC with PC Configurator online and free! Choose any components you like and buy them!',
   home = 'Home',
@@ -12,7 +12,8 @@ const appName = 'PC Components shop',
   totalCost = 'Total cost: ',
   clearSelection = 'Clear selection',
   submitOrder = 'Submit order',
-  copyright = 'Copyright (C) 2022 | All Rights Reserved';
+  copyright = 'Copyright (C) 2022 | All Rights Reserved',
+  aboutApp = 'About PC Components Shop';
 
 const components = {
   'Processor': 'pc_cpu',
@@ -26,4 +27,8 @@ const components = {
   'Case' : 'pc_case'
 };
 
-const appIcon = 'pc_icon.svg', svgExtension = '.svg';
+const appIcon = 'pc_icon.svg',
+  svgExtension = '.svg';
+
+const routeHome = '/',
+  routeAbout = '/about';

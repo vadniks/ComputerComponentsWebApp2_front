@@ -2,10 +2,10 @@
 // ignore_for_file: curly_braces_in_flow_control_structures
 
 import 'package:flutter/material.dart';
-import 'basicAppBar.dart';
-import 'basicBottomBar.dart';
-import 'basicWindow.dart';
-import 'consts.dart';
+import '../widgets/basicAppBar.dart';
+import '../widgets/basicBottomBar.dart';
+import '../widgets/basicWindow.dart';
+import '../consts.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class HomePage extends StatefulWidget {
@@ -64,7 +64,10 @@ class _HomePageState extends State<HomePage> {
         child: const Text(home),
       ),
       TextButton(
-        onPressed: () {},
+        onPressed: () => Navigator.pushNamed(
+          context,
+          routeAbout
+        ),
         child: const Text(about)
       )
     ]),

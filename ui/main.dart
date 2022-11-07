@@ -1,7 +1,8 @@
 
 import 'package:flutter/services.dart';
 import 'package:flutter/material.dart';
-import 'homePage.dart';
+import 'pages/aboutPage.dart';
+import 'pages/homePage.dart';
 import 'consts.dart';
 
 void main() => runApp(const App());
@@ -46,5 +47,10 @@ class App extends StatelessWidget {
       // ))
     ),
     home: const HomePage(),
+    initialRoute: routeHome,
+    routes: {
+      routeHome : (context) => const HomePage(),
+      routeAbout : (context) => const AboutPage()
+    },
   );
 }
