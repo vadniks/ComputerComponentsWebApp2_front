@@ -31,4 +31,4 @@ const routeHome = '/',
   routeAbout = '/about',
   routeSelect = '/select';
 
-const fetchAmount = 25;
+const fetchAmount = 8;

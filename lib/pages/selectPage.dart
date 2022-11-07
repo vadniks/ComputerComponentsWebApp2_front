@@ -1,5 +1,6 @@
 
 import 'dart:convert';
+import 'dart:developer';
 import '../component.dart';
 import '../consts.dart';
 import '../widgets/basicAppBar.dart';
@@ -16,7 +17,7 @@ class SelectPage extends StatefulWidget {
 
 class _SelectPageState extends State<SelectPage> {
   late final Type _type;
-  late final ScrollController _controller;
+  late final ScrollController _scrollController;
   final List<Component> _items = [];
   var _isFetching = false;
   var _hasFetched = false;
@@ -36,14 +37,14 @@ class _SelectPageState extends State<SelectPage> {
   @override
   void initState() {
     super.initState();
-    _controller = ScrollController()..addListener(() => _loadItems(false));
+    _scrollController = ScrollController()..addListener(() => _loadItems(false));
     _searchController = TextEditingController()..addListener(_search);
     _loadItems(true);
   }
 
   @override
   void dispose() {
-    _controller.removeListener(() => _loadItems(false));
+    _scrollController.removeListener(() => _loadItems(false));
     _searchController.removeListener(_search);
     super.dispose();
   }
@@ -62,10 +63,10 @@ class _SelectPageState extends State<SelectPage> {
   );
 
   @Deprecated('test only')
-  Future<List<Component>> testFetch([int initial = 0]) async { // TODO: test only
+  Future<List<Component>> testFetch(int from, int to) async { // TODO: test only
     await Future.delayed(const Duration(seconds: 3));
     final list = <Component>[];
-    for (int i = initial, j = 'a'.codeUnitAt(0); j < 'z'.codeUnitAt(0); i++, j++) {
+    for (int i = from, j = 'a'.codeUnitAt(0); i < to; i++, j++) {
       final char = String.fromCharCode(j);
       list.add(Component(title: char, type: _type, description: char * 2, cost: i));
     }
@@ -73,11 +74,10 @@ class _SelectPageState extends State<SelectPage> {
   }
 
   Future<void> _loadItems(bool firstTime) async {
-    if (!firstTime && _controller.position.extentAfter >= 30 ||
-        _isFetching) return;
+    if (!firstTime && _scrollController.position.extentAfter >= 10 || _isFetching) return;
     setState(() => _isFetching = true);
 
-    final items = await testFetch(_fetchFrom); // TODO: test only
+    final items = await testFetch(_fetchFrom, _fetchFrom + fetchAmount); // TODO: test only
     if (items.isNotEmpty) setState(() => _items.addAll(items));
 
     setState(() {
@@ -124,24 +124,27 @@ class _SelectPageState extends State<SelectPage> {
     )]),
     body: BasicWindow(
       titleWidgets: [
-        Text(
-          '$componentsSelection ${_type.title}',
-          style: const TextStyle(fontSize: 20)
-        ),
-        SizedBox(child: TextFormField(
-          keyboardType: TextInputType.text,
-          maxLines: 1,
-          cursorColor: Colors.white70,
-          controller: _searchController,
-          style: const TextStyle(
-            color: Colors.white70,
-            fontSize: 18
+        Text('$componentsSelection ${_type.title}'),
+        Padding(
+          padding: const EdgeInsets.all(5),
+          child: SizedBox(
+            width: 200,
+            child: TextFormField(
+              keyboardType: TextInputType.text,
+              maxLines: 1,
+              cursorColor: Colors.white70,
+              controller: _searchController,
+              style: const TextStyle(
+                color: Colors.white70,
+                fontSize: 18
+              ),
+              decoration: const InputDecoration(
+                hintText: searchByTitle,
+                hintStyle: TextStyle(color: Colors.white38)
+              ),
+            )
           ),
-          decoration: const InputDecoration(
-            hintText: searchByTitle,
-            hintStyle: TextStyle(color: Colors.white38)
-          ),
-        ))
+        )
       ],
       content: _hasFetched && _items.isEmpty
         ? const Center(child: Text(
@@ -151,7 +154,8 @@ class _SelectPageState extends State<SelectPage> {
         : ListView.separated(
           itemBuilder: (_, index) => _makeItem(_items[index], context),
           separatorBuilder: (_, index) => const Divider(),
-          itemCount: _items.length
+          itemCount: _items.length,
+          controller: _scrollController,
         ),
       footerWidgets: const [],
       showLoading: _isFetching,
