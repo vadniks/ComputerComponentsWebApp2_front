@@ -58,7 +58,7 @@ class _SelectPageState extends State<SelectPage> {
 
   Widget _makeItem(Component component, BuildContext context) => Card(
     child: Material(child: ListTile(
-      onTap: () {},
+      onTap: () => _onItemClick(component),
       leading: SvgPicture.asset('pc_icon.svg', width: 50, height: 50),//component.image != null ? _decodeImage(component.image!) : null,
       title: Text(component.title),
       trailing: Text('\$${component.cost}'),
@@ -141,10 +141,36 @@ class _SelectPageState extends State<SelectPage> {
     await _loadItems(true);
   }
 
-  void _onItemClick(int id) => showModalBottomSheet(
+  void _onItemClick(Component component) => showModalBottomSheet(
     context: context,
-    builder: (builder) => Column(children: [
-
+    builder: (builder) => Row(children: [
+      SvgPicture.asset('pc_icon.svg', width: 200, height: 200),
+      Container(
+        decoration: const BoxDecoration(
+          color: Colors.black, // TODO: border, border-radius
+          boxShadow: [BoxShadow(
+            color: Colors.white10,
+            spreadRadius: 2,
+            blurRadius: 2,
+            offset: Offset(0, 0)
+          )]),
+        child: Column(children: [
+          Text(
+            component.title,
+            style: const TextStyle(fontSize: 20),
+          ),
+          RichText(
+            textAlign: TextAlign.justify,
+            text: TextSpan(
+              text: component.description,
+              style: const TextStyle(
+                fontSize: 18,
+                color: Colors.white70
+              )
+            ),
+          )
+        ]),
+      )
     ])
   );
 
