@@ -143,20 +143,22 @@ class _SelectPageState extends State<SelectPage> {
 
   void _onItemClick(Component component) => showModalBottomSheet(
     context: context,
-    builder: (builder) => Row(children: [
-      SvgPicture.asset('pc_icon.svg', width: 200, height: 200),
-      Container(
-        decoration: const BoxDecoration(
-          color: Colors.black, // TODO: border, border-radius
-          boxShadow: [BoxShadow(
-            color: Colors.white10,
-            spreadRadius: 2,
-            blurRadius: 2,
-            offset: Offset(0, 0)
-          )]),
-        child: Column(children: [
+    builder: (builder) => Column(children: [
+      const Divider(
+        height: 1,
+        thickness: 1
+      ),
+      Expanded(child: Row(children: [
+        SvgPicture.asset(
+          'pc_icon.svg',
+          width: 200,
+          height: 200
+        ),
+        const VerticalDivider(thickness: 1),
+        Expanded(child: Column(children: [
           Text(
             component.title,
+            textAlign: TextAlign.center,
             style: const TextStyle(fontSize: 20),
           ),
           RichText(
@@ -169,8 +171,8 @@ class _SelectPageState extends State<SelectPage> {
               )
             ),
           )
-        ]),
-      )
+        ]))
+      ]))
     ])
   );
 
