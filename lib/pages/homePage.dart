@@ -1,8 +1,6 @@
 
 // ignore_for_file: curly_braces_in_flow_control_structures
 
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import '../widgets/basicAppBar.dart';
 import '../widgets/basicBottomBar.dart';
@@ -20,6 +18,9 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   final _selected = List<Component?>.filled(Type.amount, null, growable: false);
+  final _submitControllers = List.generate(
+    4, (_) => TextEditingController(), growable: false
+  );
 
   NavigatorState get _navigator => Navigator.of(context);
 
@@ -36,9 +37,6 @@ class _HomePageState extends State<HomePage> {
     setState(() => _selected[result.type.index] = result);
   }
 
-  Image _decodeImage(String base64) =>
-      Image.memory(const Base64Decoder().convert(base64));
-
   List<Widget> _makeItems() {
     final list = <Widget>[];
     for (final i in Type.types) {
@@ -48,7 +46,7 @@ class _HomePageState extends State<HomePage> {
         child: Material(child: ListTile(
           onTap: () => _onItemClick(i),
           leading: component?.image != null
-            ? _decodeImage(component!.image!)
+            ? decodeImage(component!.image!)
             : SvgPicture.asset(
               i.icon + svgExtension,
               width: 50,
@@ -70,6 +68,64 @@ class _HomePageState extends State<HomePage> {
       ));
     }
     return list;
+  }
+
+  _makeTextField(TextEditingController controller, String hint) => SizedBox(
+    width: 500,
+    child: TextFormField(
+      keyboardType: TextInputType.text,
+      maxLines: 1,
+      cursorColor: Colors.white70,
+      controller: controller,
+      style: const TextStyle(
+        color: Colors.white70,
+        fontSize: 14
+      ),
+      decoration: InputDecoration(
+        hintText: hint,
+        hintStyle: const TextStyle(color: Colors.white38)
+      ),
+    ),
+  );
+
+  void _onSubmitClick() => showModalBottomSheet(
+    context: context,
+    builder: (context) => Column(children: [
+      const Divider(
+        height: 1,
+        thickness: 1,
+      ),
+      const Padding(
+        padding: EdgeInsets.only(top: 5),
+        child: Text(
+          submitOrder,
+          style: TextStyle(fontSize: 20)
+        )
+      ),
+      _makeTextField(_submitControllers[0], firstName),
+      _makeTextField(_submitControllers[1], lastName),
+      _makeTextField(_submitControllers[2], phoneNumber),
+      _makeTextField(_submitControllers[3], address),
+      Padding(
+        padding: const EdgeInsets.only(top: 10),
+        child: TextButton(
+          onPressed: () => _performSubmit(),
+          child: const Text(
+            submit,
+            style: TextStyle(fontSize: 18),
+          )
+        )
+      )
+    ])
+  );
+
+  Future<void> _performSubmit() async {
+    // TODO: post request
+  }
+
+  Future<void> _clearSelection() async {
+    _selected.clear();
+    _selected.addAll(List.filled(Type.amount, null, growable: false));
   }
 
   @override
@@ -99,11 +155,11 @@ class _HomePageState extends State<HomePage> {
           style: TextStyle(fontSize: 16),
         ),
         TextButton(
-          onPressed: () {},
+          onPressed: () => _clearSelection(),
           child: const Text(clearSelection)
         ),
         TextButton(
-          onPressed: () {},
+          onPressed: () => _onSubmitClick(),
           child: const Text(submitOrder)
         )
       ],

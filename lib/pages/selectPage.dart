@@ -1,7 +1,6 @@
 
 // ignore_for_file: curly_braces_in_flow_control_structures
 
-import 'dart:convert';
 import 'errorPage.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import '../component.dart';
@@ -59,9 +58,6 @@ class _SelectPageState extends State<SelectPage> {
     _searchController.removeListener(_search);
     super.dispose();
   }
-
-  Image _decodeImage(String base64) =>
-    Image.memory(const Base64Decoder().convert(base64));
 
   Widget _makeItem(Component component, BuildContext context) => Card(
     child: Material(child: ListTile(
@@ -161,7 +157,11 @@ class _SelectPageState extends State<SelectPage> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 5),
+              padding: const EdgeInsets.only(
+                left: 5,
+                top: 5,
+                right: 5
+              ),
               child: Text(
                 component.title,
                 textAlign: TextAlign.center,
