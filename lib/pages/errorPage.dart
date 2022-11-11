@@ -1,8 +1,8 @@
 
 // ignore_for_file: curly_braces_in_flow_control_structures
 
-import 'package:cursov_front/consts.dart';
-import 'package:cursov_front/widgets/basicAppBar.dart';
+import '../consts.dart';
+import '../widgets/basicAppBar.dart';
 import 'package:flutter/material.dart';
 
 class ErrorPage extends StatelessWidget {

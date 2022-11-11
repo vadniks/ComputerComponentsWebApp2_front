@@ -2,7 +2,7 @@
 // ignore_for_file: curly_braces_in_flow_control_structures
 
 import 'dart:convert';
-import 'package:cursov_front/pages/errorPage.dart';
+import 'errorPage.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import '../component.dart';
 import '../consts.dart';
