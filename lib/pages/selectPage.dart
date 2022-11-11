@@ -33,8 +33,14 @@ class _SelectPageState extends State<SelectPage> {
   void didChangeDependencies() {
     super.didChangeDependencies();
 
-    final dynamic args = ModalRoute.of(context)?.settings.arguments;
-    if (args == null || args is! Type) throw ArgumentError(null);
+    final dynamic args = ModalRoute.of(context)!.settings.arguments;
+    if (args == null || args is! Type) {
+      Navigator.of(context).pushNamed(
+        routeError,
+        arguments: noParametersProvidedError
+      );
+      return;
+    }
     _type = args;
   }
 
@@ -141,6 +147,7 @@ class _SelectPageState extends State<SelectPage> {
     await _loadItems(true);
   }
 
+  // TODO: border-radius
   void _onItemClick(Component component) => showModalBottomSheet(
     context: context,
     builder: (builder) => Column(children: [
@@ -196,7 +203,7 @@ class _SelectPageState extends State<SelectPage> {
               controller: _searchController,
               style: const TextStyle(
                 color: Colors.white70,
-                fontSize: 18
+                fontSize: 14
               ),
               decoration: const InputDecoration(
                 hintText: searchByTitle,
@@ -217,7 +224,7 @@ class _SelectPageState extends State<SelectPage> {
           itemCount: _items.length,
           controller: _scrollController,
         ),
-      footerWidgets: const [],
+      footerWidgets: const [SizedBox(height: 25)],
       showLoading: _isFetching,
     ),
     bottomNavigationBar: const BasicBottomBar(),

@@ -1,4 +1,5 @@
 
+import 'package:cursov_front/pages/errorPage.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/material.dart';
 import 'pages/aboutPage.dart';
@@ -51,7 +52,8 @@ class App extends StatelessWidget {
     initialRoute: routeHome,
     routes: {
       routeAbout : (context) => const AboutPage(),
-      routeSelect : (context) => const SelectPage()
+      routeSelect : (context) => const SelectPage(),
+      routeError : (context) => const ErrorPage()
     },
   );
 }
