@@ -65,7 +65,10 @@ class _SelectPageState extends State<SelectPage> {
     child: Material(child: ListTile(
       onTap: () => _onItemClick(component),
       leading: SvgPicture.asset('pc_icon.svg', width: 50, height: 50),//component.image != null ? _decodeImage(component.image!) : null,
-      title: Text(component.title),
+      title: Text(
+        component.title,
+        overflow: TextOverflow.ellipsis,
+      ),
       trailing: Text('\$${component.cost}'),
     )),
   );
@@ -150,9 +153,26 @@ class _SelectPageState extends State<SelectPage> {
   void _onItemClick(Component component) => showModalBottomSheet(
     context: context,
     builder: (builder) => Column(children: [
-      const Divider(
-        height: 1,
-        thickness: 1
+      ColoredBox(
+        color: darkSecondaryColor,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 5),
+              child: Text(
+                component.title,
+                textAlign: TextAlign.center,
+                overflow: TextOverflow.ellipsis,
+                style: const TextStyle(fontSize: 20),
+              ),
+            ),
+            TextButton(
+              onPressed: () {},
+              child: const Text(submit)
+            )
+          ]
+        ),
       ),
       Expanded(child: Row(children: [
         SvgPicture.asset(
@@ -162,11 +182,6 @@ class _SelectPageState extends State<SelectPage> {
         ),
         const VerticalDivider(thickness: 1),
         Expanded(child: Column(children: [
-          Text(
-            component.title,
-            textAlign: TextAlign.center,
-            style: const TextStyle(fontSize: 20),
-          ),
           RichText(
             textAlign: TextAlign.justify,
             text: TextSpan(

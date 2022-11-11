@@ -39,7 +39,10 @@ class _HomePageState extends State<HomePage> {
             'Title',
             style: TextStyle(fontWeight: FontWeight.bold)
           ),
-          subtitle: Text(i.title),
+          subtitle: Text(
+            i.title,
+            overflow: TextOverflow.ellipsis,
+          ),
           trailing: const Text(
             '0\$',
             style: TextStyle(fontStyle: FontStyle.italic)
