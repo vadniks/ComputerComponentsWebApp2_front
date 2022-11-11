@@ -6,7 +6,8 @@ import 'package:cursov_front/widgets/basicAppBar.dart';
 import 'package:flutter/material.dart';
 
 class ErrorPage extends StatelessWidget {
-  const ErrorPage({super.key});
+  final String? error;
+  const ErrorPage({super.key, this.error});
 
   String? _getArgument(BuildContext context) {
     final dynamic args = ModalRoute.of(context)?.settings.arguments;
@@ -36,7 +37,7 @@ class ErrorPage extends StatelessWidget {
           ),
         ),
         Text(
-          _getArgument(context) ?? unknownError,
+          _getArgument(context) ?? error ?? unknownError,
           textAlign: TextAlign.center,
           style: const TextStyle(fontSize: 24),
         )

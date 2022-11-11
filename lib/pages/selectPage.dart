@@ -2,6 +2,7 @@
 // ignore_for_file: curly_braces_in_flow_control_structures
 
 import 'dart:convert';
+import 'package:cursov_front/pages/errorPage.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import '../component.dart';
 import '../consts.dart';
@@ -26,6 +27,7 @@ class _SelectPageState extends State<SelectPage> {
   var _fetchFrom = 0;
   var _hasSearched = false;
   var _isSearching = false;
+  var _isLeaving = false;
 
   late final TextEditingController _searchController;
 
@@ -35,13 +37,10 @@ class _SelectPageState extends State<SelectPage> {
 
     final dynamic args = ModalRoute.of(context)!.settings.arguments;
     if (args == null || args is! Type) {
-      Navigator.of(context).pushNamed(
-        routeError,
-        arguments: noParametersProvidedError
-      );
-      return;
-    }
-    _type = args;
+      _type = Type.cpu;
+      _isLeaving = true;
+    } else
+      _type = args;
   }
 
   @override
@@ -49,7 +48,7 @@ class _SelectPageState extends State<SelectPage> {
     super.initState();
     _scrollController = ScrollController()..addListener(() => _loadItems(false));
     _searchController = TextEditingController()..addListener(_search);
-    _loadItems(true);
+    if (!_isLeaving) _loadItems(true);
   }
 
   @override
@@ -184,7 +183,8 @@ class _SelectPageState extends State<SelectPage> {
   );
 
   @override
-  Widget build(BuildContext context) => Scaffold(
+  Widget build(BuildContext context)
+  => _isLeaving ? const ErrorPage(error: noParametersProvidedError) : Scaffold(
     appBar: BasicAppBar(buttons: [TextButton(
       onPressed: () => Navigator.of(context).pushNamed(routeHome),
       child: const Text(home)
