@@ -1,6 +1,8 @@
 
 // ignore_for_file: curly_braces_in_flow_control_structures
 
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import '../widgets/basicAppBar.dart';
 import '../widgets/basicBottomBar.dart';
@@ -17,38 +19,56 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  final _selected = List<Component?>.filled(Type.amount, null, growable: false);
 
-  void _onItemClick(Type type) => Navigator.of(context).pushNamed(
-    routeSelect,
-    arguments: type
-  );
+  NavigatorState get _navigator => Navigator.of(context);
+
+  Future<void> _onItemClick(Type type) async {
+    final dynamic result = await _navigator.pushNamed(
+      routeSelect,
+      arguments: type
+    );
+
+    if (result != null && result is! Component) throw ArgumentError(null);
+    if (!mounted) return;
+    result as Component;
+
+    setState(() => _selected[result.type.index] = result);
+  }
+
+  Image _decodeImage(String base64) =>
+      Image.memory(const Base64Decoder().convert(base64));
 
   List<Widget> _makeItems() {
     final list = <Widget>[];
-    for (final i in Type.types)
+    for (final i in Type.types) {
+      final component = _selected[i.index];
       list.add(Card(
         margin: const EdgeInsets.all(5),
         child: Material(child: ListTile(
           onTap: () => _onItemClick(i),
-          leading: SvgPicture.asset(
-            i.icon + svgExtension,
-            width: 50,
-            height: 50,
-          ),
+          leading: component?.image != null
+            ? _decodeImage(component!.image!)
+            : SvgPicture.asset(
+              i.icon + svgExtension,
+              width: 50,
+              height: 50,
+            ),
           title: const Text(
             'Title',
             style: TextStyle(fontWeight: FontWeight.bold)
           ),
           subtitle: Text(
-            i.title,
+            component != null ? component.title : i.title,
             overflow: TextOverflow.ellipsis,
           ),
-          trailing: const Text(
-            '0\$',
-            style: TextStyle(fontStyle: FontStyle.italic)
+          trailing: Text(
+            component != null ? component.cost.toString() : defaultCost,
+            style: const TextStyle(fontStyle: FontStyle.italic)
           ),
         )),
       ));
+    }
     return list;
   }
 
@@ -60,7 +80,7 @@ class _HomePageState extends State<HomePage> {
         child: const Text(home),
       ),
       TextButton(
-        onPressed: () => Navigator.of(context).pushNamed(routeAbout),
+        onPressed: () => _navigator.pushNamed(routeAbout),
         child: const Text(about)
       )
     ]),

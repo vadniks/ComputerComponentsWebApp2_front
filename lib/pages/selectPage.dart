@@ -10,6 +10,7 @@ import '../widgets/basicAppBar.dart';
 import '../widgets/basicBottomBar.dart';
 import '../widgets/basicWindow.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 
 class SelectPage extends StatefulWidget {
   const SelectPage({super.key});
@@ -28,8 +29,9 @@ class _SelectPageState extends State<SelectPage> {
   var _hasSearched = false;
   var _isSearching = false;
   var _isLeaving = false;
-
   late final TextEditingController _searchController;
+
+  NavigatorState get _navigator => Navigator.of(context);
 
   @override
   void didChangeDependencies() {
@@ -168,14 +170,14 @@ class _SelectPageState extends State<SelectPage> {
               ),
             ),
             TextButton(
-              onPressed: () {},
+              onPressed: () => _submit(component),
               child: const Text(submit)
             )
           ]
         ),
       ),
       Expanded(child: Row(children: [
-        SvgPicture.asset(
+        SvgPicture.asset( // TODO: test
           'pc_icon.svg',
           width: 200,
           height: 200
@@ -197,11 +199,16 @@ class _SelectPageState extends State<SelectPage> {
     ])
   );
 
+  Future<void> _submit(Component component) async {
+    // await http.post(Uri.parse('$selectComponentUrl/${component.id!}'));
+    if (mounted) _navigator..pop()..pop(component);
+  }
+
   @override
   Widget build(BuildContext context)
   => _isLeaving ? const ErrorPage(error: noParametersProvidedError) : Scaffold(
     appBar: BasicAppBar(buttons: [TextButton(
-      onPressed: () => Navigator.of(context).pushNamed(routeHome),
+      onPressed: () => _navigator.pushNamed(routeHome),
       child: const Text(home)
     )]),
     body: BasicWindow(
