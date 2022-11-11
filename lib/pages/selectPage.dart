@@ -171,7 +171,10 @@ class _SelectPageState extends State<SelectPage> {
             ),
             TextButton(
               onPressed: () => _submit(component),
-              child: const Text(submit)
+              child: const Text(
+                submit,
+                style: TextStyle(fontSize: 18),
+              )
             )
           ]
         ),
