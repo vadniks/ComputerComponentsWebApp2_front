@@ -191,7 +191,14 @@ class _SelectPageState extends State<SelectPage> {
     )]),
     body: BasicWindow(
       titleWidgets: [
-        Text('$componentsSelection ${_type.title}'),
+        RichText(text: TextSpan(
+          text: '$componentsSelection ',
+          style: const TextStyle(color: Colors.white),
+          children: [TextSpan(
+            text: _type.title,
+            style: const TextStyle(fontWeight: FontWeight.bold)
+          )]
+        )),
         Padding(
           padding: const EdgeInsets.all(5),
           child: SizedBox(
