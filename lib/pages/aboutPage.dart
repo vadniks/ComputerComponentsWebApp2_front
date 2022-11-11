@@ -23,7 +23,7 @@ class AboutPage extends StatelessWidget {
             aboutApp,
             style: TextStyle(fontSize: 20)
           )],
-          content: RichText(
+          content: SingleChildScrollView(child: RichText(
             textAlign: TextAlign.justify,
             text: const TextSpan(
               text: aboutText,
@@ -32,7 +32,7 @@ class AboutPage extends StatelessWidget {
                 color: Colors.white70
               ),
             ),
-          ),
+          )),
           footerWidgets: const [Text(
             'EASTER_EGG',
             style: TextStyle(color: Colors.transparent),
@@ -43,22 +43,28 @@ class AboutPage extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 10),
+              padding: const EdgeInsets.symmetric(
+                horizontal: 10,
+                vertical: 10
+              ),
               child: SvgPicture.asset(
                 hardwareIcon,
                 width: 100,
                 height: 100,
                 color: Colors.white70
-              ),
+              )
             ),
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 10),
+              padding: const EdgeInsets.symmetric(
+                horizontal: 10,
+                vertical: 10
+              ),
               child: SvgPicture.asset(
                 qualityIcon,
                 width: 175,
                 height: 175,
                 color: Colors.white70
-              ),
+              )
             )
           ]
         )
