@@ -71,63 +71,70 @@ class _HomePageState extends State<HomePage> {
   }
 
   void _onSubmitClick() => showModalBottomSheet(
+    constraints: const BoxConstraints(maxWidth: 600),
     context: context,
-    builder: (context) => Column(children: [
-      const Divider(
-        height: 1,
-        thickness: 1,
+    builder: (context) => Container(
+      decoration: const BoxDecoration(
+        color: Colors.black,
+        boxShadow: [BoxShadow(
+          color: darkSecondaryColor,
+          spreadRadius: 1,
+          offset: Offset(0, 0)
+        )]
       ),
-      Padding(
-        padding: const EdgeInsets.only(top: 5),
-        child: SizedBox(
-          width: 500,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: const [
-              Text(
-                submitOrder,
-                style: TextStyle(fontSize: 20)
-              ),
-              Text(
-                ' $totalCost${100}', // TODO
-                style: TextStyle(
-                  fontSize: 20,
-                  color: Colors.white70,
-                  fontStyle: FontStyle.italic
+      child: Column(children: [
+        Padding(
+          padding: const EdgeInsets.only(top: 5, left: 25, right: 25),
+          child: SizedBox(
+            width: 500,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: const [
+                Text(
+                  submitOrder,
+                  style: TextStyle(fontSize: 20)
+                ),
+                Text(
+                  ' $totalCost${100}', // TODO
+                  style: TextStyle(
+                    fontSize: 20,
+                    color: Colors.teal,
+                    fontStyle: FontStyle.italic
+                  )
                 )
-              )
-            ]
-          ),
-        )
-      ),
-      makeTextField(
-        controller: _submitControllers[0],
-        hint: firstName
-      ),
-      makeTextField(
-        controller: _submitControllers[1],
-        hint: lastName
-      ),
-      makeTextField(
-        controller: _submitControllers[2],
-        hint: phoneNumber,
-        isNumeric: true
-      ),
-      makeTextField(
-        controller: _submitControllers[3],
-        hint: address
-      ),
-      Padding(
-        padding: const EdgeInsets.only(top: 10),
-        child: TextButton(
-          onPressed: _performSubmit,
-          child: const Text(
-            submit,
-            style: TextStyle(fontSize: 18),
+              ]
+            ),
+          )
+        ),
+        makeTextField(
+          controller: _submitControllers[0],
+          hint: firstName
+        ),
+        makeTextField(
+          controller: _submitControllers[1],
+          hint: lastName
+        ),
+        makeTextField(
+          controller: _submitControllers[2],
+          hint: phoneNumber,
+          isNumeric: true
+        ),
+        makeTextField(
+          controller: _submitControllers[3],
+          hint: address
+        ),
+        Padding(
+          padding: const EdgeInsets.only(top: 10),
+          child: TextButton(
+            onPressed: _performSubmit,
+            child: const Text(
+              submit,
+              style: TextStyle(fontSize: 18),
+            )
           )
         )
-      )
-    ])
+      ])
+    )
   );
 
   Future<void> _performSubmit() async {
