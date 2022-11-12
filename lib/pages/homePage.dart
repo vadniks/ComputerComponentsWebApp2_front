@@ -70,24 +70,6 @@ class _HomePageState extends State<HomePage> {
     return list;
   }
 
-  _makeTextField(TextEditingController controller, String hint) => SizedBox(
-    width: 500,
-    child: TextFormField(
-      keyboardType: TextInputType.text,
-      maxLines: 1,
-      cursorColor: Colors.white70,
-      controller: controller,
-      style: const TextStyle(
-        color: Colors.white70,
-        fontSize: 14
-      ),
-      decoration: InputDecoration(
-        hintText: hint,
-        hintStyle: const TextStyle(color: Colors.white38)
-      ),
-    ),
-  );
-
   void _onSubmitClick() => showModalBottomSheet(
     context: context,
     builder: (context) => Column(children: [
@@ -117,14 +99,27 @@ class _HomePageState extends State<HomePage> {
           ),
         )
       ),
-      _makeTextField(_submitControllers[0], firstName),
-      _makeTextField(_submitControllers[1], lastName),
-      _makeTextField(_submitControllers[2], phoneNumber),
-      _makeTextField(_submitControllers[3], address),
+      makeTextField(
+        controller: _submitControllers[0],
+        hint: firstName
+      ),
+      makeTextField(
+        controller: _submitControllers[1],
+        hint: lastName
+      ),
+      makeTextField(
+        controller: _submitControllers[2],
+        hint: phoneNumber,
+        isNumeric: true
+      ),
+      makeTextField(
+        controller: _submitControllers[3],
+        hint: address
+      ),
       Padding(
         padding: const EdgeInsets.only(top: 10),
         child: TextButton(
-          onPressed: () => _performSubmit(),
+          onPressed: _performSubmit,
           child: const Text(
             submit,
             style: TextStyle(fontSize: 18),
@@ -170,11 +165,11 @@ class _HomePageState extends State<HomePage> {
           style: TextStyle(fontSize: 16),
         ),
         TextButton(
-          onPressed: () => _clearSelection(),
+          onPressed: _clearSelection,
           child: const Text(clearSelection)
         ),
         TextButton(
-          onPressed: () => _onSubmitClick(),
+          onPressed: _onSubmitClick,
           child: const Text(submitOrder)
         )
       ],

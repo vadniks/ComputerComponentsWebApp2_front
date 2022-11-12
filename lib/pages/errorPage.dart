@@ -1,6 +1,7 @@
 
 // ignore_for_file: curly_braces_in_flow_control_structures
 
+import '../widgets/basicBottomBar.dart';
 import '../consts.dart';
 import '../widgets/basicAppBar.dart';
 import 'package:flutter/material.dart';
@@ -19,7 +20,7 @@ class ErrorPage extends StatelessWidget {
   Widget build(BuildContext context) => Scaffold(
     appBar: BasicAppBar(trailings: [
       TextButton(
-        onPressed: () => Navigator.of(context).pushNamed(routeHome),
+        onPressed: Navigator.of(context).pop,
         child: const Text(home)
       )
     ]),
@@ -42,6 +43,7 @@ class ErrorPage extends StatelessWidget {
           style: const TextStyle(fontSize: 24),
         )
       ]
-    )
+    ),
+    bottomNavigationBar: const BasicBottomBar(),
   );
 }

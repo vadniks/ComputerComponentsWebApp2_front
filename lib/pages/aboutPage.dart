@@ -12,7 +12,7 @@ class AboutPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) => Scaffold(
     appBar: BasicAppBar(trailings: [TextButton(
-      onPressed: () => Navigator.of(context).pop(),
+      onPressed: Navigator.of(context).pop,
       child: const Text(home))]
     ),
     body: Column(
@@ -33,10 +33,7 @@ class AboutPage extends StatelessWidget {
               ),
             ),
           )),
-          footerWidgets: const [Text(
-            'EASTER_EGG',
-            style: TextStyle(color: Colors.transparent),
-          )],
+          footerWidgets: defaultFooter(),
           padding: const EdgeInsets.only(left: 50, top: 50, right: 50),
         )),
         Row(

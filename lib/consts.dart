@@ -28,6 +28,12 @@ const appName = 'PC Components Shop',
   lastName = 'Last name',
   phoneNumber = 'Phone number',
   address = 'Address',
+  loginPanel = 'Login panel',
+  registrationPanel = 'Login panel',
+  login = 'Login',
+  password = 'Password',
+  register = 'Register',
+  clear = 'Clear',
   aboutText = '''We are Leading Company
 Provide our customers with superior products and services at the most reasonable rates available. At the time of company formation in 2022, our core business was as a computer parts reseller. We initiated our company with the philosophy that “We refuse to compromise quality for profit” and have not since changed that guiding principle.
 
@@ -50,3 +56,31 @@ const baseUrl = 'http:localhost:8080',
 
 Image decodeImage(String base64) =>
     Image.memory(const Base64Decoder().convert(base64));
+
+dynamic getArgs(BuildContext context) => ModalRoute.of(context)!.settings.arguments;
+
+List<Widget> defaultFooter() => const [SizedBox(height: 25)];
+
+makeTextField({
+  required TextEditingController controller,
+  required String hint,
+  bool isNumeric = false,
+  bool isPassword = false
+}) => SizedBox(
+  width: 500,
+  child: TextFormField(
+    keyboardType: !isNumeric ? TextInputType.text : TextInputType.number,
+    obscureText: isPassword,
+    maxLines: 1,
+    cursorColor: Colors.white70,
+    controller: controller,
+    style: const TextStyle(
+      color: Colors.white70,
+      fontSize: 14
+    ),
+    decoration: InputDecoration(
+      hintText: hint,
+      hintStyle: const TextStyle(color: Colors.white38)
+    ),
+  ),
+);

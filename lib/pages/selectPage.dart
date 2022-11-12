@@ -36,7 +36,7 @@ class _SelectPageState extends State<SelectPage> {
   void didChangeDependencies() {
     super.didChangeDependencies();
 
-    final dynamic args = ModalRoute.of(context)!.settings.arguments;
+    final dynamic args = getArgs(context);
     if (args == null || args is! Type) {
       _type = Type.cpu;
       _isLeaving = true;
@@ -211,7 +211,7 @@ class _SelectPageState extends State<SelectPage> {
   Widget build(BuildContext context)
   => _isLeaving ? const ErrorPage(error: noParametersProvidedError) : Scaffold(
     appBar: BasicAppBar(trailings: [TextButton(
-      onPressed: () => _navigator.pop(),
+      onPressed: _navigator.pop,
       child: const Text(home)
     )]),
     body: BasicWindow(
@@ -228,19 +228,9 @@ class _SelectPageState extends State<SelectPage> {
           padding: const EdgeInsets.all(5),
           child: SizedBox(
             width: 200,
-            child: TextFormField(
-              keyboardType: TextInputType.text,
-              maxLines: 1,
-              cursorColor: Colors.white70,
+            child: makeTextField(
               controller: _searchController,
-              style: const TextStyle(
-                color: Colors.white70,
-                fontSize: 14
-              ),
-              decoration: const InputDecoration(
-                hintText: searchByTitle,
-                hintStyle: TextStyle(color: Colors.white38)
-              ),
+              hint: searchByTitle
             )
           ),
         )
@@ -256,7 +246,7 @@ class _SelectPageState extends State<SelectPage> {
           itemCount: _items.length,
           controller: _scrollController,
         ),
-      footerWidgets: const [SizedBox(height: 25)],
+      footerWidgets: defaultFooter(),
       showLoading: _isFetching,
     ),
     bottomNavigationBar: const BasicBottomBar(),
