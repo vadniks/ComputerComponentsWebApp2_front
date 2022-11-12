@@ -99,7 +99,7 @@ class _HomePageState extends State<HomePage> {
                   style: TextStyle(fontSize: 20)
                 ),
                 Text(
-                  ' $totalCost${100}', // TODO
+                  ' $totalCost${100}\$', // TODO
                   style: TextStyle(
                     fontSize: 20,
                     color: Colors.teal,
