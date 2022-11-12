@@ -84,7 +84,11 @@ class _HomePageState extends State<HomePage> {
       ),
       child: Column(children: [
         Padding(
-          padding: const EdgeInsets.only(top: 5, left: 25, right: 25),
+          padding: const EdgeInsets.only(
+            top: 5,
+            left: 25,
+            right: 25
+          ),
           child: SizedBox(
             width: 500,
             child: Row(
