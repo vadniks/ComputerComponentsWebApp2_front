@@ -47,7 +47,8 @@ const appIcon = 'pc_icon.svg',
 const routeHome = '/',
   routeAbout = '/about',
   routeSelect = '/select',
-  routeError = '/error';
+  routeError = '/error',
+  routeLogin = '/login';
 
 const fetchAmount = 8;
 
@@ -59,7 +60,7 @@ Image decodeImage(String base64) =>
 
 dynamic getArgs(BuildContext context) => ModalRoute.of(context)!.settings.arguments;
 
-List<Widget> defaultFooter() => const [SizedBox(height: 25)];
+List<Widget> defaultFooter() => const [SizedBox(width: 25, height: 25)];
 
 makeTextField({
   required TextEditingController controller,

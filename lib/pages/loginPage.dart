@@ -28,7 +28,7 @@ class _LoginPageState extends State<LoginPage> {
 
     final dynamic args = getArgs(context);
     if (args != null && args is! bool) throw ArgumentError(null);
-    _registration = args;
+    _registration = args ?? false;
   }
 
   void _performAction() {
@@ -46,29 +46,36 @@ class _LoginPageState extends State<LoginPage> {
       )
     ]),
     body: BasicWindow(
-      titleWidgets: [Text(!_registration ? loginPanel : registrationPanel)],
-      content: Column(children: [
-        makeTextField(
-          controller: _controllers[0],
-          hint: login
-        ),
-        makeTextField(
-          controller: _controllers[1],
-          hint: password,
-          isPassword: true
-        ),
-        Row(children: [
-          TextButton(
-            onPressed: _performAction,
-            child: Text(!_registration ? login : register)
+      expandContent: false,
+      width: 600,
+      titleWidgets: [Text(
+        !_registration ? loginPanel : registrationPanel,
+        style: const TextStyle(fontSize: 20)
+      )],
+      content: Padding(
+        padding: const EdgeInsets.only(bottom: 10),
+        child: Column(children: [
+          makeTextField(
+            controller: _controllers[0],
+            hint: login
           ),
-          TextButton(
-            onPressed: _clear,
-            child: const Text(clear)
+          makeTextField(
+            controller: _controllers[1],
+            hint: password,
+            isPassword: true
           )
-        ])
-      ]),
-      footerWidgets: defaultFooter(),
+        ]),
+      ),
+      footerWidgets: [
+        TextButton(
+          onPressed: _performAction,
+          child: Text(!_registration ? login : register)
+        ),
+        TextButton(
+          onPressed: _clear,
+          child: const Text(clear)
+        )
+      ],
     ),
     bottomNavigationBar: const BasicBottomBar(),
   );

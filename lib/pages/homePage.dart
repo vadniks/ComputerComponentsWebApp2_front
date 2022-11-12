@@ -92,7 +92,8 @@ class _HomePageState extends State<HomePage> {
                 ' $totalCost${100}', // TODO
                 style: TextStyle(
                   fontSize: 20,
-                  color: Colors.white70
+                  color: Colors.white70,
+                  fontStyle: FontStyle.italic
                 )
               )
             ]
@@ -142,8 +143,8 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) => Scaffold(
     appBar: BasicAppBar(trailings: [
       TextButton(
-        onPressed: () {},
-        child: const Text(home),
+        onPressed: () => _navigator.pushNamed(routeLogin),
+        child: const Text(login),
       ),
       TextButton(
         onPressed: () => _navigator.pushNamed(routeAbout),

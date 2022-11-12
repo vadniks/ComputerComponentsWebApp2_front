@@ -7,6 +7,8 @@ class BasicWindow extends Padding {
   final Widget content;
   final List<Widget> footerWidgets;
   final bool showLoading;
+  final bool expandContent;
+  final double width;
 
   const BasicWindow({
     super.key,
@@ -14,43 +16,50 @@ class BasicWindow extends Padding {
     required this.content,
     required this.footerWidgets,
     super.padding = const EdgeInsets.all(50),
-    this.showLoading = false
+    this.showLoading = false,
+    this.expandContent = true,
+    this.width = -1
   });
 
   @override
-  Widget? get child => Container(
+  Widget? get child => Center(child: Container(
     decoration: const BoxDecoration(
-        color: Colors.black,
-        boxShadow: [
-          BoxShadow(
-            color: Colors.white10,
-            spreadRadius: 2,
-            blurRadius: 2,
-            offset: Offset(0, 0)
+      color: Colors.black,
+      boxShadow: [
+        BoxShadow(
+          color: Colors.white10,
+          spreadRadius: 2,
+          blurRadius: 2,
+          offset: Offset(0, 0)
+        )
+      ]
+    ),
+    child: SizedBox(
+      width: width > 0 ? width : double.infinity,
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          ColoredBox(
+            color: darkSecondaryColor,
+            child: Padding(
+              padding: const EdgeInsets.only(left: 5),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: titleWidgets
+              )
+            )
+          ),
+          if (showLoading) const LinearProgressIndicator(value: null),
+          expandContent ? Expanded(child: content) : content,
+          ColoredBox(
+            color: darkSecondaryColor,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: footerWidgets
+            )
           )
         ]
-    ),
-    child: Column(children: [
-      ColoredBox(
-        color: darkSecondaryColor,
-        child: Padding(
-          padding: const EdgeInsets.only(left: 5),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: titleWidgets
-          )
-        )
-      ),
-      if (showLoading) const LinearProgressIndicator(value: null),
-      Expanded(child: content),
-      ColoredBox(
-        color: darkSecondaryColor,
-        child: Flex(
-          direction: Axis.horizontal,
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: footerWidgets
-        )
-      ),
-    ]),
-  );
+      )
+    )
+  ));
 }

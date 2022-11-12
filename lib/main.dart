@@ -1,5 +1,6 @@
 
-import 'package:cursov_front/pages/errorPage.dart';
+import 'pages/errorPage.dart';
+import 'pages/loginPage.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/material.dart';
 import 'pages/aboutPage.dart';
@@ -42,18 +43,15 @@ class App extends StatelessWidget {
           systemNavigationBarColor: Colors.black,
           systemNavigationBarIconBrightness: Brightness.light,
         )
-      ),
-      // textButtonTheme: TextButtonThemeData(style: ButtonStyle(
-      //   backgroundColor: MaterialStateProperty.all(Colors.blue),
-      //   textStyle: MaterialStateProperty.all(const TextStyle(color: Colors.white))
-      // ))
+      )
     ),
     home: const HomePage(),
     initialRoute: routeHome,
     routes: {
       routeAbout : (context) => const AboutPage(),
       routeSelect : (context) => const SelectPage(),
-      routeError : (context) => const ErrorPage()
+      routeError : (context) => const ErrorPage(),
+      routeLogin : (context) => const LoginPage()
     },
   );
 }
