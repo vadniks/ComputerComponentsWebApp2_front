@@ -95,11 +95,26 @@ class _HomePageState extends State<HomePage> {
         height: 1,
         thickness: 1,
       ),
-      const Padding(
-        padding: EdgeInsets.only(top: 5),
-        child: Text(
-          submitOrder,
-          style: TextStyle(fontSize: 20)
+      Padding(
+        padding: const EdgeInsets.only(top: 5),
+        child: SizedBox(
+          width: 500,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: const [
+              Text(
+                submitOrder,
+                style: TextStyle(fontSize: 20)
+              ),
+              Text(
+                ' $totalCost${100}', // TODO
+                style: TextStyle(
+                  fontSize: 20,
+                  color: Colors.white70
+                )
+              )
+            ]
+          ),
         )
       ),
       _makeTextField(_submitControllers[0], firstName),
@@ -130,7 +145,7 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) => Scaffold(
-    appBar: BasicAppBar(buttons: [
+    appBar: BasicAppBar(trailings: [
       TextButton(
         onPressed: () {},
         child: const Text(home),

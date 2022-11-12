@@ -4,12 +4,12 @@ import 'package:flutter_svg/flutter_svg.dart';
 import '../consts.dart';
 
 class BasicAppBar extends AppBar {
-  final List<Widget> buttons;
+  final List<Widget> trailings;
 
-  BasicAppBar({super.key, required this.buttons});
+  BasicAppBar({super.key, required this.trailings});
 
   @override
-  List<Widget>? get actions => buttons;
+  List<Widget>? get actions => trailings;
 
   @override
   Widget? get leading => Padding(

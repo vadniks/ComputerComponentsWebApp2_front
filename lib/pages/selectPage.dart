@@ -210,8 +210,8 @@ class _SelectPageState extends State<SelectPage> {
   @override
   Widget build(BuildContext context)
   => _isLeaving ? const ErrorPage(error: noParametersProvidedError) : Scaffold(
-    appBar: BasicAppBar(buttons: [TextButton(
-      onPressed: () => _navigator.pushNamed(routeHome),
+    appBar: BasicAppBar(trailings: [TextButton(
+      onPressed: () => _navigator.pop(),
       child: const Text(home)
     )]),
     body: BasicWindow(

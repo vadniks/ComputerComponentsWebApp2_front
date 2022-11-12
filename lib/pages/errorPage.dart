@@ -17,7 +17,7 @@ class ErrorPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Scaffold(
-    appBar: BasicAppBar(buttons: [
+    appBar: BasicAppBar(trailings: [
       TextButton(
         onPressed: () => Navigator.of(context).pushNamed(routeHome),
         child: const Text(home)
