@@ -8,8 +8,3 @@ import 'DatabaseTable.dart';
   @override
   dynamic noSuchMethod(Invocation invocation) => super.noSuchMethod(invocation);
 }
-
-extension DefaultMethods on PlaceableInDbTable {
-  MapEntry<String, double> operator [](String weightedColumnsKey)
-  => table.weightedColumns.entries.firstWhere((element) => element.key == weightedColumnsKey);
-}

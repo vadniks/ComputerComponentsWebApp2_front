@@ -43,18 +43,20 @@ class _AdminPageState extends State<AdminPage> {
 
   }
 
-  int _weightOf(PlaceableInDbTable placeable, String value)
-  => (placeable[value].value * 100).floor();
-
-  List<Widget> _makeItemContent(PlaceableInDbTable placeable, List<String>? values) =>
-    [for (final i in values ?? _dbTable.weightedColumns.keys)
-      Expanded(
-        flex: _weightOf(placeable, i),
+  List<Expanded> _makeItemContent(List<String>? values) {
+    final list = <Expanded>[], j = _dbTable.weightedColumns.values.iterator;
+    for (final i in values ?? _dbTable.weightedColumns.keys) {
+      assert(j.moveNext());
+      list.add(Expanded(
+        flex: (j.current * 100).floor(),
         child: Text(i),
-    )];
+      ));
+    }
+    return list;
+  }
 
-  Container _makeItem(PlaceableInDbTable? placeable) => Container(
-    decoration: placeable != null ? null : const BoxDecoration(
+  Container _makeItem(List<String>? values) => Container(
+    decoration: values != null ? null : const BoxDecoration(
       color: Colors.black,
       boxShadow: [BoxShadow(
         color: darkSecondaryColor,
@@ -62,16 +64,10 @@ class _AdminPageState extends State<AdminPage> {
         spreadRadius: 1
       )]
     ),
-    child: Row(children: _makeItemContent(placeable,  ? null : placeable.values)),
+    child: Row(children: _makeItemContent(values))
   );
 
-  List<Widget> _makeItems() {
-    switch (_dbTable) {
-      case DatabaseTable.components: return [for (final i in _items) _makeItem(i as Component, false)];
-      case DatabaseTable.users: return [for (final i in _items) _makeItem(i as User, false)];
-      case DatabaseTable.sessions: return [for (final i in _items) _makeItem(i as Session, false)];
-    }
-  }
+  List<Widget> _makeItems() => [for (final i in _items) _makeItem(i.values)];
 
   @override
   Widget build(BuildContext context) => Scaffold(
