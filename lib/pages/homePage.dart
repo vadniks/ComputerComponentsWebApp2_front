@@ -148,6 +148,10 @@ class _HomePageState extends State<HomePage> {
       TextButton(
         onPressed: () => _navigator.pushNamed(routeAbout),
         child: const Text(about)
+      ),
+      TextButton(
+        onPressed: () => _navigator.pushNamed(routeAdmin),
+        child: const Text(administrate)
       )
     ]),
     body: BasicWindow(

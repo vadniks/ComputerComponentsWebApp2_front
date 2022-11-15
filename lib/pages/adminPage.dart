@@ -23,12 +23,6 @@ class _AdminPageState extends State<AdminPage> {
 
   NavigatorState get _navigator => Navigator.of(context);
 
-  @override
-  void initState() {
-    super.initState();
-
-  }
-
   void _changeTable() {
 
   }

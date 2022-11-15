@@ -1,4 +1,6 @@
 
+import 'package:cursov_front/pages/adminPage.dart';
+
 import 'pages/errorPage.dart';
 import 'pages/loginPage.dart';
 import 'package:flutter/services.dart';
@@ -51,7 +53,8 @@ class App extends StatelessWidget {
       routeAbout : (context) => const AboutPage(),
       routeSelect : (context) => const SelectPage(),
       routeError : (context) => const ErrorPage(),
-      routeLogin : (context) => const LoginPage()
+      routeLogin : (context) => const LoginPage(),
+      routeAdmin : (context) => const AdminPage()
     },
   );
 }
