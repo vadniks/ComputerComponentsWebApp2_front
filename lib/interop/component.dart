@@ -1,13 +1,19 @@
 
 // ignore_for_file: curly_braces_in_flow_control_structures
 
-class Component {
+import 'DatabaseTable.dart';
+import 'placeableInDbTable.dart';
+
+class Component implements PlaceableInDbTable {
   final int? id;
   final String title;
   final Type type;
   final String description;
   final int cost;
   final String? image;
+
+  @override
+  DatabaseTable get table => DatabaseTable.components;
 
   const Component({
     this.id,
@@ -66,6 +72,9 @@ enum Type {
   final String icon;
   static const amount = 9;
 
+  @override
+  String toString() => title;
+
   static Type? create(int type) { switch (type) {
     case 0: return Type.cpu;
     case 1: return Type.mb;
@@ -79,10 +88,5 @@ enum Type {
     default: return null;
   } }
 
-  static List<Type> get types {
-    final list = <Type>[];
-    for (var i = 0; i < amount; i++)
-      list.add(create(i)!);
-    return list;
-  }
+  static List<Type> get types => [for (var i = 0; i < amount; i++) create(i)!];
 }
