@@ -72,9 +72,6 @@ enum Type {
   final String icon;
   static const amount = 9;
 
-  @override
-  String toString() => title;
-
   static Type? create(int type) { switch (type) {
     case 0: return Type.cpu;
     case 1: return Type.mb;

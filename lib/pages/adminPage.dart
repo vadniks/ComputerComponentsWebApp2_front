@@ -82,7 +82,7 @@ class _AdminPageState extends State<AdminPage> {
     ),
     Expanded(
       flex: _weightOf(component, 2),
-      child: Text(component.type.toString())
+      child: Text(component.type.name)
     ),
     Expanded(
       flex: _weightOf(component, 3),
@@ -100,39 +100,51 @@ class _AdminPageState extends State<AdminPage> {
 
   Row _visualizeUser(User user) => Row(children: [
     Expanded(
-        flex: _weightOf(component, 0),
-        child: Text(component.id!.toString())
+      flex: _weightOf(user, 0),
+      child: Text(user.id!.toString())
     ),
     Expanded(
-        flex: _weightOf(component, 1),
-        child: Text(component.title)
+      flex: _weightOf(user, 1),
+      child: Text(user.name)
     ),
     Expanded(
-        flex: _weightOf(component, 2),
-        child: Text(component.type.toString())
+      flex: _weightOf(user, 2),
+      child: Text(user.role.toString())
     ),
     Expanded(
-        flex: _weightOf(component, 3),
-        child: Text(component.description)
+      flex: _weightOf(user, 3),
+      child: Text(user.password)
     ),
     Expanded(
-        flex: _weightOf(component, 4),
-        child: Text(component.cost.toString())
+      flex: _weightOf(user, 4),
+      child: Text(user.firstName ?? nullString)
     ),
     Expanded(
-        flex: _weightOf(component, 5),
-        child: Text(component.image ?? nullString)
+      flex: _weightOf(user, 5),
+      child: Text(user.lastName ?? nullString)
+    ),
+    Expanded(
+      flex: _weightOf(user, 6),
+      child: Text(user.phone.toString())
+    ),
+    Expanded(
+      flex: _weightOf(user, 7),
+      child: Text(user.address ?? nullString)
+    ),
+    Expanded(
+      flex: _weightOf(user, 8),
+      child: Text(user.selection ?? nullString)
     )
   ]);
 
   Row _visualizeSession(Session session) => Row(children: [
     Expanded(
-        flex: _weightOf(session, 0),
-        child: Text(session.id)
+      flex: _weightOf(session, 0),
+      child: Text(session.id)
     ),
     Expanded(
-        flex: _weightOf(session, 1),
-        child: Text(session.title)
+      flex: _weightOf(session, 1),
+      child: Text(session.value)
     )
   ]);
 
