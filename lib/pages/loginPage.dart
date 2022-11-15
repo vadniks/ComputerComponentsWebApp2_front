@@ -15,7 +15,7 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  late final bool _registration;
+  bool _registration = false;
   final _controllers = List<TextEditingController>.generate(
     2, (index) => TextEditingController(), growable: false
   );
@@ -43,6 +43,10 @@ class _LoginPageState extends State<LoginPage> {
       TextButton(
         onPressed: _navigator.pop,
         child: const Text(home)
+      ),
+      TextButton(
+        onPressed: () => setState(() => _registration = !_registration),
+        child: !_registration ? const Text(register) : const Text(login)
       )
     ]),
     body: BasicWindow(
