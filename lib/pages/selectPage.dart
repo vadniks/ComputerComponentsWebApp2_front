@@ -246,7 +246,7 @@ class _SelectPageState extends State<SelectPage> {
           itemCount: _items.length,
           controller: _scrollController,
         ),
-      footerWidgets: defaultFooter(),
+      footerWidgets: defaultFooter,
       showLoading: _isFetching,
     ),
     bottomNavigationBar: const BasicBottomBar(),

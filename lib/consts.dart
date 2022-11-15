@@ -60,7 +60,7 @@ Image decodeImage(String base64) =>
 
 dynamic getArgs(BuildContext context) => ModalRoute.of(context)!.settings.arguments;
 
-List<Widget> defaultFooter() => const [SizedBox(width: 25, height: 25)];
+List<Widget> get defaultFooter => const [SizedBox(width: 25, height: 25)];
 
 makeTextField({
   required TextEditingController controller,
