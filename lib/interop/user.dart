@@ -1,4 +1,5 @@
 
+import '../consts.dart';
 import 'DatabaseTable.dart';
 import 'placeableInDbTable.dart';
 
@@ -27,6 +28,46 @@ class User implements PlaceableInDbTable {
 
   @override
   DatabaseTable get table => DatabaseTable.users;
+
+  @override
+  List<String> get values => [
+    id.toString(),
+    name,
+    role.name,
+    password,
+    firstName.value,
+    lastName.value,
+    phone.toString(),
+    address.value,
+    selection.value
+  ];
+
+  @override
+  bool operator ==(Object other) =>
+    identical(this, other) ||
+    other is User &&
+      runtimeType == other.runtimeType &&
+      id == other.id &&
+      name == other.name &&
+      role == other.role &&
+      password == other.password &&
+      firstName == other.firstName &&
+      lastName == other.lastName &&
+      phone == other.phone &&
+      address == other.address &&
+      selection == other.selection;
+
+  @override
+  int get hashCode =>
+    id.hashCode ^
+    name.hashCode ^
+    role.hashCode ^
+    password.hashCode ^
+    firstName.hashCode ^
+    lastName.hashCode ^
+    phone.hashCode ^
+    address.hashCode ^
+    selection.hashCode;
 }
 
 enum Role {

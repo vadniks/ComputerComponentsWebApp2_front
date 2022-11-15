@@ -1,6 +1,7 @@
 
 // ignore_for_file: curly_braces_in_flow_control_structures
 
+import '../consts.dart';
 import 'DatabaseTable.dart';
 import 'placeableInDbTable.dart';
 
@@ -14,6 +15,16 @@ class Component implements PlaceableInDbTable {
 
   @override
   DatabaseTable get table => DatabaseTable.components;
+
+  @override
+  List<String> get values => [
+    id.toString(),
+    title,
+    type.name,
+    description,
+    cost.toString(),
+    image.value
+  ];
 
   const Component({
     this.id,

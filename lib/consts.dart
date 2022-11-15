@@ -88,3 +88,7 @@ makeTextField({
     ),
   ),
 );
+
+extension Additionals on String? {
+  String get value => this ?? nullString;
+}

@@ -9,4 +9,18 @@ class Session implements PlaceableInDbTable {
 
   @override
   DatabaseTable get table => DatabaseTable.sessions;
+
+  @override
+  List<String> get values => [id, value];
+
+  @override
+  bool operator ==(Object other) =>
+    identical(this, other) ||
+    other is Session &&
+      runtimeType == other.runtimeType &&
+      id == other.id &&
+      value == other.value;
+
+  @override
+  int get hashCode => id.hashCode ^ value.hashCode;
 }

@@ -43,21 +43,18 @@ class _AdminPageState extends State<AdminPage> {
 
   }
 
-  List<Widget> _makeItemContent(List<String>? values) {
-    final list = <Widget>[],
-      j = _dbTable.weightedColumns.values.iterator;
-    for (final i in values ?? _dbTable.weightedColumns.keys) {
-      assert(j.moveNext());
-      list.add(Expanded(
-        flex: (j.current * 100).floor(),
-        child: Text(i),
-      ));
-    }
-    return list;
-  }
+  int _weightOf(PlaceableInDbTable placeable, String value)
+  => (placeable[value].value * 100).floor();
 
-  Widget _makeItem(List<String>? values) => Container(
-    decoration: values != null ? null : const BoxDecoration(
+  List<Widget> _makeItemContent(PlaceableInDbTable placeable, List<String>? values) =>
+    [for (final i in values ?? _dbTable.weightedColumns.keys)
+      Expanded(
+        flex: _weightOf(placeable, i),
+        child: Text(i),
+    )];
+
+  Container _makeItem(PlaceableInDbTable? placeable) => Container(
+    decoration: placeable != null ? null : const BoxDecoration(
       color: Colors.black,
       boxShadow: [BoxShadow(
         color: darkSecondaryColor,
@@ -65,94 +62,14 @@ class _AdminPageState extends State<AdminPage> {
         spreadRadius: 1
       )]
     ),
-    child: Row(children: _makeItemContent(values)),
+    child: Row(children: _makeItemContent(placeable,  ? null : placeable.values)),
   );
-
-  int _weightOf<T extends PlaceableInDbTable>(T placeable, int index)
-  => (placeable[index].value * 100).floor();
-
-  Row _visualizeComponent(Component component) => Row(children: [
-    Expanded(
-      flex: _weightOf(component, 0),
-      child: Text(component.id!.toString())
-    ),
-    Expanded(
-      flex: _weightOf(component, 1),
-      child: Text(component.title)
-    ),
-    Expanded(
-      flex: _weightOf(component, 2),
-      child: Text(component.type.name)
-    ),
-    Expanded(
-      flex: _weightOf(component, 3),
-      child: Text(component.description)
-    ),
-    Expanded(
-      flex: _weightOf(component, 4),
-      child: Text(component.cost.toString())
-    ),
-    Expanded(
-      flex: _weightOf(component, 5),
-      child: Text(component.image ?? nullString)
-    )
-  ]);
-
-  Row _visualizeUser(User user) => Row(children: [
-    Expanded(
-      flex: _weightOf(user, 0),
-      child: Text(user.id!.toString())
-    ),
-    Expanded(
-      flex: _weightOf(user, 1),
-      child: Text(user.name)
-    ),
-    Expanded(
-      flex: _weightOf(user, 2),
-      child: Text(user.role.toString())
-    ),
-    Expanded(
-      flex: _weightOf(user, 3),
-      child: Text(user.password)
-    ),
-    Expanded(
-      flex: _weightOf(user, 4),
-      child: Text(user.firstName ?? nullString)
-    ),
-    Expanded(
-      flex: _weightOf(user, 5),
-      child: Text(user.lastName ?? nullString)
-    ),
-    Expanded(
-      flex: _weightOf(user, 6),
-      child: Text(user.phone.toString())
-    ),
-    Expanded(
-      flex: _weightOf(user, 7),
-      child: Text(user.address ?? nullString)
-    ),
-    Expanded(
-      flex: _weightOf(user, 8),
-      child: Text(user.selection ?? nullString)
-    )
-  ]);
-
-  Row _visualizeSession(Session session) => Row(children: [
-    Expanded(
-      flex: _weightOf(session, 0),
-      child: Text(session.id)
-    ),
-    Expanded(
-      flex: _weightOf(session, 1),
-      child: Text(session.value)
-    )
-  ]);
 
   List<Widget> _makeItems() {
     switch (_dbTable) {
-      case DatabaseTable.components: return [for (final i in _items) _visualizeComponent(i as Component)];
-      case DatabaseTable.users: return [for (final i in _items) _visualizeUser(i as User)];
-      case DatabaseTable.sessions: return [for (final i in _items) _visualizeSession(i as Session)];
+      case DatabaseTable.components: return [for (final i in _items) _makeItem(i as Component, false)];
+      case DatabaseTable.users: return [for (final i in _items) _makeItem(i as User, false)];
+      case DatabaseTable.sessions: return [for (final i in _items) _makeItem(i as Session, false)];
     }
   }
 
