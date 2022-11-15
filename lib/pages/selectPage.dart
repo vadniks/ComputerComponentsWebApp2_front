@@ -3,7 +3,7 @@
 
 import 'errorPage.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import '../component.dart';
+import '../interop/component.dart';
 import '../consts.dart';
 import '../widgets/basicAppBar.dart';
 import '../widgets/basicBottomBar.dart';

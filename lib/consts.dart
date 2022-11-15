@@ -1,6 +1,5 @@
 
 import 'dart:convert';
-import 'dart:ui';
 import 'package:flutter/material.dart';
 
 const darkSecondaryColor = Color(0xFF0F0F0F);
@@ -34,6 +33,9 @@ const appName = 'PC Components Shop',
   password = 'Password',
   register = 'Register',
   clear = 'Clear',
+  databaseAdministration = 'Database administration',
+  select = 'Select',
+  insert = 'insert',
   aboutText = '''We are Leading Company
 Provide our customers with superior products and services at the most reasonable rates available. At the time of company formation in 2022, our core business was as a computer parts reseller. We initiated our company with the philosophy that “We refuse to compromise quality for profit” and have not since changed that guiding principle.
 

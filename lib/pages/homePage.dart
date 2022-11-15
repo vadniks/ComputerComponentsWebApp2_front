@@ -6,7 +6,7 @@ import '../widgets/basicAppBar.dart';
 import '../widgets/basicBottomBar.dart';
 import '../widgets/basicWindow.dart';
 import '../consts.dart';
-import '../component.dart';
+import '../interop/component.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class HomePage extends StatefulWidget {
