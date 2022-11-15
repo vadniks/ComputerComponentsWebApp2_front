@@ -149,11 +149,19 @@ class _SelectPageState extends State<SelectPage> {
 
   // TODO: border-radius
   void _onItemClick(Component component) => showModalBottomSheet(
+    constraints: const BoxConstraints(maxWidth: 600),
     context: context,
-    builder: (builder) => Column(children: [
-      ColoredBox(
-        color: darkSecondaryColor,
-        child: Row(
+    builder: (builder) => Container(
+      decoration: const BoxDecoration(
+        color: Colors.black,
+        boxShadow: [BoxShadow(
+          color: darkSecondaryColor,
+          spreadRadius: 1,
+          offset: Offset(0, 0)
+        )]
+      ),
+      child: Column(children: [
+        Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Padding(
@@ -178,28 +186,32 @@ class _SelectPageState extends State<SelectPage> {
             )
           ]
         ),
-      ),
-      Expanded(child: Row(children: [
-        SvgPicture.asset( // TODO: test
-          'pc_icon.svg',
-          width: 200,
-          height: 200
+        const Divider(
+          thickness: 1,
+          height: 1,
         ),
-        const VerticalDivider(thickness: 1),
-        Expanded(child: Column(children: [
-          RichText(
-            textAlign: TextAlign.justify,
-            text: TextSpan(
-              text: component.description,
-              style: const TextStyle(
-                fontSize: 18,
-                color: Colors.white70
-              )
-            ),
-          )
+        Expanded(child: Row(children: [
+          SvgPicture.asset( // TODO: test
+            'pc_icon.svg',
+            width: 200,
+            height: 200
+          ),
+          const VerticalDivider(thickness: 1),
+          Expanded(child: Column(children: [
+            RichText(
+              textAlign: TextAlign.justify,
+              text: TextSpan(
+                text: component.description,
+                style: const TextStyle(
+                  fontSize: 18,
+                  color: Colors.white70
+                )
+              ),
+            )
+          ]))
         ]))
-      ]))
-    ])
+      ]),
+    )
   );
 
   Future<void> _submit(Component component) async {

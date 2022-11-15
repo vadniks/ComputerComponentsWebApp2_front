@@ -83,36 +83,23 @@ class _HomePageState extends State<HomePage> {
         )]
       ),
       child: Column(children: [
-        Padding(
-          padding: const EdgeInsets.only(
+        const Padding(
+          padding: EdgeInsets.only(
             top: 5,
             left: 25,
             right: 25
           ),
-          child: SizedBox(
-            width: 500,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: const [
-                Text(
-                  submitOrder,
-                  style: TextStyle(fontSize: 20)
-                ),
-                Text(
-                  ' $totalCost${100}\$', // TODO
-                  style: TextStyle(
-                    fontSize: 20,
-                    color: Colors.teal,
-                    fontStyle: FontStyle.italic
-                  )
-                )
-              ]
-            ),
-          )
+          child: Text(
+            submitOrder,
+            style: TextStyle(fontSize: 20)
+          ),
         ),
-        makeTextField(
-          controller: _submitControllers[0],
-          hint: firstName
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 10),
+          child: makeTextField(
+            controller: _submitControllers[0],
+            hint: firstName
+          ),
         ),
         makeTextField(
           controller: _submitControllers[1],
