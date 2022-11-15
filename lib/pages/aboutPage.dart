@@ -5,6 +5,7 @@ import '../consts.dart';
 import '../widgets/basicAppBar.dart';
 import '../widgets/basicBottomBar.dart';
 import '../widgets/basicWindow.dart';
+import '../util.dart';
 
 class AboutPage extends StatelessWidget {
   const AboutPage({super.key});

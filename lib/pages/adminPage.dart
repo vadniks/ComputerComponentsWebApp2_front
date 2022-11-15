@@ -4,13 +4,11 @@
 import 'package:flutter/material.dart';
 import '../consts.dart';
 import '../interop/DatabaseTable.dart';
-import '../interop/session.dart';
-import '../interop/user.dart';
 import '../widgets/basicAppBar.dart';
 import '../widgets/basicBottomBar.dart';
 import '../widgets/basicWindow.dart';
 import '../interop/placeableInDbTable.dart';
-import '../interop/component.dart';
+import '../util.dart';
 
 class AdminPage extends StatefulWidget {
   const AdminPage({super.key});

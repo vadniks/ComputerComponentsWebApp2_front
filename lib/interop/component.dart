@@ -1,7 +1,7 @@
 
 // ignore_for_file: curly_braces_in_flow_control_structures
 
-import '../consts.dart';
+import '../util.dart';
 import 'DatabaseTable.dart';
 import 'placeableInDbTable.dart';
 
