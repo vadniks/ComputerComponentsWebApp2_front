@@ -25,8 +25,6 @@ class _AdminPageState extends State<AdminPage> {
   final List<PlaceableInDbTable> _items = [];
   var _isFetching = false, _hasFetched = false;
 
-  NavigatorState get _navigator => Navigator.of(context);
-
   @override
   void initState() {
     super.initState();
@@ -97,16 +95,18 @@ class _AdminPageState extends State<AdminPage> {
   }
 
   List<Expanded> _makeItemContent(PlaceableInDbTable? placeable) {
-    final list = <Expanded>[], j = _dbTable.weightedColumns.values.iterator, k = placeable != null;
-    for (final i in placeable?.values ?? _dbTable.weightedColumns.keys) {
-      assert(j.moveNext());
+    final list = <Expanded>[],
+      weight = _dbTable.weightedColumns.values.iterator,
+      isLeading = placeable != null;
+    for (final value in placeable?.values ?? _dbTable.weightedColumns.keys) {
+      assert(weight.moveNext());
       list.add(Expanded(
-        flex: (j.current * 100).floor(),
+        flex: (weight.current * 100).floor(),
         child: Text(
-          i,
+          value,
           style: TextStyle(
-            fontWeight: k ? FontWeight.normal : FontWeight.bold,
-            color: !k ? Colors.white54 : Colors.white70
+            fontWeight: isLeading ? FontWeight.normal : FontWeight.bold,
+            color: !isLeading ? Colors.white54 : Colors.white70
           ),
         ),
       ));
@@ -122,7 +122,7 @@ class _AdminPageState extends State<AdminPage> {
   @override
   Widget build(BuildContext context) => Scaffold(
     appBar: BasicAppBar(trailings: [TextButton(
-      onPressed: _navigator.pop,
+      onPressed: Navigator.of(context).pop,
       child: const Text(home)
     )]),
     body: BasicWindow(
