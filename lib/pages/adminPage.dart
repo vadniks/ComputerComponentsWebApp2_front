@@ -56,7 +56,7 @@ class _AdminPageState extends State<AdminPage> {
   Future<void> _loadAllItems() async {
     setState(() => _isFetching = true);
 
-    Future.delayed(const Duration(seconds: 2)); // TODO: test
+    await Future.delayed(const Duration(seconds: 2)); // TODO: test
 
     final List<PlaceableInDbTable> items;
     switch (_dbTable) {
@@ -94,7 +94,7 @@ class _AdminPageState extends State<AdminPage> {
       (index) => TextEditingController(text: values?[index])
     );
     showModalBottomSheet(
-      constraints: const BoxConstraints(maxWidth: 600),
+      constraints: const BoxConstraints(maxWidth: 520),
       context: context,
       builder: (context) => Container(
         decoration: const BoxDecoration(
@@ -105,27 +105,31 @@ class _AdminPageState extends State<AdminPage> {
             offset: Offset(0, 0)
           )]
         ),
-        child: SingleChildScrollView(child: Column(children: [
-          Row(children: [
-            Text(operation ?? viewDetails),
-            if (operation != null) TextButton(
-              onPressed: () {},
-              child: Text(operation)
-            )
-          ]),
-          for (int i = 0; i < _dbTable.weightedColumns.length; i++)
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 10),
+          child: Column(children: [
             Padding(
-              padding: const EdgeInsets.only(
-                left: 10,
-                top: 10,
-                right: 10
-              ),
-              child: makeTextField(
-                controller: _controllers![i],
-                hint: _dbTable.weightedColumns.keys.elementAt(i)
-              )
-            )
-        ]))
+              padding: const EdgeInsets.symmetric(vertical: 10),
+              child: Row(children: [
+                Text(
+                  operation ?? viewDetails,
+                  style: const TextStyle(fontSize: 18),
+                ),
+                if (operation != null) TextButton(
+                  onPressed: () {},
+                  child: Text(operation)
+                )
+              ]),
+            ),
+            Expanded(child: SingleChildScrollView(child: Column(children: [
+              for (int i = 0; i < _dbTable.weightedColumns.length; i++)
+                makeTextField(
+                  controller: _controllers![i],
+                  hint: _dbTable.weightedColumns.keys.elementAt(i)
+                )
+            ])))
+          ]),
+        )
       )
     );
   }
