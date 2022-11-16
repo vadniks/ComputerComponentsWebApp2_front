@@ -179,11 +179,17 @@ class _SelectPageState extends State<SelectPage> {
           height: 1,
         ),
         Expanded(child: Row(children: [
-          SvgPicture.asset( // TODO: test
-            'pc_icon.svg',
-            width: 200,
-            height: 200
-          ),
+          component.image == null
+            ? SvgPicture.asset( // TODO: test
+              'pc_icon.svg',
+              width: 200,
+              height: 200
+            )
+            : Image.network(
+              imageUrl + component.image! + jpgExtension,
+              width: 200,
+              height: 200,
+            ),
           const VerticalDivider(thickness: 1),
           Expanded(child: Column(children: [
             RichText(
