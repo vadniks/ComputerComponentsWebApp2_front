@@ -23,13 +23,10 @@ class SelectPage extends StatefulWidget {
 
 class _SelectPageState extends State<SelectPage> {
   late final Type _type;
-  late final ScrollController _scrollController;
   final List<Component> _items = [];
   var _isFetching = false;
   var _hasFetched = false;
-  var _fetchFrom = 0;
   var _hasSearched = false;
-  var _isSearching = false;
   var _isLeaving = false;
   late final TextEditingController _searchController;
 
@@ -45,19 +42,17 @@ class _SelectPageState extends State<SelectPage> {
       _isLeaving = true;
     } else
       _type = args;
+    if (!_isLeaving) _loadItems(true);
   }
 
   @override
   void initState() {
     super.initState();
-    _scrollController = ScrollController()..addListener(() => _loadItems(false));
     _searchController = TextEditingController()..addListener(_search);
-    if (!_isLeaving) _loadItems(true);
   }
 
   @override
   void dispose() {
-    _scrollController.removeListener(() => _loadItems(false));
     _searchController.removeListener(_search);
     super.dispose();
   }
@@ -65,14 +60,14 @@ class _SelectPageState extends State<SelectPage> {
   Widget _makeItem(Component component, BuildContext context) => Card(
     child: Material(child: ListTile(
       onTap: () => _onItemClick(component),
-      leading: component.image != null
+      leading: component.image == null
         ? SvgPicture.asset(
           'pc_icon.svg',
           width: 50,
           height: 50
         )
         : Image.network(
-          imageUrl + component.image!,
+          imageUrl + component.image! + jpgExtension,
           width: 50,
           height: 50
       ),
@@ -84,18 +79,7 @@ class _SelectPageState extends State<SelectPage> {
     )),
   );
 
-  @Deprecated('test only')
-  Future<List<Component>> testFetch(int from, int to) async { // TODO: test only
-    await Future.delayed(const Duration(seconds: 2));
-    final list = <Component>[];
-    for (int i = from, j = 'a'.codeUnitAt(0); i < to; i++, j++) {
-      final char = String.fromCharCode(j);
-      list.add(Component(title: char, type: _type, description: char * 2, cost: i));
-    }
-    return list;
-  }
-
-  Future<List<Component>> _fetch(int _, int __) async {
+  Future<List<Component>> _fetch() async {
     final response = await http.get(Uri.parse('$baseUrl/component/type/${_type.type}'));
     if (response.statusCode == 200)
       return [for (final dynamic i in jsonDecode(response.body)) Component.fromJson(i)];
@@ -104,38 +88,27 @@ class _SelectPageState extends State<SelectPage> {
   }
 
   Future<void> _loadItems(bool firstTime) async {
-    if (!firstTime && _scrollController.position.extentAfter >= 10 || _isFetching || _isSearching) return;
     setState(() => _isFetching = true);
 
-    final items = await _fetch(0, 0); //testFetch(_fetchFrom, _fetchFrom + fetchAmount); // TODO: test only
+    final items = await _fetch();
     if (items.isNotEmpty) setState(() => _items.addAll(items));
 
     setState(() {
       _isFetching = false;
-      _fetchFrom += fetchAmount;
       _hasFetched = true;
     });
   }
 
   void _resetItemsList() => setState(() {
     _items.clear();
-    _fetchFrom = 0;
     _hasFetched = false;
   });
 
-  @Deprecated('test only')
-  Future<List<Component>> _testSearch(String query) async {
-    await Future.delayed(const Duration(seconds: 2));
-    return [
-      Component(title: 'a+$query', type: _type, description: 'a', cost: 1),
-      Component(title: 'b+$query', type: _type, description: 'b', cost: 2),
-      Component(title: 'c+$query', type: _type, description: 'c', cost: 3),
-      Component(title: 'd+$query', type: _type, description: 'c', cost: 4),
-      Component(title: 'e+$query', type: _type, description: 'c', cost: 5),
-      Component(title: 'f+$query', type: _type, description: 'c', cost: 6),
-      Component(title: 'g+$query', type: _type, description: 'c', cost: 7),
-      Component(title: 'h+$query', type: _type, description: 'c', cost: 8)
-    ];
+  Future<List<Component>> _doSearch(String query) async {
+    final results = <Component>[];
+    for (final i in await _fetch())
+      if (i.title.containsIgnoreCase(query)) results.add(i);
+    return results;
   }
 
   Future<void> _search() async {
@@ -145,13 +118,10 @@ class _SelectPageState extends State<SelectPage> {
       return;
     }
 
-    setState(() {
-      _isFetching = true;
-      _isSearching = true;
-    });
+    setState(() => _isFetching = true);
     _resetItemsList();
 
-    _items.addAll(await _testSearch(query));
+    _items.addAll(await _doSearch(query));
     setState(() {
       _isFetching = false;
       _hasFetched = true;
@@ -161,10 +131,7 @@ class _SelectPageState extends State<SelectPage> {
 
   Future<void> _refresh() async {
     _resetItemsList();
-    setState(() {
-      _hasSearched = false;
-      _isSearching = false;
-    });
+    setState(() => _hasSearched = false);
     await _loadItems(true);
   }
 
@@ -276,8 +243,7 @@ class _SelectPageState extends State<SelectPage> {
         : ListView.separated(
           itemBuilder: (_, index) => _makeItem(_items[index], context),
           separatorBuilder: (_, index) => const Divider(height: 2),
-          itemCount: _items.length,
-          controller: _scrollController,
+          itemCount: _items.length
         ),
       footerWidgets: defaultFooter,
       showLoading: _isFetching,

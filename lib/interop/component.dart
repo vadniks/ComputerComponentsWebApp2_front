@@ -45,7 +45,7 @@ class Component implements PlaceableInDbTable {
   factory Component.fromJson(Map<String, dynamic> json) => Component(
     id: json[idC],
     title: json[titleC],
-    type: json[typeC],
+    type: Type.create2(json[typeC])!,
     description: json[descriptionC],
     cost: json[costC],
     image: json[imageC]
@@ -83,32 +83,46 @@ class Component implements PlaceableInDbTable {
 }
 
 enum Type {
-  cpu (0, 'Processor', 'pc_cpu'),
-  mb  (1, 'Motherboard', 'pc_mb'),
-  gpu (2, 'Graphics adapter', 'pc_gpu'),
-  ram (3, 'Operating memory', 'pc_ram'),
-  hdd (4, 'Hard drive', 'pc_hdd'),
-  ssd (5, 'Solid state drive', 'pc_ssd'),
-  psu (6, 'Power supply unit', 'pc_psu'),
-  fan (7, 'Cooler', 'pc_fan'),
-  ca$e(8, 'Case', 'pc_case');
+  cpu (0, 'Processor', 'pc_cpu', 'CPU'),
+  mb  (1, 'Motherboard', 'pc_mb', 'MB'),
+  gpu (2, 'Graphics adapter', 'pc_gpu', 'GPU'),
+  ram (3, 'Operating memory', 'pc_ram', 'RAM'),
+  hdd (4, 'Hard drive', 'pc_hdd', 'HDD'),
+  ssd (5, 'Solid state drive', 'pc_ssd', 'SSD'),
+  psu (6, 'Power supply unit', 'pc_psu', 'PSU'),
+  fan (7, 'Cooler', 'pc_fan', 'FAN'),
+  ca$e(8, 'Case', 'pc_case', 'CASE');
 
-  const Type(this.type, this.title, this.icon);
+  const Type(this.type, this.title, this.icon, this.value);
   final int type;
   final String title;
   final String icon;
+  final String value;
   static const amount = 9;
 
   static Type? create(int type) { switch (type) {
-    case 0: return Type.cpu;
-    case 1: return Type.mb;
-    case 2: return Type.gpu;
-    case 3: return Type.ram;
-    case 4: return Type.hdd;
-    case 5: return Type.ssd;
-    case 6: return Type.psu;
-    case 7: return Type.fan;
-    case 8: return Type.ca$e;
+    case 0: return cpu;
+    case 1: return mb;
+    case 2: return gpu;
+    case 3: return ram;
+    case 4: return hdd;
+    case 5: return ssd;
+    case 6: return psu;
+    case 7: return fan;
+    case 8: return ca$e;
+    default: return null;
+  } }
+
+  static Type? create2(String value) { switch (value) {
+    case 'CPU': return cpu;
+    case 'MB': return mb;
+    case 'GPU': return gpu;
+    case 'RAM': return ram;
+    case 'HDD': return hdd;
+    case 'SSD': return ssd;
+    case 'PSU': return psu;
+    case 'FAN': return fan;
+    case 'CASE': return ca$e;
     default: return null;
   } }
 

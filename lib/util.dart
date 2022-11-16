@@ -33,4 +33,10 @@ makeTextField({
   ),
 );
 
-extension Additionals on String? { String get value => this ?? nullString; }
+extension Additionals on String? {
+
+  String get value => this ?? nullString;
+
+  bool containsIgnoreCase(String value)
+  => this == null ? false : this!.toLowerCase().contains(value.toLowerCase());
+}

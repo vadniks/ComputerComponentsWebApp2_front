@@ -48,7 +48,8 @@ The quality of our custom built computers speak for themselves. They are reliabl
 const appIcon = 'pc_icon.svg',
   svgExtension = '.svg',
   hardwareIcon = 'hwr_ico.svg',
-  qualityIcon = 'qlt_ico.svg';
+  qualityIcon = 'qlt_ico.svg',
+  jpgExtension = '.jpg';
 
 const routeHome = '/',
   routeAbout = '/about',
