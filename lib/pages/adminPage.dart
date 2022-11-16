@@ -85,11 +85,12 @@ class _AdminPageState extends State<AdminPage> {
     _loadAllItems();
   }
 
-  void _showItemDetails(List<String>? values) {
+  void _showItemDetails(PlaceableInDbTable? placeable, String? operation, void Function()? action) {
+    assert(operation == null && action == null || operation != null && action != null);
     _controllers?.clear();
     _controllers = List.generate(
       _dbTable.weightedColumns.keys.length,
-      (index) => TextEditingController(text: values?[index])
+      (index) => TextEditingController(text: placeable?.values[index])
     );
     showModalBottomSheet(
       constraints: const BoxConstraints(maxWidth: 520),
@@ -115,19 +116,24 @@ class _AdminPageState extends State<AdminPage> {
                     viewDetails,
                     style: TextStyle(fontSize: 18),
                   ),
-                  Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      TextButton(
-                        onPressed: _update,
-                        child: const Text(update)
-                      ),
-                      TextButton(
-                        onPressed: _delete,
-                        child: const Text(delete)
-                      )
-                    ]
-                  )
+                  operation != null
+                    ? TextButton(
+                      onPressed: action!,
+                      child: Text(operation)
+                    )
+                    : Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        TextButton(
+                          onPressed: () => _update(placeable!),
+                          child: const Text(update)
+                        ),
+                        TextButton(
+                          onPressed: () => _delete(placeable!),
+                          child: const Text(delete)
+                        )
+                      ]
+                    )
                 ]
               )
             ),
@@ -144,20 +150,20 @@ class _AdminPageState extends State<AdminPage> {
     );
   }
 
-  void _select() {
+  void _select() => _showItemDetails(null, select, () {
+    // TODO: get request
+  });
 
+  void _insert() => _showItemDetails(null, insert, () {
+    // TODO: post request
+  });
+
+  void _update(PlaceableInDbTable placeable) {
+    // TODO: put request
   }
 
-  void _insert() {
-
-  }
-
-  void _update() {
-
-  }
-
-  void _delete() {
-
+  void _delete(PlaceableInDbTable placeable) {
+    // TODO: delete request
   }
 
   List<Expanded> _makeItemContent(PlaceableInDbTable? placeable) {
@@ -181,7 +187,11 @@ class _AdminPageState extends State<AdminPage> {
   }
 
   Widget _makeItem(int index) => Material(child: ListTile(
-    onTap: index == 0 ? null : () => _showItemDetails(_items[index].values),
+    onTap: index == 0 ? null : () => _showItemDetails(
+      _items[index],
+      null,
+      null
+    ),
     title: Row(children: _makeItemContent(index == 0 ? null : _items[index]))
   ));
 
