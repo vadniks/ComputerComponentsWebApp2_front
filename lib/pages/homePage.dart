@@ -47,22 +47,26 @@ class _HomePageState extends State<HomePage> {
         child: Material(child: ListTile(
           onTap: () => _onItemClick(i),
           leading: component?.image != null
-            ? decodeImage(component!.image!)
+            ? loadImage(
+              component!.image!,
+              width: 50,
+              height: 50
+            )
             : SvgPicture.asset(
               i.icon + svgExtension,
               width: 50,
               height: 50,
             ),
-          title: const Text(
-            'Title',
-            style: TextStyle(fontWeight: FontWeight.bold)
+          title: Text(
+            component?.title ?? notSelected,
+            style: const TextStyle(fontWeight: FontWeight.bold)
           ),
           subtitle: Text(
             component != null ? component.title : i.title,
             overflow: TextOverflow.ellipsis,
           ),
           trailing: Text(
-            component != null ? component.cost.toString() : defaultCost,
+            component != null ? '${component.cost}\$' : defaultCost,
             style: const TextStyle(fontStyle: FontStyle.italic)
           ),
         )),

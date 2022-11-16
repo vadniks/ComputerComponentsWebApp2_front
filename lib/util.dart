@@ -1,9 +1,14 @@
 
-import 'dart:convert';
+import 'package:flutter_svg/svg.dart';
+
 import 'consts.dart';
 import 'package:flutter/material.dart';
 
-Image decodeImage(String base64) => Image.memory(const Base64Decoder().convert(base64));
+Image loadImage(String image, {required double width, required double height}) => Image.network(
+  imageUrl + image + jpgExtension,
+  width: width,
+  height: height,
+);
 
 dynamic getArgs(BuildContext context) => ModalRoute.of(context)!.settings.arguments;
 

@@ -62,12 +62,12 @@ class _SelectPageState extends State<SelectPage> {
       onTap: () => _onItemClick(component),
       leading: component.image == null
         ? SvgPicture.asset(
-          'pc_icon.svg',
+          appIcon,
           width: 50,
           height: 50
         )
-        : Image.network(
-          imageUrl + component.image! + jpgExtension,
+        : loadImage(
+          component.image!,
           width: 50,
           height: 50
       ),
@@ -181,12 +181,12 @@ class _SelectPageState extends State<SelectPage> {
         Expanded(child: Row(children: [
           component.image == null
             ? SvgPicture.asset( // TODO: test
-              'pc_icon.svg',
+              appIcon,
               width: 200,
               height: 200
             )
-            : Image.network(
-              imageUrl + component.image! + jpgExtension,
+            : loadImage(
+              component.image!,
               width: 200,
               height: 200,
             ),
