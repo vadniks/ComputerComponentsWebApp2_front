@@ -1,7 +1,7 @@
 
 // ignore_for_file: curly_braces_in_flow_control_structures
 
-import 'package:cursov_front/interop/component.dart';
+import '../interop/component.dart';
 import 'package:flutter/material.dart';
 import '../consts.dart';
 import '../interop/DatabaseTable.dart';
@@ -24,6 +24,7 @@ class _AdminPageState extends State<AdminPage> {
   var _dbTable = DatabaseTable.components;
   final List<PlaceableInDbTable> _items = [];
   var _isFetching = false, _hasFetched = false;
+  List<TextEditingController>? _controllers = null;
 
   @override
   void initState() {
@@ -34,19 +35,19 @@ class _AdminPageState extends State<AdminPage> {
   @Deprecated('test only')
   Future<List<Component>> _testFetchComponents() async
   => [for (int i = 0; i < 10; i++) Component(
-        title: i.toString(),
-        type: i % 2 == 0 ? Type.cpu : Type.gpu,
-        description: (i * 10).toString(),
-        cost: i * 100
-      )];
+      title: i.toString(),
+      type: i % 2 == 0 ? Type.cpu : Type.gpu,
+      description: (i * 10).toString(),
+      cost: i * 100
+    )];
 
   @Deprecated('test only')
   Future<List<User>> _testFetchUsers() async
   => [for (int i = 0; i < 10; i++) User(
-        name: i.toString(),
-        role: Role.user,
-        password: (i * 10).toString()
-      )];
+      name: i.toString(),
+      role: Role.user,
+      password: (i * 10).toString()
+    )];
 
   @Deprecated('test only')
   Future<List<Session>> _testFetchSessions() async
@@ -86,6 +87,49 @@ class _AdminPageState extends State<AdminPage> {
     _loadAllItems();
   }
 
+  void _showItemDetails(List<String>? values, String? operation) {
+    _controllers?.clear();
+    _controllers = List.generate(
+      _dbTable.weightedColumns.keys.length,
+      (index) => TextEditingController(text: values?[index])
+    );
+    showModalBottomSheet(
+      constraints: const BoxConstraints(maxWidth: 600),
+      context: context,
+      builder: (context) => Container(
+        decoration: const BoxDecoration(
+          color: Colors.black,
+          boxShadow: [BoxShadow(
+            color: darkSecondaryColor,
+            spreadRadius: 1,
+            offset: Offset(0, 0)
+          )]
+        ),
+        child: SingleChildScrollView(child: Column(children: [
+          Row(children: [
+            Text(operation ?? viewDetails),
+            if (operation != null) TextButton(
+              onPressed: () {},
+              child: Text(operation)
+            )
+          ]),
+          for (int i = 0; i < _dbTable.weightedColumns.length; i++)
+            Padding(
+              padding: const EdgeInsets.only(
+                left: 10,
+                top: 10,
+                right: 10
+              ),
+              child: makeTextField(
+                controller: _controllers![i],
+                hint: _dbTable.weightedColumns.keys.elementAt(i)
+              )
+            )
+        ]))
+      )
+    );
+  }
+
   void _select() {
 
   }
@@ -115,7 +159,7 @@ class _AdminPageState extends State<AdminPage> {
   }
 
   Widget _makeItem(int index) => Material(child: ListTile(
-    onTap: index == 0 ? null : () {},
+    onTap: index == 0 ? null : () => _showItemDetails(_items[index].values, null),
     title: Row(children: _makeItemContent(index == 0 ? null : _items[index]))
   ));
 
@@ -128,7 +172,10 @@ class _AdminPageState extends State<AdminPage> {
     body: BasicWindow(
       showLoading: _isFetching,
       titleWidgets: [
-        const Text(databaseAdministration),
+        const Text(
+          databaseAdministration,
+          style: TextStyle(fontSize: 18),
+        ),
         Row(children: [
           TextButton(
             onPressed: _changeTable,
