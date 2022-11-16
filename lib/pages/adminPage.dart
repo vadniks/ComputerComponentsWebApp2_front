@@ -1,6 +1,4 @@
 
-// ignore_for_file: curly_braces_in_flow_control_structures
-
 import '../interop/component.dart';
 import 'package:flutter/material.dart';
 import '../consts.dart';
@@ -24,7 +22,7 @@ class _AdminPageState extends State<AdminPage> {
   var _dbTable = DatabaseTable.components;
   final List<PlaceableInDbTable> _items = [];
   var _isFetching = false, _hasFetched = false;
-  List<TextEditingController>? _controllers = null;
+  List<TextEditingController>? _controllers;
 
   @override
   void initState() {
@@ -87,7 +85,7 @@ class _AdminPageState extends State<AdminPage> {
     _loadAllItems();
   }
 
-  void _showItemDetails(List<String>? values, String? operation) {
+  void _showItemDetails(List<String>? values) {
     _controllers?.clear();
     _controllers = List.generate(
       _dbTable.weightedColumns.keys.length,
@@ -110,16 +108,28 @@ class _AdminPageState extends State<AdminPage> {
           child: Column(children: [
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 10),
-              child: Row(children: [
-                Text(
-                  operation ?? viewDetails,
-                  style: const TextStyle(fontSize: 18),
-                ),
-                if (operation != null) TextButton(
-                  onPressed: () {},
-                  child: Text(operation)
-                )
-              ]),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  const Text(
+                    viewDetails,
+                    style: TextStyle(fontSize: 18),
+                  ),
+                  Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      TextButton(
+                        onPressed: _update,
+                        child: const Text(update)
+                      ),
+                      TextButton(
+                        onPressed: _delete,
+                        child: const Text(delete)
+                      )
+                    ]
+                  )
+                ]
+              )
             ),
             Expanded(child: SingleChildScrollView(child: Column(children: [
               for (int i = 0; i < _dbTable.weightedColumns.length; i++)
@@ -139,6 +149,14 @@ class _AdminPageState extends State<AdminPage> {
   }
 
   void _insert() {
+
+  }
+
+  void _update() {
+
+  }
+
+  void _delete() {
 
   }
 
@@ -163,7 +181,7 @@ class _AdminPageState extends State<AdminPage> {
   }
 
   Widget _makeItem(int index) => Material(child: ListTile(
-    onTap: index == 0 ? null : () => _showItemDetails(_items[index].values, null),
+    onTap: index == 0 ? null : () => _showItemDetails(_items[index].values),
     title: Row(children: _makeItemContent(index == 0 ? null : _items[index]))
   ));
 
