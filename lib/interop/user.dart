@@ -1,5 +1,5 @@
 
-import '../consts.dart';
+import '../util.dart';
 import 'DatabaseTable.dart';
 import 'placeableInDbTable.dart';
 
