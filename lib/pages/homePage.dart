@@ -18,10 +18,11 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  final _selected = List<Component?>.filled(Type.amount, null, growable: false);
+  var _selected = List<Component?>.filled(Type.amount, null, growable: false);
   final _submitControllers = List.generate(
     4, (_) => TextEditingController(), growable: false
   );
+  var _totalCost = 0;
 
   NavigatorState get _navigator => Navigator.of(context);
 
@@ -35,7 +36,10 @@ class _HomePageState extends State<HomePage> {
     if (!mounted) return;
     result as Component;
 
-    setState(() => _selected[result.type.index] = result);
+    setState(() {
+      _selected[result.type.index] = result;
+      _totalCost += result.cost;
+    });
   }
 
   List<Widget> _makeItems() {
@@ -137,10 +141,14 @@ class _HomePageState extends State<HomePage> {
     // TODO: post request
   }
 
-  Future<void> _clearSelection() async {
-    _selected.clear();
-    _selected.addAll(List.filled(Type.amount, null, growable: false));
-  }
+  void _clearSelection() => setState(() {
+    _selected = List.filled(
+      Type.amount,
+      null,
+      growable: false
+    );
+    _totalCost = 0;
+  });
 
   @override
   Widget build(BuildContext context) => Scaffold(
@@ -168,9 +176,9 @@ class _HomePageState extends State<HomePage> {
         color: Colors.white10
       ).toList()),
       footerWidgets: [
-        const Text(
-          totalCost,
-          style: TextStyle(fontSize: 16),
+        Text(
+          '$totalCost$_totalCost\$',
+          style: const TextStyle(fontSize: 16),
         ),
         TextButton(
           onPressed: _clearSelection,
