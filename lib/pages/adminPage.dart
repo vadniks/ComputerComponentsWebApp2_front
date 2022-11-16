@@ -57,7 +57,7 @@ class _AdminPageState extends State<AdminPage> {
   Future<void> _loadAllItems() async {
     setState(() => _isFetching = true);
 
-    Future.delayed(const Duration(seconds: 1));
+    Future.delayed(const Duration(seconds: 2)); // TODO: test
 
     final List<PlaceableInDbTable> items;
     switch (_dbTable) {
@@ -73,8 +73,19 @@ class _AdminPageState extends State<AdminPage> {
     });
   }
 
-  void _changeTable() {
+  void _resetItemsList() => setState(() {
+    _items.clear();
+    _hasFetched = false;
+  });
 
+  void _changeTable() {
+    _resetItemsList();
+    setState(() { switch (_dbTable) {
+      case DatabaseTable.components: _dbTable = DatabaseTable.users; break;
+      case DatabaseTable.users: _dbTable = DatabaseTable.sessions; break;
+      case DatabaseTable.sessions: _dbTable = DatabaseTable.components; break;
+    } });
+    _loadAllItems();
   }
 
   void _select() {
