@@ -164,6 +164,7 @@ class _AdminPageState extends State<AdminPage> {
 
   void _delete(PlaceableInDbTable placeable) {
     // TODO: delete request
+    // TODO: http://0.0.0.0:8080/res_back/amd_r5.jpg
   }
 
   List<Expanded> _makeItemContent(PlaceableInDbTable? placeable) {

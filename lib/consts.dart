@@ -59,5 +59,4 @@ const routeHome = '/',
 
 const fetchAmount = 8;
 
-const baseUrl = 'http:localhost:8080',
-  selectComponentUrl = '$baseUrl/select';
+const baseUrl = 'http://0.0.0.0:8080', imageUrl = '$baseUrl/res_back/';

@@ -5,6 +5,13 @@ import '../util.dart';
 import 'DatabaseTable.dart';
 import 'placeableInDbTable.dart';
 
+const idC = 'id',
+  titleC = 'title',
+  typeC = 'type',
+  descriptionC = 'description',
+  costC = 'cost',
+  imageC = 'image';
+
 class Component implements PlaceableInDbTable {
   final int? id;
   final String title;
@@ -34,6 +41,15 @@ class Component implements PlaceableInDbTable {
     required this.cost,
     this.image
   });
+
+  factory Component.fromJson(Map<String, dynamic> json) => Component(
+    id: json[idC],
+    title: json[titleC],
+    type: json[typeC],
+    description: json[descriptionC],
+    cost: json[costC],
+    image: json[imageC]
+  );
 
   @override
   bool operator ==(Object other) =>

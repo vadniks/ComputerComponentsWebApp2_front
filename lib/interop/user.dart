@@ -2,6 +2,16 @@
 import '../util.dart';
 import 'DatabaseTable.dart';
 import 'placeableInDbTable.dart';
+import 'component.dart';
+
+const nameC = 'name',
+  roleC = 'role',
+  passwordC = 'password',
+  firstNameC = 'firstName',
+  lastNameC = 'lastName',
+  phoneC = 'phone',
+  addressC = 'address',
+  selectionC = 'selection';
 
 class User implements PlaceableInDbTable {
   final int? id;
@@ -25,6 +35,18 @@ class User implements PlaceableInDbTable {
     this.address,
     this.selection
   });
+
+  factory User.fromJson(Map<String, dynamic> json) => User(
+    id: json[idC],
+    name: json[nameC],
+    role: json[roleC],
+    password: json[passwordC],
+    firstName: json[firstNameC],
+    lastName: json[lastNameC],
+    phone: json[phoneC],
+    address: json[addressC],
+    selection: json[selectionC]
+  );
 
   @override
   DatabaseTable get table => DatabaseTable.users;

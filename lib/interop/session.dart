@@ -1,11 +1,18 @@
 
 import 'DatabaseTable.dart';
 import 'placeableInDbTable.dart';
+import 'component.dart';
+
+const valueC = 'value';
 
 class Session implements PlaceableInDbTable {
   final String id;
   final String value;
+
   const Session(this.id, this.value);
+
+  factory Session.fromJson(Map<String, dynamic> json)
+  => Session(json[idC], json[valueC]);
 
   @override
   DatabaseTable get table => DatabaseTable.sessions;

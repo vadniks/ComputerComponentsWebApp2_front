@@ -1,6 +1,8 @@
 
 // ignore_for_file: curly_braces_in_flow_control_structures
 
+import 'dart:convert';
+
 import 'errorPage.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import '../interop/component.dart';
@@ -63,7 +65,17 @@ class _SelectPageState extends State<SelectPage> {
   Widget _makeItem(Component component, BuildContext context) => Card(
     child: Material(child: ListTile(
       onTap: () => _onItemClick(component),
-      leading: SvgPicture.asset('pc_icon.svg', width: 50, height: 50),//component.image != null ? _decodeImage(component.image!) : null,
+      leading: component.image != null
+        ? SvgPicture.asset(
+          'pc_icon.svg',
+          width: 50,
+          height: 50
+        )
+        : Image.network(
+          imageUrl + component.image!,
+          width: 50,
+          height: 50
+      ),
       title: Text(
         component.title,
         overflow: TextOverflow.ellipsis,
@@ -83,11 +95,19 @@ class _SelectPageState extends State<SelectPage> {
     return list;
   }
 
+  Future<List<Component>> _fetch(int _, int __) async {
+    final response = await http.get(Uri.parse('$baseUrl/component/type/${_type.type}'));
+    if (response.statusCode == 200)
+      return [for (final dynamic i in jsonDecode(response.body)) Component.fromJson(i)];
+    else
+      return [];
+  }
+
   Future<void> _loadItems(bool firstTime) async {
     if (!firstTime && _scrollController.position.extentAfter >= 10 || _isFetching || _isSearching) return;
     setState(() => _isFetching = true);
 
-    final items = await testFetch(_fetchFrom, _fetchFrom + fetchAmount); // TODO: test only
+    final items = await _fetch(0, 0); //testFetch(_fetchFrom, _fetchFrom + fetchAmount); // TODO: test only
     if (items.isNotEmpty) setState(() => _items.addAll(items));
 
     setState(() {

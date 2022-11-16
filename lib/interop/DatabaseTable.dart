@@ -1,27 +1,31 @@
 
+import 'component.dart';
+import 'user.dart';
+import 'session.dart';
+
 enum DatabaseTable {
   components(0, 'components', {
-    'id' : 0.05,
-    'title' : 0.25,
-    'type' : 0.1,
-    'description' : 0.4,
-    'cost' : 0.1,
-    'image' : 0.1
+    idC : 0.05,
+    titleC : 0.25,
+    typeC : 0.1,
+    descriptionC : 0.4,
+    costC : 0.1,
+    imageC : 0.1
   }),
   users(1, 'users', {
-    'id' : 0.05,
-    'name' : 0.15,
-    'role' : 0.1,
-    'password' : 0.1,
-    'firstName' : 0.15,
-    'lastName' : 0.15,
-    'phone' : 0.1,
-    'address' : 0.1,
-    'selection' : 0.1
+    idC : 0.05,
+    nameC : 0.15,
+    roleC : 0.1,
+    passwordC : 0.1,
+    firstNameC : 0.15,
+    lastNameC : 0.15,
+    phoneC : 0.1,
+    addressC : 0.1,
+    selectionC : 0.1
   }),
   sessions  (2, 'sessions', {
-    'id' : 0.5,
-    'value' : 0.5
+    idC : 0.5,
+    valueC : 0.5
   });
 
   const DatabaseTable(this.which, this.table, this.weightedColumns);
