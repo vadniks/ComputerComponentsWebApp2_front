@@ -128,3 +128,24 @@ enum Type {
 
   static List<Type> get types => [for (var i = 0; i < amount; i++) create(i)!];
 }
+
+class Selection {
+  int? cpu, mb, gpu, ram, hdd, ssd, psu, fan, ca$e;
+
+  static const cpuC = 'cpu', mbC = 'mb', gpuC = 'gpu', ramC = 'ram',
+      hddC = 'hdd', ssdC = 'ssd', psuC = 'psu', fanC = 'fan', caseC = 'case';
+
+  Selection({cpu, mb, gpu, ram, hdd, ssd, psu, fan, ca$e});
+
+  factory Selection.fromJson(Map<String, dynamic> json) => Selection(
+    cpu: json[cpuC],
+    mb: json[mbC],
+    gpu: json[gpuC],
+    ram: json[ramC],
+    hdd: json[hddC],
+    ssd: json[ssdC],
+    psu: json[psuC],
+    fan: json[fanC],
+    ca$e: json[caseC]
+  );
+}

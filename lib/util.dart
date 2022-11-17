@@ -1,6 +1,5 @@
 
-import 'package:flutter_svg/svg.dart';
-
+import 'package:http/http.dart' as http;
 import 'consts.dart';
 import 'package:flutter/material.dart';
 
@@ -37,6 +36,18 @@ makeTextField({
     ),
   ),
 );
+
+Future<bool> get authorizedAsUser async
+=> (await http.get(Uri.parse('$baseUrl/authorizedU'))).statusCode == 200;
+
+Future<bool> get authorizedAsAdmin async
+=> (await http.get(Uri.parse('$baseUrl/authorizedA'))).statusCode == 200;
+
+void showSnackBar(BuildContext context, String text)
+=> ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(
+  text,
+  style: const TextStyle(color: Colors.white70),
+)));
 
 extension Additionals on String? {
 

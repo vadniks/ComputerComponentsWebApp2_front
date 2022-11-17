@@ -9,6 +9,7 @@ import '../consts.dart';
 import '../interop/component.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import '../util.dart';
+import 'package:http/http.dart' as http;
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -27,6 +28,11 @@ class _HomePageState extends State<HomePage> {
   NavigatorState get _navigator => Navigator.of(context);
 
   Future<void> _onItemClick(Type type) async {
+    if (!await authorizedAsUser) {
+      showSnackBar(context, unauthorizedAsUser);
+      return;
+    }
+
     final dynamic result = await _navigator.pushNamed(
       routeSelect,
       arguments: type
@@ -40,7 +46,11 @@ class _HomePageState extends State<HomePage> {
       _selected[result.type.index] = result;
       _totalCost += result.cost;
     });
+    _postSelected(result.id!);
   }
+
+  Future<void> _postSelected(int id) async
+  => await http.post(Uri.parse('$baseUrl/select/$id'));
 
   List<Widget> _makeItems() {
     final list = <Widget>[];
