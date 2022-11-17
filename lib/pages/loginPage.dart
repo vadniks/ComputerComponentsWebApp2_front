@@ -1,12 +1,14 @@
 
 // ignore_for_file: curly_braces_in_flow_control_structures
 
+import '../interop/user.dart';
 import '../widgets/basicBottomBar.dart';
 import '../widgets/basicWindow.dart';
 import '../consts.dart';
 import '../widgets/basicAppBar.dart';
 import 'package:flutter/material.dart';
 import '../util.dart';
+import 'package:http/http.dart' as http;
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -16,7 +18,7 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  bool _registration = false;
+  var _registration = false;
   final _controllers = List<TextEditingController>.generate(
     2, (index) => TextEditingController(), growable: false
   );
@@ -32,8 +34,19 @@ class _LoginPageState extends State<LoginPage> {
     _registration = args ?? false;
   }
 
-  void _performAction() {
+  Future<bool> _post(String which) async => (await http.post(
+    Uri.parse('$baseUrl/$which'),
+    body: <String ,dynamic>{
+      nameC : _controllers[0].text,
+      password : _controllers[1].text
+    }
+  )).statusCode == 200;
 
+  Future<void> _performAction() async {
+    if (!await _post(!_registration ? 'login' : 'register'))
+      showSnackBar(context, !_registration ? wrongCredentials : nameExists);
+    else
+      _navigator.pop();
   }
 
   void _clear() { for (final i in _controllers) i.clear(); }
