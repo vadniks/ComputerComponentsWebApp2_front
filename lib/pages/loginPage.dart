@@ -10,6 +10,8 @@ import 'package:flutter/material.dart';
 import '../util.dart';
 import 'package:http/http.dart' as http;
 
+import 'errorPage.dart';
+
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
 
@@ -22,25 +24,36 @@ class _LoginPageState extends State<LoginPage> {
   final _controllers = List<TextEditingController>.generate(
     2, (index) => TextEditingController(), growable: false
   );
+  var _authorized = false;
 
   NavigatorState get _navigator => Navigator.of(context);
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
+    _checkAuthorization();
 
     final dynamic args = getArgs(context);
     if (args != null && args is! bool) throw ArgumentError(null);
     _registration = args ?? false;
   }
 
-  Future<bool> _post(String which) async => (await http.post(
-    Uri.parse('$baseUrl/$which'),
-    body: <String ,dynamic>{
-      nameC : _controllers[0].text,
-      password : _controllers[1].text
-    }
-  )).statusCode == 200;
+  Future<void> _checkAuthorization() async {
+    final result = await authorizedAsUser || await authorizedAsAdmin;
+    setState(() => _authorized = result);
+  }
+
+  Future<bool> _post(String which) async {
+    final response = await http.post(
+      Uri.parse('$baseUrl/$which'),
+      body: <String, dynamic>{
+        nameC : _controllers[0].text,
+        password : _controllers[1].text
+      }
+    );
+    final result = response.statusCode == 200;
+    return result;
+  }
 
   Future<void> _performAction() async {
     if (!await _post(!_registration ? 'login' : 'register'))
@@ -52,7 +65,8 @@ class _LoginPageState extends State<LoginPage> {
   void _clear() { for (final i in _controllers) i.clear(); }
   
   @override
-  Widget build(BuildContext context) => Scaffold(
+  Widget build(BuildContext context)
+  => _authorized ? const ErrorPage(error: alreadyAuthorized) : Scaffold(
     appBar: BasicAppBar(trailings: [
       TextButton(
         onPressed: _navigator.pop,
