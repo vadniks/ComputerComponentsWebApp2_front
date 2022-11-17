@@ -43,6 +43,9 @@ Future<bool> get authorizedAsUser async
 Future<bool> get authorizedAsAdmin async
 => (await http.get(Uri.parse('$baseUrl/authorizedA'))).statusCode == 200;
 
+Future<bool> get authorizedAsAny async
+=> await authorizedAsUser || await authorizedAsAdmin;
+
 void showSnackBar(BuildContext context, String text)
 => ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(
   text,

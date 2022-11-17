@@ -23,12 +23,27 @@ class _HomePageState extends State<HomePage> {
   final _submitControllers = List.generate(
     4, (_) => TextEditingController(), growable: false
   );
-  var _totalCost = 0;
+  var _totalCost = 0, _authorizedAsUser = false, _authorizedAsAdmin = false;
 
   NavigatorState get _navigator => Navigator.of(context);
 
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _checkAuthorization();
+  }
+
+  Future<void> _checkAuthorization() async {
+    final user = await authorizedAsUser;
+    final admin = await authorizedAsAdmin;
+    setState(() {
+      _authorizedAsUser = user;
+      _authorizedAsAdmin = admin;
+    });
+  }
+
   Future<void> _onItemClick(Type type) async {
-    if (!await authorizedAsUser) {
+    if (!_authorizedAsUser) {
       showSnackBar(context, unauthorizedAsUser);
       return;
     }
@@ -89,7 +104,8 @@ class _HomePageState extends State<HomePage> {
     return list;
   }
 
-  void _onSubmitClick() => showModalBottomSheet(
+  void _onSubmitClick()
+  => !_authorizedAsUser ? showSnackBar(context, unauthorizedAsUser) : showModalBottomSheet(
     constraints: const BoxConstraints(maxWidth: 600),
     context: context,
     builder: (context) => Container(
@@ -151,7 +167,8 @@ class _HomePageState extends State<HomePage> {
     // TODO: post request
   }
 
-  void _clearSelection() => setState(() {
+  void _clearSelection()
+  => !_authorizedAsUser ? showSnackBar(context, unauthorizedAsUser) : setState(() {
     _selected = List.filled(
       Type.amount,
       null,
@@ -163,17 +180,19 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) => Scaffold(
     appBar: BasicAppBar(trailings: [
-      TextButton(
-        onPressed: () => _navigator.pushNamed(routeLogin),
+      if (!_authorizedAsUser && !_authorizedAsAdmin) TextButton(
+        onPressed: () => _navigator
+          .pushNamed(routeLogin)
+          .then((value) => _checkAuthorization()),
         child: const Text(login),
+      ),
+      if (_authorizedAsAdmin) TextButton(
+        onPressed: () => _navigator.pushNamed(routeAdmin),
+        child: const Text(administrate)
       ),
       TextButton(
         onPressed: () => _navigator.pushNamed(routeAbout),
         child: const Text(about)
-      ),
-      TextButton(
-        onPressed: () => _navigator.pushNamed(routeAdmin),
-        child: const Text(administrate)
       )
     ]),
     body: BasicWindow(

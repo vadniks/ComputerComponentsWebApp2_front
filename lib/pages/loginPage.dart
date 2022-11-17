@@ -39,7 +39,7 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   Future<void> _checkAuthorization() async {
-    final result = await authorizedAsUser || await authorizedAsAdmin;
+    final result = await authorizedAsAny;
     setState(() => _authorized = result);
   }
 
