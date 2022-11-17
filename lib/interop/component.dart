@@ -137,15 +137,18 @@ class Selection {
 
   Selection({cpu, mb, gpu, ram, hdd, ssd, psu, fan, ca$e});
 
-  factory Selection.fromJson(Map<String, dynamic> json) => Selection(
-    cpu: json[cpuC],
-    mb: json[mbC],
-    gpu: json[gpuC],
-    ram: json[ramC],
-    hdd: json[hddC],
-    ssd: json[ssdC],
-    psu: json[psuC],
-    fan: json[fanC],
-    ca$e: json[caseC]
-  );
+  factory Selection.fromString(String fetched) {
+    final  values = fetched.split(',');
+    return Selection(
+      cpu: values[0],
+      mb: values[1],
+      gpu: values[2],
+      ram: values[3],
+      hdd: values[4],
+      ssd: values[5],
+      psu: values[6],
+      fan: values[7],
+      ca$e: values[8]
+    );
+  }
 }

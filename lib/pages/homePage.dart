@@ -1,6 +1,8 @@
 
 // ignore_for_file: curly_braces_in_flow_control_structures
 
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import '../widgets/basicAppBar.dart';
 import '../widgets/basicBottomBar.dart';
@@ -30,16 +32,44 @@ class _HomePageState extends State<HomePage> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    _checkAuthorization();
+    _checkAuthorization(true);
   }
 
-  Future<void> _checkAuthorization() async {
+  Future<void> _checkAuthorization(bool init) async {
     final user = await authorizedAsUser;
     final admin = await authorizedAsAdmin;
     setState(() {
       _authorizedAsUser = user;
       _authorizedAsAdmin = admin;
+      _fetchSelection();
     });
+  }
+
+  Future<Component?> _fetchComponent(int? id) async {
+    if (id == null) return null;
+    final response = await http.get(Uri.parse('$baseUrl/component/$id'));
+    return response.statusCode == 200 ? Component.fromJson(jsonDecode(response.body)) : null;
+  }
+
+  Future<void> _fetchSelection() async {
+    if (!_authorizedAsUser) return;
+
+    final response = await http.get(Uri.parse('$baseUrl/selected'));
+    if (response.statusCode != 200) return;
+
+    final selection = Selection.fromString(response.body);
+    final result = [
+      await _fetchComponent(selection.cpu),
+      await _fetchComponent(selection.mb),
+      await _fetchComponent(selection.gpu),
+      await _fetchComponent(selection.ram),
+      await _fetchComponent(selection.hdd),
+      await _fetchComponent(selection.ssd),
+      await _fetchComponent(selection.psu),
+      await _fetchComponent(selection.fan),
+      await _fetchComponent(selection.ca$e),
+    ];
+    setState(() => _selected = result);
   }
 
   Future<void> _onItemClick(Type type) async {
@@ -61,11 +91,8 @@ class _HomePageState extends State<HomePage> {
       _selected[result.type.index] = result;
       _totalCost += result.cost;
     });
-    _postSelected(result.id!);
+    await http.post(Uri.parse('$baseUrl/select/${result.id!}'));
   }
-
-  Future<void> _postSelected(int id) async
-  => await http.post(Uri.parse('$baseUrl/select/$id'));
 
   List<Widget> _makeItems() {
     final list = <Widget>[];
@@ -167,15 +194,21 @@ class _HomePageState extends State<HomePage> {
     // TODO: post request
   }
 
-  void _clearSelection()
-  => !_authorizedAsUser ? showSnackBar(context, unauthorizedAsUser) : setState(() {
-    _selected = List.filled(
-      Type.amount,
-      null,
-      growable: false
-    );
-    _totalCost = 0;
-  });
+  void _clearSelection() {
+    if (!_authorizedAsUser) {
+      showSnackBar(context, unauthorizedAsUser);
+      return;
+    }
+    setState(() {
+      _selected = List.filled(
+        Type.amount,
+        null,
+        growable: false
+      );
+      _totalCost = 0;
+    });
+    http.post(Uri.parse('$baseUrl/clearSelected'));
+  }
 
   @override
   Widget build(BuildContext context) => Scaffold(
@@ -183,7 +216,7 @@ class _HomePageState extends State<HomePage> {
       if (!_authorizedAsUser && !_authorizedAsAdmin) TextButton(
         onPressed: () => _navigator
           .pushNamed(routeLogin)
-          .then((value) => _checkAuthorization()),
+          .then((value) => _checkAuthorization(false)),
         child: const Text(login),
       ),
       if (_authorizedAsAdmin) TextButton(
