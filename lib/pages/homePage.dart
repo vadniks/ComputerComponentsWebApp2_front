@@ -31,10 +31,10 @@ class _HomePageState extends State<HomePage> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    _checkAuthorization(true);
+    _checkAuthorization();
   }
 
-  Future<void> _checkAuthorization(bool init) async {
+  Future<void> _checkAuthorization() async {
     final user = await authorizedAsUser;
     final admin = await authorizedAsAdmin;
     setState(() {
@@ -44,16 +44,21 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
+  Future<void> _logOut() async {
+    http.post('$baseUrl/logout'.uri);
+    _checkAuthorization();
+  }
+
   Future<Component?> _fetchComponent(int? id) async {
     if (id == null) return null;
-    final response = await http.get(Uri.parse('$baseUrl/component/$id'));
+    final response = await http.get('$baseUrl/component/$id'.uri);
     return response.statusCode == 200 ? Component.fromJson(jsonDecode(response.body)) : null;
   }
 
   Future<void> _fetchSelection() async {
     if (!_authorizedAsUser) return;
 
-    final response = await http.get(Uri.parse('$baseUrl/selected'));
+    final response = await http.get('$baseUrl/selected'.uri);
     if (response.statusCode != 200) return;
 
     final selection = Selection.fromString(response.body);
@@ -90,7 +95,7 @@ class _HomePageState extends State<HomePage> {
       _selected[result.type.index] = result;
       _totalCost += result.cost;
     });
-    await http.post(Uri.parse('$baseUrl/select/${result.id!}'));
+    await http.post('$baseUrl/select/${result.id!}'.uri);
   }
 
   List<Widget> _makeItems() {
@@ -206,18 +211,23 @@ class _HomePageState extends State<HomePage> {
       );
       _totalCost = 0;
     });
-    http.post(Uri.parse('$baseUrl/clearSelected'));
+    http.post('$baseUrl/clearSelected'.uri);
   }
 
   @override
   Widget build(BuildContext context) => Scaffold(
     appBar: BasicAppBar(trailings: [
-      if (!_authorizedAsUser && !_authorizedAsAdmin) TextButton(
-        onPressed: () => _navigator
-          .pushNamed(routeLogin)
-          .then((value) => _checkAuthorization(false)),
-        child: const Text(login),
-      ),
+      !_authorizedAsUser && !_authorizedAsAdmin
+        ? TextButton(
+          onPressed: () => _navigator
+            .pushNamed(routeLogin)
+            .then((value) => _checkAuthorization()),
+          child: const Text(login),
+        )
+        : TextButton(
+          onPressed: _logOut,
+          child: const Text(logout),
+        ),
       if (_authorizedAsAdmin) TextButton(
         onPressed: () => _navigator.pushNamed(routeAdmin),
         child: const Text(administrate)

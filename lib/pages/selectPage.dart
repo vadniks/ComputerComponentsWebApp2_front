@@ -79,7 +79,7 @@ class _SelectPageState extends State<SelectPage> {
   );
 
   Future<List<Component>> _fetch() async {
-    final response = await http.get(Uri.parse('$baseUrl/component/type/${_type.type}'));
+    final response = await http.get('$baseUrl/component/type/${_type.type}'.uri);
     if (response.statusCode == 200)
       return [for (final dynamic i in jsonDecode(response.body)) Component.fromJson(i)];
     else
@@ -165,7 +165,7 @@ class _SelectPageState extends State<SelectPage> {
               ),
             ),
             TextButton(
-              onPressed: () => _submit(component),
+              onPressed: () => _navigator..pop()..pop(component),
               child: const Text(
                 submit,
                 style: TextStyle(fontSize: 18),
@@ -206,11 +206,6 @@ class _SelectPageState extends State<SelectPage> {
       ]),
     )
   );
-
-  Future<void> _submit(Component component) async {
-    // await http.post(Uri.parse('$selectComponentUrl/${component.id!}'));
-    if (mounted) _navigator..pop()..pop(component);
-  }
 
   @override
   Widget build(BuildContext context)

@@ -45,7 +45,7 @@ class _LoginPageState extends State<LoginPage> {
 
   Future<bool> _post(String which) async {
     final response = await http.post(
-      Uri.parse('$baseUrl/$which'),
+      '$baseUrl/$which'.uri,
       body: <String, dynamic>{
         nameC : _controllers[0].text,
         password : _controllers[1].text

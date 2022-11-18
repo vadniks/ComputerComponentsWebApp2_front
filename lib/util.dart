@@ -52,10 +52,12 @@ void showSnackBar(BuildContext context, String text)
   style: const TextStyle(color: Colors.white70),
 )));
 
-extension Additionals on String? {
+extension NullableAdditionals on String? { String get value => this ?? nullString; }
 
-  String get value => this ?? nullString;
+extension Additionals on String {
 
   bool containsIgnoreCase(String value)
-  => this == null ? false : this!.toLowerCase().contains(value.toLowerCase());
+  => toLowerCase().contains(value.toLowerCase());
+
+  Uri get uri => Uri.parse(this);
 }
