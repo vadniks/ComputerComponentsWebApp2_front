@@ -61,6 +61,12 @@ class _LoginPageState extends State<LoginPage> {
     body: jsonEncode(_makeMap())
   )).statusCode == 200;
 
+  void _afterRegistration() {
+    setState(() => _registration = false);
+    _clear();
+    showSnackBar(context, registrationSuccessful);
+  }
+
   Future<void> _performAction() async {
     var areAllFilled = true;
     for (final i in _controllers) areAllFilled &= i.text.isNotEmpty;
@@ -71,7 +77,7 @@ class _LoginPageState extends State<LoginPage> {
     }
 
     if (!_registration ? await _login() : await _register())
-      _navigator.pop();
+      !_registration ? _navigator.pop() : _afterRegistration();
     else
       showSnackBar(context, !_registration ? wrongCredentials : nameExists);
   }
@@ -103,7 +109,7 @@ class _LoginPageState extends State<LoginPage> {
         child: Column(children: [
           makeTextField(
             controller: _controllers[0],
-            hint: login
+            hint: !_registration ? login : register
           ),
           makeTextField(
             controller: _controllers[1],
