@@ -29,14 +29,13 @@ class _HomePageState extends State<HomePage> {
   NavigatorState get _navigator => Navigator.of(context);
 
   @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
+  void initState() {
+    super.initState();
     _checkAuthorization();
   }
 
   Future<void> _checkAuthorization() async {
-    final user = await authorizedAsUser;
-    final admin = await authorizedAsAdmin;
+    final user = await authorizedAsUser, admin = await authorizedAsAdmin;
     setState(() {
       _authorizedAsUser = user;
       _authorizedAsAdmin = admin;

@@ -1,6 +1,8 @@
 
 // ignore_for_file: curly_braces_in_flow_control_structures
 
+import 'dart:convert';
+
 import '../interop/user.dart';
 import '../widgets/basicBottomBar.dart';
 import '../widgets/basicWindow.dart';
@@ -43,30 +45,35 @@ class _LoginPageState extends State<LoginPage> {
     setState(() => _authorized = result);
   }
 
-  Future<bool> _post(String which) async {
-    final response = await http.post(
-      '$baseUrl/$which'.uri,
-      body: <String, dynamic>{
-        nameC : _controllers[0].text,
-        password : _controllers[1].text
-      }
-    );
-    final result = response.statusCode == 200;
-    return result;
-  }
+  Map<String, dynamic> _makeMap() => {
+    nameC : _controllers[0].text,
+    passwordC : _controllers[1].text
+  };
+
+  Future<bool> _login() async => (await http.post(
+    '$baseUrl/login'.uri,
+    body: _makeMap()
+  )).statusCode == 200;
+
+  Future<bool> _register() async => (await http.post(
+    '$baseUrl/register'.uri,
+    headers: jsonHeader,
+    body: jsonEncode(_makeMap())
+  )).statusCode == 200;
 
   Future<void> _performAction() async {
     var areAllFilled = true;
     for (final i in _controllers) areAllFilled &= i.text.isNotEmpty;
+
     if (!areAllFilled) {
       showSnackBar(context, notAllFieldsFilled);
       return;
     }
 
-    if (!await _post(!_registration ? 'login' : 'register'))
-      showSnackBar(context, !_registration ? wrongCredentials : nameExists);
-    else
+    if (!_registration ? await _login() : await _register())
       _navigator.pop();
+    else
+      showSnackBar(context, !_registration ? wrongCredentials : nameExists);
   }
 
   void _clear() { for (final i in _controllers) i.clear(); }

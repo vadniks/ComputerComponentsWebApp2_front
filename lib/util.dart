@@ -52,6 +52,8 @@ void showSnackBar(BuildContext context, String text)
   style: const TextStyle(color: Colors.white70),
 )));
 
+const jsonHeader = {"Content-Type": "application/json"};
+
 extension NullableAdditionals on String? { String get value => this ?? nullString; }
 
 extension Additionals on String {

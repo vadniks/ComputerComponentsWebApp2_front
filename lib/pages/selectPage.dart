@@ -48,6 +48,12 @@ class _SelectPageState extends State<SelectPage> {
   void initState() {
     super.initState();
     _searchController = TextEditingController()..addListener(_search);
+    _checkAuthorization();
+  }
+
+  Future<void> _checkAuthorization() async {
+    final authorized = await authorizedAsUser;
+    setState(() => _isLeaving = !authorized);
   }
 
   @override
