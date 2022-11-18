@@ -49,6 +49,8 @@ const appName = 'PC Components Shop',
   notAllFieldsFilled = 'All text fields must be filled in',
   registrationSuccessful = 'Registration successfully performed',
   welcome = 'Welcome ',
+  forbidden = 'Forbidden',
+  unauthorizedAsAdmin = 'Unauthorized, you must log in as admin to proceed',
   aboutText = '''We are Leading Company
 Provide our customers with superior products and services at the most reasonable rates available. At the time of company formation in 2022, our core business was as a computer parts reseller. We initiated our company with the philosophy that “We refuse to compromise quality for profit” and have not since changed that guiding principle.
 

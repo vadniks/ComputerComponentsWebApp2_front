@@ -1,4 +1,6 @@
 
+// ignore_for_file: curly_braces_in_flow_control_structures
+
 import '../interop/component.dart';
 import 'package:flutter/material.dart';
 import '../consts.dart';
@@ -10,6 +12,7 @@ import '../widgets/basicBottomBar.dart';
 import '../widgets/basicWindow.dart';
 import '../interop/placeableInDbTable.dart';
 import '../util.dart';
+import 'errorPage.dart';
 
 class AdminPage extends StatefulWidget {
   const AdminPage({super.key});
@@ -23,11 +26,18 @@ class _AdminPageState extends State<AdminPage> {
   final List<PlaceableInDbTable> _items = [];
   var _isFetching = false, _hasFetched = false;
   List<TextEditingController>? _controllers;
+  var _authorized = false;
 
   @override
-  void initState() {
+  Future<void> initState() async {
     super.initState();
-    _loadAllItems();
+    await _checkAuthorization();
+    if (_authorized) _loadAllItems();
+  }
+
+  Future<void> _checkAuthorization() async {
+    final result = await authorizedAsAdmin;
+    setState(() => _authorized = result);
   }
 
   @Deprecated('test only')
@@ -75,7 +85,12 @@ class _AdminPageState extends State<AdminPage> {
     _hasFetched = false;
   });
 
-  void _changeTable() {
+  Future<void> _changeTable() async {
+    await _checkAuthorization();
+    if (!_authorized) {
+      if (mounted) showSnackBar(context, unauthorizedAsAdmin);
+      return;
+    }
     _resetItemsList();
     setState(() { switch (_dbTable) {
       case DatabaseTable.components: _dbTable = DatabaseTable.users; break;
@@ -85,13 +100,27 @@ class _AdminPageState extends State<AdminPage> {
     _loadAllItems();
   }
 
-  void _showItemDetails(PlaceableInDbTable? placeable, String? operation, void Function()? action) {
-    assert(operation == null && action == null || operation != null && action != null);
+  Future<void> _showItemDetails(
+    PlaceableInDbTable? placeable,
+    String? operation,
+    void Function()? action
+  ) async {
+    await _checkAuthorization();
+    if (!_authorized) {
+      if (mounted) showSnackBar(context, unauthorizedAsAdmin);
+      return;
+    }
+
+    if (!(operation == null && action == null
+        || operation != null && action != null))
+      throw Exception(null);
+
     _controllers?.clear();
     _controllers = List.generate(
       _dbTable.weightedColumns.keys.length,
       (index) => TextEditingController(text: placeable?.values[index])
     );
+
     showModalBottomSheet(
       constraints: const BoxConstraints(maxWidth: 520),
       context: context,
@@ -199,7 +228,8 @@ class _AdminPageState extends State<AdminPage> {
   ));
 
   @override
-  Widget build(BuildContext context) => Scaffold(
+  Widget build(BuildContext context)
+  => !_authorized ? const ErrorPage(error: forbidden) : Scaffold(
     appBar: BasicAppBar(trailings: [TextButton(
       onPressed: Navigator.of(context).pop,
       child: const Text(home)
