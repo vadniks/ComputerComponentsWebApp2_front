@@ -86,10 +86,9 @@ class _SelectPageState extends State<SelectPage> {
 
   Future<List<Component>> _fetch() async {
     final response = await http.get('$baseUrl/component/type/${_type.type}'.uri);
-    if (response.statusCode == 200)
-      return [for (final dynamic i in jsonDecode(response.body)) Component.fromJson(i)];
-    else
-      return [];
+    return response.statusCode == 200
+      ? [for (final dynamic i in jsonDecode(response.body)) Component.fromJson(i)]
+      : [];
   }
 
   Future<void> _loadItems(bool firstTime) async {

@@ -1,6 +1,8 @@
 
 // ignore_for_file: curly_braces_in_flow_control_structures
 
+import 'dart:convert';
+
 import '../interop/component.dart';
 import 'package:flutter/material.dart';
 import '../consts.dart';
@@ -13,6 +15,7 @@ import '../widgets/basicWindow.dart';
 import '../interop/placeableInDbTable.dart';
 import '../util.dart';
 import 'errorPage.dart';
+import 'package:http/http.dart' as http;
 
 class AdminPage extends StatefulWidget {
   const AdminPage({super.key});
@@ -49,31 +52,39 @@ class _AdminPageState extends State<AdminPage> {
       cost: i * 100
     )];
 
-  @Deprecated('test only')
-  Future<List<User>> _testFetchUsers() async
-  => [for (int i = 0; i < 10; i++) User(
-      name: i.toString(),
-      role: Role.user,
-      password: (i * 10).toString()
-    )];
+  Future<List<PlaceableInDbTable>> _fetchPlaceable() async {
+    String which;
+    PlaceableInDbTable Function(Map<String, dynamic> json) converter;
 
-  @Deprecated('test only')
-  Future<List<Session>> _testFetchSessions() async
-  => [for (int i = 0; i < 10; i++) Session(i.toString(), (i * 10).toString())];
+    switch (_dbTable) {
+      case DatabaseTable.components:
+        which = DatabaseTable.components.table;
+        converter = (json) => Component.fromJson(json);
+        break;
+      case DatabaseTable.users:
+        which = DatabaseTable.users.table;
+        converter = (json) => User.fromJson(json);
+        break;
+      case DatabaseTable.sessions:
+        which = DatabaseTable.sessions.table;
+        converter = (json) => Session.fromJson(json);
+        break;
+      default: throw Exception(null);
+    }
+    which = which.substring(0, which.length - 1);
+
+    final response = await http.get('$baseUrl/$which'.uri);
+    return response.statusCode == 200
+      ? [for (final dynamic i in jsonDecode(response.body)) converter(i)]
+      : [];
+  }
 
   Future<void> _loadAllItems() async {
     setState(() => _isFetching = true);
 
-    // await Future.delayed(const Duration(seconds: 2)); // TODO: test
-
-    final List<PlaceableInDbTable> items;
-    switch (_dbTable) {
-      case DatabaseTable.components: items = await _testFetchComponents(); break;
-      case DatabaseTable.users: items = await _testFetchUsers(); break;
-      case DatabaseTable.sessions: items = await _testFetchSessions(); break;
-    }
-
+    final List<PlaceableInDbTable> items = await _fetchPlaceable();
     if (items.isNotEmpty) setState(() => _items.addAll(items));
+
     setState(() {
       _hasFetched = true;
       _isFetching = false;
