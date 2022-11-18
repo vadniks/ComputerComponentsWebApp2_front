@@ -39,7 +39,7 @@ class User implements PlaceableInDbTable {
   factory User.fromJson(Map<String, dynamic> json) => User(
     id: json[idC],
     name: json[nameC],
-    role: json[roleC],
+    role: Role.create(json[roleC]),
     password: json[passwordC],
     firstName: json[firstNameC],
     lastName: json[lastNameC],
@@ -97,4 +97,10 @@ enum Role {
 
   const Role(this.value);
   final int value;
+
+  static Role create(String capitalized) { switch (capitalized) {
+    case 'USER': return user;
+    case 'ADMIN': return admin;
+    default: throw ArgumentError(null);
+  } }
 }

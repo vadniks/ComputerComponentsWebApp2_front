@@ -43,15 +43,6 @@ class _AdminPageState extends State<AdminPage> {
     setState(() => _authorized = result);
   }
 
-  @Deprecated('test only')
-  Future<List<Component>> _testFetchComponents() async
-  => [for (int i = 0; i < 10; i++) Component(
-      title: i.toString(),
-      type: i % 2 == 0 ? Type.cpu : Type.gpu,
-      description: (i * 10).toString(),
-      cost: i * 100
-    )];
-
   Future<List<PlaceableInDbTable>> _fetchPlaceable() async {
     String which;
     PlaceableInDbTable Function(Map<String, dynamic> json) converter;
@@ -206,35 +197,49 @@ class _AdminPageState extends State<AdminPage> {
     // TODO: delete request
   }
 
-  List<Expanded> _makeItemContent(PlaceableInDbTable? placeable) {
+  List<Expanded> _makeItemContent(PlaceableInDbTable placeable) {
     final list = <Expanded>[],
-      weight = _dbTable.weightedColumns.values.iterator,
-      isLeading = placeable != null;
-    for (final value in placeable?.values ?? _dbTable.weightedColumns.keys) {
-      if (!weight.moveNext()) throw Exception();
+      weightedColumn = _dbTable.weightedColumns.entries.iterator;
+    for (final value in placeable.values) {
+      if (!weightedColumn.moveNext()) throw Exception();
       list.add(Expanded(
-        flex: (weight.current * 100).floor(),
-        child: Text(
-          value,
-          style: TextStyle(
-            fontWeight: isLeading ? FontWeight.normal : FontWeight.bold,
-            color: !isLeading ? Colors.white54 : Colors.white70
-          ),
-        ),
+        flex: (weightedColumn.current.value * 100).floor(),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
+              value,
+              overflow: TextOverflow.ellipsis,
+              style: const TextStyle(
+                fontWeight: FontWeight.normal,
+                color: Colors.white70
+              ),
+            ),
+            Text(
+              weightedColumn.current.key,
+              style: const TextStyle(
+                fontStyle: FontStyle.italic,
+                color: Colors.white38,
+                fontSize: 12
+              )
+            )
+          ]
+        )
       ));
     }
     return list;
   }
 
   Widget _makeItem(int index) => Material(child: ListTile(
-    onTap: index == 0 ? null : () => _showItemDetails(
+    onTap: () => _showItemDetails(
       _items[index],
       null,
       null
     ),
     title: Row(
       mainAxisSize: MainAxisSize.max,
-      children: _makeItemContent(index == 0 ? null : _items[index])
+      children: _makeItemContent(_items[index])
     )
   ));
 
