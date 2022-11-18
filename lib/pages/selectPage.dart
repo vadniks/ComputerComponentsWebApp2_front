@@ -141,7 +141,7 @@ class _SelectPageState extends State<SelectPage> {
 
   // TODO: border-radius
   void _onItemClick(Component component) => showModalBottomSheet(
-    constraints: const BoxConstraints(maxWidth: 600),
+    constraints: const BoxConstraints(maxWidth: 700),
     context: context,
     builder: (builder) => Container(
       decoration: const BoxDecoration(
@@ -186,13 +186,13 @@ class _SelectPageState extends State<SelectPage> {
           component.image == null
             ? SvgPicture.asset( // TODO: test
               appIcon,
-              width: 200,
-              height: 200
+              width: 300,
+              height: 300
             )
             : loadImage(
               component.image!,
-              width: 200,
-              height: 200,
+              width: 300,
+              height: 300,
             ),
           const VerticalDivider(thickness: 1),
           Expanded(child: Column(children: [

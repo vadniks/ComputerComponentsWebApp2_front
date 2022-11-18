@@ -42,10 +42,6 @@ class _HomePageState extends State<HomePage> {
   }
 
   Future<void> _fetchUserName() async {
-    if (!await authorizedAsAny) {
-      setState(() => _userName = null);
-      return;
-    }
     final response = await http.get('$baseUrl/name'.uri);
     setState(() => _userName = response.statusCode == 200 ? response.body : null);
   }
