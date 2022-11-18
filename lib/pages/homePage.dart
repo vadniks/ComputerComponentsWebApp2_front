@@ -45,8 +45,8 @@ class _HomePageState extends State<HomePage> {
   }
 
   Future<void> _logOut() async {
-    http.post('$baseUrl/logout'.uri);
-    _checkAuthorization();
+    await http.post('$baseUrl/logout'.uri);
+    await _checkAuthorization();
   }
 
   Future<Component?> _fetchComponent(int? id) async {
@@ -56,7 +56,10 @@ class _HomePageState extends State<HomePage> {
   }
 
   Future<void> _fetchSelection() async {
-    if (!_authorizedAsUser) return;
+    if (!_authorizedAsUser) {
+      _resetSelectedList();
+      return;
+    }
 
     final response = await http.get('$baseUrl/selected'.uri);
     if (response.statusCode != 200) return;
@@ -198,19 +201,21 @@ class _HomePageState extends State<HomePage> {
     // TODO: post request
   }
 
+  void _resetSelectedList() => setState(() {
+    _selected = List.filled(
+      Type.amount,
+      null,
+      growable: false
+    );
+    _totalCost = 0;
+  });
+
   void _clearSelection() {
     if (!_authorizedAsUser) {
       showSnackBar(context, unauthorizedAsUser);
       return;
     }
-    setState(() {
-      _selected = List.filled(
-        Type.amount,
-        null,
-        growable: false
-      );
-      _totalCost = 0;
-    });
+    _resetSelectedList();
     http.post('$baseUrl/clearSelected'.uri);
   }
 

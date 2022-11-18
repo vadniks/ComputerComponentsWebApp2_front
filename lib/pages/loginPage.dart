@@ -56,6 +56,13 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   Future<void> _performAction() async {
+    var areAllFilled = true;
+    for (final i in _controllers) areAllFilled &= i.text.isNotEmpty;
+    if (!areAllFilled) {
+      showSnackBar(context, notAllFieldsFilled);
+      return;
+    }
+
     if (!await _post(!_registration ? 'login' : 'register'))
       showSnackBar(context, !_registration ? wrongCredentials : nameExists);
     else
