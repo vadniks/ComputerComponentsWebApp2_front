@@ -25,13 +25,29 @@ class _HomePageState extends State<HomePage> {
     4, (_) => TextEditingController(), growable: false
   );
   var _totalCost = 0, _authorizedAsUser = false, _authorizedAsAdmin = false;
+  String? _userName;
 
   NavigatorState get _navigator => Navigator.of(context);
 
   @override
   void initState() {
     super.initState();
-    _checkAuthorization();
+    _fetchEverythingWeNeed();
+  }
+  
+  Future<void> _fetchEverythingWeNeed() async {
+    await _checkAuthorization();
+    await _fetchUserName();
+    await _fetchSelection();
+  }
+
+  Future<void> _fetchUserName() async {
+    if (!await authorizedAsAny) {
+      setState(() => _userName = null);
+      return;
+    }
+    final response = await http.get('$baseUrl/name'.uri);
+    setState(() => _userName = response.statusCode == 200 ? response.body : null);
   }
 
   Future<void> _checkAuthorization() async {
@@ -45,7 +61,7 @@ class _HomePageState extends State<HomePage> {
 
   Future<void> _logOut() async {
     await http.post('$baseUrl/logout'.uri);
-    await _checkAuthorization();
+    await _fetchEverythingWeNeed();
   }
 
   Future<Component?> _fetchComponent(int? id) async {
@@ -225,7 +241,7 @@ class _HomePageState extends State<HomePage> {
         ? TextButton(
           onPressed: () => _navigator
             .pushNamed(routeLogin)
-            .then((value) => _checkAuthorization()),
+            .then((value) => _fetchEverythingWeNeed()),
           child: const Text(login),
         )
         : TextButton(
@@ -242,10 +258,25 @@ class _HomePageState extends State<HomePage> {
       )
     ]),
     body: BasicWindow(
-      titleWidgets: const [Text(
-        componentsList,
-        style: TextStyle(fontSize: 20)
-      )],
+      titleWidgets: [
+        const Text(
+          componentsList,
+          style: TextStyle(fontSize: 20)
+        ),
+        if (_userName != null) Padding(
+          padding: const EdgeInsets.only(
+            right: 5,
+            bottom: 5
+          ),
+          child: Text(
+            '$welcome $_userName!',
+            style: const TextStyle(
+              fontStyle: FontStyle.italic,
+              color: Colors.white70,
+            )
+          ),
+        )
+      ],
       content: ListView(children: ListTile.divideTiles(
         tiles: _makeItems(),
         color: Colors.white10
