@@ -54,7 +54,7 @@ class _AdminPageState extends State<AdminPage> {
   Future<void> _loadAllItems() async {
     setState(() => _isFetching = true);
 
-    await Future.delayed(const Duration(seconds: 2)); // TODO: test
+    // await Future.delayed(const Duration(seconds: 2)); // TODO: test
 
     final List<PlaceableInDbTable> items;
     switch (_dbTable) {
@@ -164,7 +164,6 @@ class _AdminPageState extends State<AdminPage> {
 
   void _delete(PlaceableInDbTable placeable) {
     // TODO: delete request
-    // TODO: http://0.0.0.0:8080/res_back/amd_r5.jpg
   }
 
   List<Expanded> _makeItemContent(PlaceableInDbTable? placeable) {
@@ -172,7 +171,7 @@ class _AdminPageState extends State<AdminPage> {
       weight = _dbTable.weightedColumns.values.iterator,
       isLeading = placeable != null;
     for (final value in placeable?.values ?? _dbTable.weightedColumns.keys) {
-      assert(weight.moveNext());
+      if (!weight.moveNext()) throw Exception();
       list.add(Expanded(
         flex: (weight.current * 100).floor(),
         child: Text(
@@ -193,7 +192,10 @@ class _AdminPageState extends State<AdminPage> {
       null,
       null
     ),
-    title: Row(children: _makeItemContent(index == 0 ? null : _items[index]))
+    title: Row(
+      mainAxisSize: MainAxisSize.max,
+      children: _makeItemContent(index == 0 ? null : _items[index])
+    )
   ));
 
   @override
