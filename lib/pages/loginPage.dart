@@ -121,7 +121,7 @@ class _LoginPageState extends State<LoginPage> {
       footerWidgets: [
         TextButton(
           onPressed: _performAction,
-          child: Text(!_registration ? login : register)
+          child: Text(!_registration ? login2 : register)
         ),
         TextButton(
           onPressed: _clear,

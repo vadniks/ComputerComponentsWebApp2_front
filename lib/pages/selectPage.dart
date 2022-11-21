@@ -53,7 +53,7 @@ class _SelectPageState extends State<SelectPage> {
 
   Future<void> _checkAuthorization() async {
     final authorized = await authorizedAsUser;
-    setState(() => _isLeaving = !authorized);
+    setState(() => _isLeaving &= !authorized);
   }
 
   @override
