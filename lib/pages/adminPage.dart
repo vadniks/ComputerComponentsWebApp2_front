@@ -2,9 +2,6 @@
 // ignore_for_file: curly_braces_in_flow_control_structures, empty_statements
 
 import 'dart:convert';
-
-import 'package:cursov_front/interop/Selection.dart';
-
 import '../interop/component.dart';
 import 'package:flutter/material.dart';
 import '../consts.dart';
@@ -227,10 +224,6 @@ class _AdminPageState extends State<AdminPage> {
     } } catch (_) { return null; }
   }
 
-  void _select() => _showItemDetails(null, select, () {
-    // TODO: get request
-  });
-
   Future<void> _postOrPut(PlaceableInDbTable? old) async {
     var placeable = _fieldsToPlaceable();
     if (placeable == null) {
@@ -345,10 +338,6 @@ class _AdminPageState extends State<AdminPage> {
                 color: Colors.white70
               )
             )
-          ),
-          TextButton(
-            onPressed: _select,
-            child: const Text(select)
           ),
           TextButton(
             onPressed: _insert,
