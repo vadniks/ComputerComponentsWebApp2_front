@@ -129,7 +129,10 @@ class _AdminPageState extends State<AdminPage> {
     _controllers?.clear();
     _controllers = List.generate(
       _dbTable.weightedColumns.keys.length,
-      (index) => TextEditingController(text: placeable?.values[index])
+      (index) {
+        final text = placeable?.values[index];
+        return TextEditingController(text: text == nullString ? stub : text);
+      }
     );
 
     showModalBottomSheet(
@@ -178,10 +181,12 @@ class _AdminPageState extends State<AdminPage> {
               )
             ),
             Expanded(child: SingleChildScrollView(child: Column(children: [
-              for (int i = 0; i < _dbTable.weightedColumns.length; i++)
+              for (var i = 0; i < _dbTable.weightedColumns.length; i++)
                 makeTextField(
                   controller: _controllers![i], // TODO: add type check i.e. text, number...
-                  hint: _dbTable.weightedColumns.keys.elementAt(i)
+                  hint: _dbTable.weightedColumns.keys.elementAt(i) +
+                    (_dbTable.nullablesMask[i] ? ' $nullable' : stub),
+                  isItalic: _dbTable.nullablesMask[i]
                 )
             ])))
           ]),
@@ -191,28 +196,34 @@ class _AdminPageState extends State<AdminPage> {
   }
 
   PlaceableInDbTable? _fieldsToPlaceable() {
-    String cx(int index) => _controllers![index].text;
+    String? txt(int index) {
+      final text = _controllers![index].text;
+      return text.isEmpty ? null : text;
+    }
+    final id = txt(0);
     try { switch (_dbTable) {
       case DatabaseTable.components: return Component(
-        id: int.tryParse(cx(0)),
-        title: cx(1),
-        type: Type.create2(cx(2))!,
-        description: cx(3),
-        cost: int.tryParse(cx(4))!,
-        image: cx(5)
+        id: id != null ? int.tryParse(id) : null,
+        title: txt(1)!,
+        type: Type.create2(txt(2)!)!,
+        description: txt(3)!,
+        cost: int.tryParse(txt(4)!)!,
+        image: txt(5)
       );
-      case DatabaseTable.users: return User(
-        id: int.tryParse(cx(0)),
-        name: cx(1),
-        role: Role.create(cx(2)),
-        password: cx(3),
-        firstName: cx(4),
-        lastName: cx(5),
-        phone: int.tryParse(cx(6)),
-        address: cx(7),
-        selection: cx(8)
+      case DatabaseTable.users:
+        final phone = txt(6);
+        return User(
+          id: id != null ? int.tryParse(id) : null,
+          name: txt(1)!,
+          role: Role.create(txt(2)!),
+          password: txt(3)!,
+          firstName: txt(4),
+          lastName: txt(5),
+          phone: phone != null ? int.tryParse(phone) : null,
+          address: txt(7),
+          selection: txt(8)
       );
-      case DatabaseTable.sessions: return Session(cx(0), cx(1));
+      case DatabaseTable.sessions: return Session(id!, txt(1)!);
     } } catch (_) { return null; }
   }
 
@@ -264,9 +275,10 @@ class _AdminPageState extends State<AdminPage> {
 
   List<Expanded> _makeItemContent(PlaceableInDbTable placeable) {
     final list = <Expanded>[],
-      weightedColumn = _dbTable.weightedColumns.entries.iterator;
+      weightedColumn = _dbTable.weightedColumns.entries.iterator,
+      nullables = _dbTable.nullablesMask.iterator;
     for (final value in placeable.values) {
-      if (!weightedColumn.moveNext()) throw Exception();
+      if (!weightedColumn.moveNext() || !nullables.moveNext()) throw Exception();
       list.add(Expanded(
         flex: (weightedColumn.current.value * 100).floor(),
         child: Column(
@@ -276,9 +288,10 @@ class _AdminPageState extends State<AdminPage> {
             Text(
               value,
               overflow: TextOverflow.ellipsis,
-              style: const TextStyle(
+              style: TextStyle(
                 fontWeight: FontWeight.normal,
-                color: Colors.white70
+                color: Colors.white70,
+                fontStyle: nullables.current ? FontStyle.italic : FontStyle.normal
               ),
             ),
             Text(

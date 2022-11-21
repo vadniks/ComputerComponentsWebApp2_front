@@ -27,7 +27,7 @@ class Component implements PlaceableInDbTable {
   List<String> get values => [
     id.toString(),
     title,
-    type.name,
+    type.value,
     description,
     cost.toString(),
     image.value
@@ -58,7 +58,7 @@ class Component implements PlaceableInDbTable {
   Map<String, dynamic> get asMap => {
     idC : id,
     titleC : title,
-    typeC : type.type,
+    typeC : type.value,
     descriptionC : description,
     costC : cost,
     imageC : image

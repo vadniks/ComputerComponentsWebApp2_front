@@ -17,7 +17,8 @@ makeTextField({
   required TextEditingController controller,
   required String hint,
   bool isNumeric = false,
-  bool isPassword = false
+  bool isPassword = false,
+  bool isItalic = false
 }) => SizedBox(
   width: 500,
   child: TextFormField(
@@ -26,9 +27,10 @@ makeTextField({
     maxLines: 1,
     cursorColor: Colors.white70,
     controller: controller,
-    style: const TextStyle(
+    style: TextStyle(
       color: Colors.white70,
-      fontSize: 14
+      fontSize: 14,
+      fontStyle: isItalic ? FontStyle.italic : FontStyle.normal
     ),
     decoration: InputDecoration(
       hintText: hint,
