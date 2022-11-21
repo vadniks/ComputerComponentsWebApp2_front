@@ -30,4 +30,10 @@ class Session implements PlaceableInDbTable {
 
   @override
   int get hashCode => id.hashCode ^ value.hashCode;
+
+  @override
+  get idProperty => id;
+
+  @override
+  Map<String, dynamic> get asMap => { idC : id, valueC : value };
 }

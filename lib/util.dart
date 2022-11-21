@@ -62,4 +62,6 @@ extension Additionals on String {
   => toLowerCase().contains(value.toLowerCase());
 
   Uri get uri => Uri.parse(this);
+
+  String get beforeLast => substring(0, length - 1);
 }

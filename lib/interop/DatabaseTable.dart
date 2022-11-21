@@ -2,6 +2,7 @@
 import 'component.dart';
 import 'user.dart';
 import 'session.dart';
+import 'dart:core';
 
 enum DatabaseTable {
   components(0, 'components', {

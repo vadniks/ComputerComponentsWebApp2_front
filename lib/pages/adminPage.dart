@@ -1,7 +1,9 @@
 
-// ignore_for_file: curly_braces_in_flow_control_structures
+// ignore_for_file: curly_braces_in_flow_control_structures, empty_statements
 
 import 'dart:convert';
+
+import 'package:cursov_front/interop/Selection.dart';
 
 import '../interop/component.dart';
 import 'package:flutter/material.dart';
@@ -30,6 +32,8 @@ class _AdminPageState extends State<AdminPage> {
   var _isFetching = false, _hasFetched = false;
   List<TextEditingController>? _controllers;
   var _authorized = false;
+
+  NavigatorState get _navigator => Navigator.of(context);
 
   @override
   Future<void> initState() async {
@@ -62,9 +66,8 @@ class _AdminPageState extends State<AdminPage> {
         break;
       default: throw Exception(null);
     }
-    which = which.substring(0, which.length - 1);
 
-    final response = await http.get('$baseUrl/$which'.uri);
+    final response = await http.get('$baseUrl/${which.beforeLast}'.uri);
     return response.statusCode == 200
       ? [for (final dynamic i in jsonDecode(response.body)) converter(i)]
       : [];
@@ -86,6 +89,12 @@ class _AdminPageState extends State<AdminPage> {
     _items.clear();
     _hasFetched = false;
   });
+
+  Future<void> _reloadItemsList() async {
+    _resetItemsList();
+    await _checkAuthorization();
+    await _loadAllItems();
+  }
 
   Future<void> _changeTable() async {
     await _checkAuthorization();
@@ -171,7 +180,7 @@ class _AdminPageState extends State<AdminPage> {
             Expanded(child: SingleChildScrollView(child: Column(children: [
               for (int i = 0; i < _dbTable.weightedColumns.length; i++)
                 makeTextField(
-                  controller: _controllers![i],
+                  controller: _controllers![i], // TODO: add type check i.e. text, number...
                   hint: _dbTable.weightedColumns.keys.elementAt(i)
                 )
             ])))
@@ -181,20 +190,76 @@ class _AdminPageState extends State<AdminPage> {
     );
   }
 
+  PlaceableInDbTable? _fieldsToPlaceable() {
+    String cx(int index) => _controllers![index].text;
+    try { switch (_dbTable) {
+      case DatabaseTable.components: return Component(
+        id: int.tryParse(cx(0)),
+        title: cx(1),
+        type: Type.create2(cx(2))!,
+        description: cx(3),
+        cost: int.tryParse(cx(4))!,
+        image: cx(5)
+      );
+      case DatabaseTable.users: return User(
+        id: int.tryParse(cx(0)),
+        name: cx(1),
+        role: Role.create(cx(2)),
+        password: cx(3),
+        firstName: cx(4),
+        lastName: cx(5),
+        phone: int.tryParse(cx(6)),
+        address: cx(7),
+        selection: cx(8)
+      );
+      case DatabaseTable.sessions: return Session(cx(0), cx(1));
+    } } catch (_) { return null; }
+  }
+
   void _select() => _showItemDetails(null, select, () {
     // TODO: get request
   });
 
-  void _insert() => _showItemDetails(null, insert, () {
-    // TODO: post request
-  });
+  Future<void> _postOrPut(PlaceableInDbTable? old) async {
+    var placeable = _fieldsToPlaceable();
+    if (placeable == null) {
+      if (mounted) showSnackBar(context, incorrectData);
+      return;
+    }
 
-  void _update(PlaceableInDbTable placeable) {
-    // TODO: put request
+    Future<http.Response> request(Uri uri, {String? body}) async => old == null
+      ? http.post(uri, headers: jsonHeader, body: body)
+      : http.put(uri, headers: jsonHeader , body: body);
+
+    final result = (await request(
+      '$baseUrl/${_dbTable.table.beforeLast}${old == null ? '' : '/${old.idProperty}'}'.uri,
+      body: jsonEncode(placeable.asMap)
+    )).statusCode == 200;
+
+    if (result) {
+      _reloadItemsList();
+      if (mounted) _navigator.pop();
+    }
+    if (mounted) showSnackBar(
+      context,
+      result ? operationSucceeded : operationFailed
+    );
   }
 
-  void _delete(PlaceableInDbTable placeable) {
-    // TODO: delete request
+  void _insert() => _showItemDetails(null, insert, () async => _postOrPut(null));
+
+  Future<void> _update(PlaceableInDbTable old) async => _postOrPut(old);
+
+  Future<void> _delete(PlaceableInDbTable old) async {
+    if ((await http.delete(
+        '$baseUrl/${_dbTable.table.beforeLast}/${old.idProperty}'.uri
+    )).statusCode == 200) {
+      if (mounted) {
+        _reloadItemsList();
+        _navigator.pop();
+        showSnackBar(context, operationSucceeded);
+      }
+    } else if (mounted) showSnackBar(context, operationFailed);
   }
 
   List<Expanded> _makeItemContent(PlaceableInDbTable placeable) {
@@ -247,7 +312,7 @@ class _AdminPageState extends State<AdminPage> {
   Widget build(BuildContext context)
   => !_authorized ? const ErrorPage(error: forbidden) : Scaffold(
     appBar: BasicAppBar(trailings: [TextButton(
-      onPressed: Navigator.of(context).pop,
+      onPressed: _navigator.pop,
       child: const Text(home)
     )]),
     body: BasicWindow(

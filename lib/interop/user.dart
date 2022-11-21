@@ -90,6 +90,22 @@ class User implements PlaceableInDbTable {
     phone.hashCode ^
     address.hashCode ^
     selection.hashCode;
+
+  @override
+  get idProperty => id;
+
+  @override
+  Map<String, dynamic> get asMap => {
+    idC : id,
+    nameC : name,
+    roleC : role.name.toUpperCase(),
+    passwordC : password,
+    firstNameC : firstName,
+    lastNameC : lastName,
+    phoneC : phone,
+    addressC : address,
+    selectionC : selection
+  };
 }
 
 enum Role {

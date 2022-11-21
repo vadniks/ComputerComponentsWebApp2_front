@@ -4,6 +4,8 @@ import 'DatabaseTable.dart';
 /*interface*/ class PlaceableInDbTable {
   DatabaseTable get table;
   List<String> get values;
+  Map<String, dynamic> get asMap;
+  dynamic get idProperty;
 
   @override
   dynamic noSuchMethod(Invocation invocation) => super.noSuchMethod(invocation);
