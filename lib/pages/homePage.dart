@@ -2,6 +2,7 @@
 // ignore_for_file: curly_braces_in_flow_control_structures
 
 import 'dart:convert';
+import 'package:cursov_front/interop/user.dart';
 import 'package:flutter/material.dart';
 import '../widgets/basicAppBar.dart';
 import '../widgets/basicBottomBar.dart';
@@ -88,7 +89,11 @@ class _HomePageState extends State<HomePage> {
       await _fetchComponent(selection.fan),
       await _fetchComponent(selection.ca$e),
     ];
-    setState(() => _selected = result);
+    setState(() {
+      _selected = result;
+      _totalCost = 0;
+      for (final i in result) _totalCost += i?.cost ?? 0;
+    });
   }
 
   Future<void> _onItemClick(Type type) async {
@@ -210,7 +215,32 @@ class _HomePageState extends State<HomePage> {
   );
 
   Future<void> _performSubmit() async {
-    // TODO: post request
+    String? txt(int index) {
+      final text = _submitControllers[index].text;
+      return text.isEmpty ? null : text;
+    }
+
+    String json;
+    try { json = jsonEncode({
+      firstNameC : txt(0)!,
+      lastNameC : txt(1)!,
+      phoneC : int.tryParse(txt(2)!)!,
+      addressC : txt(3)!
+    }); } catch (_) {
+      showSnackBar(context, incorrectData);
+      return;
+    }
+
+    final result = (await http.post(
+      '$baseUrl/order'.uri,
+      headers: jsonHeader,
+      body: json
+    )).statusCode == 200;
+
+    if (mounted) {
+      _navigator.pop();
+      showSnackBar(context, result ? operationSucceeded : operationFailed);
+    }
   }
 
   void _resetSelectedList() => setState(() {
