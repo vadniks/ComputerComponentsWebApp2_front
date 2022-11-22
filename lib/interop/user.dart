@@ -55,7 +55,7 @@ class User implements PlaceableInDbTable {
   List<String> get values => [
     id.toString(),
     name,
-    role.name,
+    role.role,
     password,
     firstName.value,
     lastName.value,
@@ -109,12 +109,13 @@ class User implements PlaceableInDbTable {
 }
 
 enum Role {
-  user(0), admin(1);
+  user(0, 'USER'), admin(1, 'ADMIN');
 
-  const Role(this.value);
+  const Role(this.value, this.role);
   final int value;
+  final String role;
 
-  static Role create(String capitalized) { switch (capitalized) {
+  static Role create(String which) { switch (which) {
     case 'USER': return user;
     case 'ADMIN': return admin;
     default: throw ArgumentError(null);

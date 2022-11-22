@@ -109,7 +109,7 @@ class _LoginPageState extends State<LoginPage> {
         child: Column(children: [
           makeTextField(
             controller: _controllers[0],
-            hint: !_registration ? login : register
+            hint: login2
           ),
           makeTextField(
             controller: _controllers[1],
@@ -121,7 +121,7 @@ class _LoginPageState extends State<LoginPage> {
       footerWidgets: [
         TextButton(
           onPressed: _performAction,
-          child: Text(!_registration ? login2 : register)
+          child: Text(!_registration ? login : register)
         ),
         TextButton(
           onPressed: _clear,

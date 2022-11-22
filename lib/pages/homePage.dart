@@ -142,7 +142,7 @@ class _HomePageState extends State<HomePage> {
             style: const TextStyle(fontWeight: FontWeight.bold)
           ),
           subtitle: Text(
-            component != null ? component.title : i.title,
+            i.title,
             overflow: TextOverflow.ellipsis,
           ),
           trailing: Text(

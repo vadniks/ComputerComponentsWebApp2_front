@@ -1,6 +1,5 @@
 
-import 'package:cursov_front/pages/adminPage.dart';
-
+import 'pages/adminPage.dart';
 import 'pages/errorPage.dart';
 import 'pages/loginPage.dart';
 import 'package:flutter/services.dart';
@@ -12,8 +11,6 @@ import 'consts.dart';
 
 void main() => runApp(const App());
 
-// ~/flutter/bin/flutter run -d web-server --web-renderer canvaskit
-// ~/flutter/bin/flutter build web --web-renderer canvaskit --base-href / --web-port 80
 // /data/flutter/bin/flutter run -d web-server --web-renderer canvaskit --web-port 8000
 // /data/flutter/bin/flutter build web --web-renderer canvaskit --base-href / --dart2js-optimization O4
 class App extends StatelessWidget {
@@ -21,7 +18,7 @@ class App extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => MaterialApp(
-    title: 'Flutter Demo',
+    title: appName,
     debugShowCheckedModeBanner: false,
     themeMode: ThemeMode.dark,
     theme: ThemeData.dark(useMaterial3: true).copyWith(

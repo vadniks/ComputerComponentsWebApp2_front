@@ -14,10 +14,10 @@ enum DatabaseTable {
     imageC : 0.1
   }, [true, false, false, false, false, true]),
   users(1, 'users', {
-    idC : 0.05,
+    idC : 0.02,
     nameC : 0.15,
     roleC : 0.1,
-    passwordC : 0.1,
+    passwordC : 0.4,
     firstNameC : 0.15,
     lastNameC : 0.15,
     phoneC : 0.1,
