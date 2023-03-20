@@ -308,7 +308,12 @@ class _AdminPageState extends State<AdminPage> {
     return list;
   }
 
-  void _uploadImage() => showModalBottomSheet(
+  void _uploadImageProxy() {
+    final controller = TextEditingController();
+    _uploadImage(controller);
+  }
+
+  void _uploadImage(TextEditingController controller) => showModalBottomSheet(
     constraints: const BoxConstraints(maxWidth: 600), // TODO: extract constant
     context: context,
     builder: (context) => Container(
@@ -338,7 +343,7 @@ class _AdminPageState extends State<AdminPage> {
                 )
               ),
               TextButton(
-                onPressed: () => _doUploadImage(),
+                onPressed: () => _doUploadImage(controller.text),
                 child: const Text( // TODO: extract template
                   clear,
                   style: TextStyle(fontSize: 18),
@@ -346,13 +351,18 @@ class _AdminPageState extends State<AdminPage> {
               )
             ],
           ),
-          makeTextField(controller: controller, hint: hint)
+          makeTextField(controller: controller, hint: fileName)
         ],
       ),
     )
   );
 
   void _doUploadImage(String filename) {
+    if (filename.isEmpty) {
+      showSnackBar(context, textEmpty);
+      return;
+    }
+
     final uploadInput = FileUploadInputElement();
     uploadInput.onChange.listen((event) {
       final files = uploadInput.files;
@@ -390,8 +400,9 @@ class _AdminPageState extends State<AdminPage> {
   }
 
   void _deleteImage() async {
-    final result = await http.delete('$baseUrl/file'.uri);
-
+    final result = await http.delete('$baseUrl/file'.uri)
+      .then((response) => response.statusCode == 200);
+    if (mounted) showSnackBar(context, result ? operationSucceeded : operationFailed);
   }
 
   Widget _makeItem(int index) => Material(child: ListTile(
@@ -449,7 +460,7 @@ class _AdminPageState extends State<AdminPage> {
         ),
       footerWidgets: [
         TextButton(
-          onPressed: _uploadImage,
+          onPressed: _uploadImageProxy,
           child: const Text(uploadImage)
         ),
         TextButton(
