@@ -259,9 +259,59 @@ class _HomePageState extends State<HomePage> {
     http.post('$baseUrl/clearSelected'.uri);
   }
 
-  void _showOrders() {
+  void _showOrders() async {
+    final result = await http.get('$baseUrl/history'.uri);
+    if (!mounted) return;
 
+    if (result.statusCode != 200) {
+      showSnackBar(context, unableToFetchOrders);
+      return;
+    }
+
+    final List<Widget> selections = [];
+    for (final selection in result.body.split(':')) {
+      final components = <Row>[];
+
+      for (final id in selection.split(',')) {
+        final fetched = await http.get('$baseUrl/component/$id'.uri);
+        if (fetched.statusCode != 200) continue;
+
+        final component = Component.fromJson(jsonDecode(fetched.body));
+        components.add(Row(children: [
+          Text(component.title),
+          Text(component.type.title),
+          Text(component.cost.toString()),
+          loadImage(
+            component.image!,
+            width: 50,
+            height: 50
+          )
+        ]));
+      }
+    }
+
+    _doShowOrders(selections);
   }
+
+  void _doShowOrders(List<Widget> selections) => showModalBottomSheet(
+    constraints: const BoxConstraints(maxWidth: 600),
+    context: context,
+    builder: (context) => Container(
+      decoration: const BoxDecoration(
+        color: Colors.black,
+        boxShadow: [BoxShadow(
+          color: darkSecondaryColor,
+          spreadRadius: 1,
+          offset: Offset(0, 0)
+        )]
+      ),
+      child: ListView.separated(
+        itemBuilder: (_, index) => selections[index],
+        separatorBuilder: (_, index) => const Divider(height: 2),
+        itemCount: selections.length
+      )
+    )
+  );
 
   @override
   Widget build(BuildContext context) => Scaffold(
