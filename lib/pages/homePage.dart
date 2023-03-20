@@ -26,6 +26,7 @@ class _HomePageState extends State<HomePage> {
   final _submitControllers = List.generate(4, (_) => TextEditingController(), growable: false);
   var _totalCost = 0, _authorizedAsUser = false, _authorizedAsAdmin = false;
   String? _userName;
+  var _isFetchingOrders = false;
 
   NavigatorState get _navigator => Navigator.of(context);
 
@@ -260,6 +261,8 @@ class _HomePageState extends State<HomePage> {
   }
 
   void _loadOrders() async {
+    setState(() => _isFetchingOrders = true);
+
     final result = await http.get('$baseUrl/history'.uri);
     if (!mounted) return;
 
@@ -322,6 +325,7 @@ class _HomePageState extends State<HomePage> {
       selections.add(divider);
     }
 
+    setState(() => _isFetchingOrders = false);
     _doShowOrders(selections);
   }
 
@@ -419,9 +423,20 @@ class _HomePageState extends State<HomePage> {
         color: Colors.white10
       ).toList()),
       footerWidgets: [
-        TextButton(
-          onPressed: _loadOrders,
-          child: const Text(orders)
+        AnimatedContainer(
+          duration: const Duration(seconds: 1),
+          child: _isFetchingOrders
+            ? const Padding(
+              padding: EdgeInsets.all(5),
+              child: SizedBox.square(
+                dimension: 15,
+                child: CircularProgressIndicator(),
+              )
+            )
+            : TextButton(
+              onPressed: _loadOrders,
+              child: const Text(orders)
+            ),
         ),
         Row(children: [
           Text(
