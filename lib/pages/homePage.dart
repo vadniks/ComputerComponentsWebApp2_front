@@ -268,8 +268,14 @@ class _HomePageState extends State<HomePage> {
       return;
     }
 
-    final List<Widget> selections = [];
-    for (final selection in result.body.split(':')) {
+    const divider = Divider(
+      height: 10,
+      thickness: 10,
+    );
+
+    final List<Widget> selections = [divider];
+    final orders = result.body.split(':'); // TODO: count repeated items & remove them, add column displaying each item quantity
+    for (final selection in orders) {
 
       for (final id in selection.split(',')) {
         if (id == nullString) continue;
@@ -312,6 +318,8 @@ class _HomePageState extends State<HomePage> {
           ]
         ));
       }
+
+      selections.add(divider);
     }
 
     _doShowOrders(selections);
@@ -344,7 +352,6 @@ class _HomePageState extends State<HomePage> {
                 style: TextStyle(fontSize: 20),
               )
             ),
-            const VerticalDivider(thickness: 1),
             TextButton(
               onPressed: () {}, // TODO 
               child: const Text(
