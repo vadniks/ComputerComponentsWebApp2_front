@@ -408,7 +408,7 @@ class _AdminPageState extends State<AdminPage> {
   }
 
   void _doDeleteImage(String filename) async {
-    final result = await http.delete('$baseUrl/file'.uri)
+    final result = await http.delete('$baseUrl/file/$filename'.uri)
       .then((response) => response.statusCode == 200);
     if (mounted) showSnackBar(context, result ? operationSucceeded : operationFailed);
   }
