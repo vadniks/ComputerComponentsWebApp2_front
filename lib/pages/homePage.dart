@@ -324,19 +324,23 @@ class _HomePageState extends State<HomePage> {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            const Text(orderHistory),
+            const Text(
+              orderHistory,
+              style: TextStyle(fontSize: 20),
+            ),
             TextButton(
               onPressed: () {}, // TODO 
-              child: const Text(clear)
+              child: const Text(
+                clear,
+                style: TextStyle(fontSize: 18),
+              )
             )
           ],
         ),
+        const Divider(height: 1),
         Expanded(child: ListView.separated(
           itemBuilder: (_, index) => selections[index],
-          separatorBuilder: (_, index) => const Divider(
-            height: 1,
-            color: darkSecondaryColor,
-          ),
+          separatorBuilder: (_, index) => const Divider(height: 1),
           itemCount: selections.length
         ))
       ])

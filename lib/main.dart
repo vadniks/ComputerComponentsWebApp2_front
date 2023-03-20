@@ -43,7 +43,8 @@ class App extends StatelessWidget {
         primary: Colors.cyan,
         surface: darkSecondaryColor,
         onSecondary: darkSecondaryColor
-      ).copyWith(background: Colors.black)
+      ).copyWith(background: Colors.black),
+      dividerTheme: const DividerThemeData(color: darkSecondaryColor)
     ),
     home: const HomePage(),
     initialRoute: routeHome,
