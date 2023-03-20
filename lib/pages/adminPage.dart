@@ -2,6 +2,8 @@
 // ignore_for_file: curly_braces_in_flow_control_structures, empty_statements
 
 import 'dart:convert';
+import 'dart:html';
+import 'dart:typed_data';
 import '../interop/component.dart';
 import 'package:flutter/material.dart';
 import '../consts.dart';
@@ -272,8 +274,10 @@ class _AdminPageState extends State<AdminPage> {
     final list = <Expanded>[],
       weightedColumn = _dbTable.weightedColumns.entries.iterator,
       nullables = _dbTable.nullablesMask.iterator;
+
     for (final value in placeable.values) {
       if (!weightedColumn.moveNext() || !nullables.moveNext()) throw Exception();
+
       list.add(Expanded(
         flex: (weightedColumn.current.value * 100).floor(),
         child: Column(
@@ -302,6 +306,47 @@ class _AdminPageState extends State<AdminPage> {
       ));
     }
     return list;
+  }
+
+  void _uploadImage() async {
+    final uploadInput = FileUploadInputElement();
+    uploadInput.onChange.listen((event) {
+      final files = uploadInput.files;
+
+      if (files == null || files.length != 1) {
+        if (mounted) showSnackBar(context, operationFailed);
+        return;
+      }
+
+      final reader = FileReader();
+      reader.onLoadEnd.listen((event) {
+
+        final result = reader.result as Uint8List?;
+        if (result == null) {
+          if (mounted) showSnackBar(context, operationFailed);
+          return;
+        }
+
+        http.post(
+          '$baseUrl/file'.uri,
+          headers: {"Content-Type": "application/x-www-form-urlencoded"},
+          body: result
+        ).then((response) {
+          if (mounted) showSnackBar(
+            context,
+            response.statusCode == 200 ? operationSucceeded : operationFailed
+          );
+        });
+      });
+
+      reader.onError.listen((_) { if (mounted) showSnackBar(context, operationFailed); });
+      reader.readAsArrayBuffer(files[0]);
+    });
+    uploadInput.click();
+  }
+
+  void _deleteImage() async {
+
   }
 
   Widget _makeItem(int index) => Material(child: ListTile(
@@ -357,7 +402,16 @@ class _AdminPageState extends State<AdminPage> {
           separatorBuilder: (_, __) => const Divider(height: 1),
           itemCount: _items.length
         ),
-      footerWidgets: defaultFooter
+      footerWidgets: [
+        TextButton(
+          onPressed: _uploadImage,
+          child: const Text(uploadImage)
+        ),
+        TextButton(
+          onPressed: _deleteImage,
+          child: const Text(deleteImage)
+        )
+      ]
     ),
     bottomNavigationBar: const BasicBottomBar(),
   );
