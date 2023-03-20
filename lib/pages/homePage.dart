@@ -384,6 +384,11 @@ class _HomePageState extends State<HomePage> {
   );
 
   void _clearOrders() async {
+    if (!_authorizedAsUser) {
+      showSnackBar(context, unauthorizedAsUser);
+      return;
+    }
+
     final result = (await http.delete('$baseUrl/history'.uri)).statusCode == 200;
     if (mounted) {
       showSnackBar(context, result ? operationSucceeded : operationFailed);

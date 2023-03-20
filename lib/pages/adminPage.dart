@@ -308,7 +308,13 @@ class _AdminPageState extends State<AdminPage> {
     return list;
   }
 
-  void _uploadFile() {
+  void _uploadFile() async {
+    await _checkAuthorization();
+    if (!_authorized) {
+      if (mounted) showSnackBar(context, unauthorizedAsAdmin);
+      return;
+    }
+
     final controller = TextEditingController();
     _askFilename(controller, upload, (filename) => _doUploadFile(filename));
   }
@@ -402,7 +408,13 @@ class _AdminPageState extends State<AdminPage> {
     uploadInput.click();
   }
 
-  void _deleteFile() {
+  void _deleteFile() async {
+    await _checkAuthorization();
+    if (!_authorized) {
+      if (mounted) showSnackBar(context, unauthorizedAsAdmin);
+      return;
+    }
+
     final controller = TextEditingController();
     _askFilename(controller, delete, (filename) => _doDeleteFile(filename));
   }
@@ -410,8 +422,64 @@ class _AdminPageState extends State<AdminPage> {
   void _doDeleteFile(String filename) async {
     final result = await http.delete('$baseUrl/file/$filename'.uri)
       .then((response) => response.statusCode == 200);
-    if (mounted) showSnackBar(context, result ? operationSucceeded : operationFailed); // TODO: add file viewer
+    if (mounted) showSnackBar(context, result ? operationSucceeded : operationFailed);
   }
+
+  void _viewFiles() async {
+    await _checkAuthorization();
+    if (!_authorized) {
+      if (mounted) showSnackBar(context, unauthorizedAsAdmin);
+      return;
+    }
+
+    final response = await http.get('$baseUrl/file'.uri);
+    if (response.statusCode != 200) {
+      if (mounted) showSnackBar(context, operationFailed);
+      return;
+    }
+
+    List<Widget> files = [];
+    for (final file in response.body.split(':'))
+      files.add(Text(
+        file,
+        style: const TextStyle(color: Colors.white70),
+      ));
+
+    _doViewFiles(files);
+  }
+
+  void _doViewFiles(List<Widget> files) => showModalBottomSheet(
+    constraints: const BoxConstraints(maxWidth: 600),
+    context: context,
+    builder: (context) => Container(
+      decoration: const BoxDecoration(
+        color: Colors.black,
+        boxShadow: [BoxShadow(
+          color: darkSecondaryColor,
+          spreadRadius: 1,
+          offset: Offset(0, 0)
+        )]
+      ),
+      child: Column(children: [
+        const Padding(
+          padding: EdgeInsets.only(
+            left: 5,
+            top: 5,
+            right: 5
+          ),
+          child: Text(
+            filesOnServer,
+            style: TextStyle(fontSize: 20),
+          )
+        ),
+        Expanded(child: ListView.separated(
+          itemBuilder: (_, index) => files[index],
+          separatorBuilder: (_, index) => const Divider(height: 1),
+          itemCount: files.length
+        ))
+      ])
+    )
+  );
 
   Widget _makeItem(int index) => Material(child: ListTile(
     onTap: () => _showItemDetails(
@@ -476,7 +544,7 @@ class _AdminPageState extends State<AdminPage> {
           child: const Text(deleteFile)
         ),
         TextButton(
-          onPressed: null,
+          onPressed: _viewFiles,
           child: const Text(viewFiles)
         ),
       ]
