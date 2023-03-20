@@ -343,7 +343,10 @@ class _AdminPageState extends State<AdminPage> {
               )
             ),
             TextButton(
-              onPressed: () => action(controller.text),
+              onPressed: () {
+                _navigator.pop();
+                action(controller.text);
+              },
               child: Text( // TODO: extract template
                 actionName,
                 style: const TextStyle(fontSize: 18),
