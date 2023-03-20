@@ -132,6 +132,8 @@ class _AdminPageState extends State<AdminPage> {
       }
     );
 
+    if (!mounted) return;
+
     showModalBottomSheet(
       constraints: const BoxConstraints(maxWidth: 520),
       context: context,

@@ -277,30 +277,28 @@ class _HomePageState extends State<HomePage> {
         if (fetched.statusCode != 200 || fetched.body == nullString) continue;
 
         final component = Component.fromJson(jsonDecode(fetched.body));
-        selections.add(SingleChildScrollView(
-          scrollDirection: Axis.horizontal,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                component.title,
-                style: const TextStyle(color: Colors.white70),
-              ),
-              Text(
-                component.type.title,
-                style: const TextStyle(color: Colors.white70),
-              ),
-              Text(
-                component.cost.toString(),
-                style: const TextStyle(color: Colors.white70),
-              ),
-              loadImage(
-                component.image!,
-                width: 50,
-                height: 50
-              )
-            ]
-          )
+        selections.add(Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              component.title,
+              style: const TextStyle(color: Colors.white70),
+              overflow: TextOverflow.ellipsis,
+            ),
+            Text(
+              component.type.title,
+              style: const TextStyle(color: Colors.white70),
+            ),
+            Text(
+              component.cost.toString(),
+              style: const TextStyle(color: Colors.white70),
+            ),
+            loadImage(
+              component.image!,
+              width: 50,
+              height: 50
+            )
+          ]
         ));
       }
     }
@@ -324,9 +322,16 @@ class _HomePageState extends State<HomePage> {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            const Text(
-              orderHistory,
-              style: TextStyle(fontSize: 20),
+            const Padding(
+              padding: EdgeInsets.only(
+                left: 5,
+                top: 5,
+                right: 5
+              ),
+              child: Text(
+                orderHistory,
+                style: TextStyle(fontSize: 20),
+              )
             ),
             TextButton(
               onPressed: () {}, // TODO 
