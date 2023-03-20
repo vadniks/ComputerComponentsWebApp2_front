@@ -357,7 +357,7 @@ class _HomePageState extends State<HomePage> {
               )
             ),
             TextButton(
-              onPressed: () {}, // TODO 
+              onPressed: () => http.delete('$baseUrl/history'.uri),
               child: const Text(
                 clear,
                 style: TextStyle(fontSize: 18),
