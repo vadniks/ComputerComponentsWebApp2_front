@@ -338,7 +338,7 @@ class _AdminPageState extends State<AdminPage> {
                 right: 5
               ),
               child: Text(
-                orderHistory,
+                fileName,
                 style: TextStyle(fontSize: 20),
               )
             ),
