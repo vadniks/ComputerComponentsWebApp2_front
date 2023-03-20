@@ -9,6 +9,7 @@ class BasicWindow extends Padding {
   final bool showLoading;
   final bool expandContent;
   final double width;
+  final MainAxisAlignment footerWidgetsAlignment;
 
   const BasicWindow({
     super.key,
@@ -18,7 +19,8 @@ class BasicWindow extends Padding {
     super.padding = const EdgeInsets.all(50),
     this.showLoading = false,
     this.expandContent = true,
-    this.width = -1
+    this.width = -1,
+    this.footerWidgetsAlignment = MainAxisAlignment.end
   });
 
   @override
@@ -54,7 +56,7 @@ class BasicWindow extends Padding {
           ColoredBox(
             color: darkSecondaryColor,
             child: Row(
-              mainAxisAlignment: MainAxisAlignment.end,
+              mainAxisAlignment: footerWidgetsAlignment,
               children: footerWidgets
             )
           )

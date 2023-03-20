@@ -23,9 +23,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   var _selected = List<Component?>.filled(Type.amount, null, growable: false);
-  final _submitControllers = List.generate(
-    4, (_) => TextEditingController(), growable: false
-  );
+  final _submitControllers = List.generate(4, (_) => TextEditingController(), growable: false);
   var _totalCost = 0, _authorizedAsUser = false, _authorizedAsAdmin = false;
   String? _userName;
 
@@ -261,6 +259,10 @@ class _HomePageState extends State<HomePage> {
     http.post('$baseUrl/clearSelected'.uri);
   }
 
+  void _showOrders() {
+
+  }
+
   @override
   Widget build(BuildContext context) => Scaffold(
     appBar: BasicAppBar(trailings: [
@@ -309,19 +311,26 @@ class _HomePageState extends State<HomePage> {
         color: Colors.white10
       ).toList()),
       footerWidgets: [
-        Text(
-          '$totalCost$_totalCost\$',
-          style: const TextStyle(fontSize: 16),
-        ),
         TextButton(
-          onPressed: _clearSelection,
-          child: const Text(clearSelection)
+          onPressed: _showOrders,
+          child: const Text(orders)
         ),
-        TextButton(
-          onPressed: _onSubmitClick,
-          child: const Text(submitOrder)
-        )
+        Row(children: [
+          Text(
+            '$totalCost$_totalCost\$',
+            style: const TextStyle(fontSize: 16),
+          ),
+          TextButton(
+            onPressed: _clearSelection,
+            child: const Text(clearSelection)
+          ),
+          TextButton(
+            onPressed: _onSubmitClick,
+            child: const Text(submitOrder)
+          )
+        ])
       ],
+      footerWidgetsAlignment: MainAxisAlignment.spaceBetween,
     ),
     bottomNavigationBar: const BasicBottomBar()
   );

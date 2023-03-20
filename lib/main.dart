@@ -23,18 +23,12 @@ class App extends StatelessWidget {
     themeMode: ThemeMode.dark,
     theme: ThemeData.dark(useMaterial3: true).copyWith(
       primaryColor: Colors.cyan,
-      backgroundColor: Colors.black,
       scaffoldBackgroundColor: Colors.black,
       canvasColor: Colors.black,
       dialogBackgroundColor: darkSecondaryColor,
       snackBarTheme: const SnackBarThemeData(backgroundColor: darkSecondaryColor),
       listTileTheme: const ListTileThemeData(tileColor: Colors.transparent),
       cardColor: Colors.black,
-      colorScheme: const ColorScheme.dark(
-        primary: Colors.cyan,
-        surface: darkSecondaryColor,
-        onSecondary: darkSecondaryColor
-      ),
       appBarTheme: const AppBarTheme(
         backgroundColor: darkSecondaryColor,
         systemOverlayStyle: SystemUiOverlayStyle(
@@ -44,7 +38,12 @@ class App extends StatelessWidget {
           systemNavigationBarColor: Colors.black,
           systemNavigationBarIconBrightness: Brightness.light,
         )
-      )
+      ),
+      colorScheme: const ColorScheme.dark(
+        primary: Colors.cyan,
+        surface: darkSecondaryColor,
+        onSecondary: darkSecondaryColor
+      ).copyWith(background: Colors.black)
     ),
     home: const HomePage(),
     initialRoute: routeHome,
