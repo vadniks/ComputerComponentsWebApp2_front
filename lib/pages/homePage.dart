@@ -270,7 +270,6 @@ class _HomePageState extends State<HomePage> {
 
     final List<Widget> selections = [];
     for (final selection in result.body.split(':')) {
-      final components = <Row>[];
 
       for (final id in selection.split(',')) {
         if (id == nullString) continue;
@@ -278,16 +277,28 @@ class _HomePageState extends State<HomePage> {
         if (fetched.statusCode != 200 || fetched.body == nullString) continue;
 
         final component = Component.fromJson(jsonDecode(fetched.body));
-        components.add(Row(children: [
-          Text(component.title),
-          Text(component.type.title),
-          Text(component.cost.toString()),
-          loadImage(
-            component.image!,
-            width: 50,
-            height: 50
-          )
-        ]));
+        selections.add(Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              component.title,
+              style: const TextStyle(color: Colors.white70),
+            ),
+            Text(
+              component.type.title,
+              style: const TextStyle(color: Colors.white70),
+            ),
+            Text(
+              component.cost.toString(),
+              style: const TextStyle(color: Colors.white70),
+            ),
+            loadImage(
+              component.image!,
+              width: 50,
+              height: 50
+            )
+          ]
+        ));
       }
     }
 
@@ -306,11 +317,26 @@ class _HomePageState extends State<HomePage> {
           offset: Offset(0, 0)
         )]
       ),
-      child: ListView.separated(
-        itemBuilder: (_, index) => selections[index],
-        separatorBuilder: (_, index) => const Divider(height: 2),
-        itemCount: selections.length
-      )
+      child: Column(children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            const Text(orderHistory),
+            TextButton(
+              onPressed: () {}, // TODO 
+              child: const Text(clear)
+            )
+          ],
+        ),
+        ListView.separated(
+          itemBuilder: (_, index) => selections[index],
+          separatorBuilder: (_, index) => const Divider(
+            height: 1,
+            color: darkSecondaryColor,
+          ),
+          itemCount: selections.length
+        )
+      ])
     )
   );
 
