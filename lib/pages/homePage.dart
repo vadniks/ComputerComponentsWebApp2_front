@@ -273,8 +273,9 @@ class _HomePageState extends State<HomePage> {
       final components = <Row>[];
 
       for (final id in selection.split(',')) {
+        if (id == nullString) continue;
         final fetched = await http.get('$baseUrl/component/$id'.uri);
-        if (fetched.statusCode != 200) continue;
+        if (fetched.statusCode != 200 || fetched.body == nullString) continue;
 
         final component = Component.fromJson(jsonDecode(fetched.body));
         components.add(Row(children: [
