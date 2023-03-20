@@ -379,8 +379,11 @@ class _HomePageState extends State<HomePage> {
   );
 
   void _clearOrders() async {
-    await http.delete('$baseUrl/history'.uri);
-    if (mounted) _navigator.pop();
+    final result = (await http.delete('$baseUrl/history'.uri)).statusCode == 200;
+    if (mounted) {
+      showSnackBar(context, result ? operationSucceeded : operationFailed);
+      _navigator.pop();
+    }
   }
 
   @override
