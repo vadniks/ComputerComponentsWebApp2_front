@@ -326,7 +326,10 @@ class _HomePageState extends State<HomePage> {
     }
 
     setState(() => _isFetchingOrders = false);
-    _doShowOrders(selections);
+    if (selections.length == 2 && mounted)
+      showSnackBar(context, ordersHistoryEmpty);
+    else
+      _doShowOrders(selections);
   }
 
   void _doShowOrders(List<Widget> selections) => showModalBottomSheet(
@@ -357,7 +360,7 @@ class _HomePageState extends State<HomePage> {
               )
             ),
             TextButton(
-              onPressed: () => http.delete('$baseUrl/history'.uri),
+              onPressed: _clearOrders,
               child: const Text(
                 clear,
                 style: TextStyle(fontSize: 18),
@@ -374,6 +377,11 @@ class _HomePageState extends State<HomePage> {
       ])
     )
   );
+
+  void _clearOrders() async {
+    await http.delete('$baseUrl/history'.uri);
+    if (mounted) _navigator.pop();
+  }
 
   @override
   Widget build(BuildContext context) => Scaffold(
