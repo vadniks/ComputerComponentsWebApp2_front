@@ -310,10 +310,12 @@ class _AdminPageState extends State<AdminPage> {
 
   void _uploadImage() {
     final controller = TextEditingController();
-    _askFilename(controller, (filename) => _doUploadImage(filename));
+    _askFilename(controller, upload, (filename) => _doUploadImage(filename));
   }
 
-  void _askFilename(TextEditingController controller, void Function(String) action) => showModalBottomSheet(
+  void _askFilename(
+    TextEditingController controller, String actionName, void Function(String) action
+  ) => showModalBottomSheet(
     constraints: const BoxConstraints(maxWidth: 600), // TODO: extract constant
     context: context,
     builder: (context) => Container(
@@ -342,9 +344,9 @@ class _AdminPageState extends State<AdminPage> {
             ),
             TextButton(
               onPressed: () => action(controller.text),
-              child: const Text( // TODO: extract template
-                clear,
-                style: TextStyle(fontSize: 18),
+              child: Text( // TODO: extract template
+                actionName,
+                style: const TextStyle(fontSize: 18),
               )
             )
           ],
@@ -399,7 +401,7 @@ class _AdminPageState extends State<AdminPage> {
 
   void _deleteImage() {
     final controller = TextEditingController();
-    _askFilename(controller, (filename) => _doDeleteImage(filename));
+    _askFilename(controller, delete, (filename) => _doDeleteImage(filename));
   }
 
   void _doDeleteImage(String filename) async {
