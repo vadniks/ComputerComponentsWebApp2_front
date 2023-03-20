@@ -280,23 +280,35 @@ class _HomePageState extends State<HomePage> {
         selections.add(Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text(
-              component.title,
-              style: const TextStyle(color: Colors.white70),
-              overflow: TextOverflow.ellipsis,
+            Expanded(
+              flex: 50,
+              child: Text(
+                component.title,
+                style: const TextStyle(color: Colors.white70),
+                overflow: TextOverflow.ellipsis,
+              )
             ),
-            Text(
-              component.type.title,
-              style: const TextStyle(color: Colors.white70),
+            Expanded(
+              flex: 25,
+              child: Text(
+                component.type.title,
+                style: const TextStyle(color: Colors.white70),
+              ),
             ),
-            Text(
-              component.cost.toString(),
-              style: const TextStyle(color: Colors.white70),
+            Expanded(
+              flex: 15,
+              child: Text(
+                '${component.cost}\$',
+                style: const TextStyle(color: Colors.white70),
+              ),
             ),
-            loadImage(
-              component.image!,
-              width: 50,
-              height: 50
+            Expanded(
+              flex: 10,
+              child: loadImage(
+                component.image!,
+                width: 50,
+                height: 50
+              ),
             )
           ]
         ));
