@@ -261,6 +261,11 @@ class _HomePageState extends State<HomePage> {
   }
 
   void _loadOrders() async {
+    if (!_authorizedAsUser) {
+      showSnackBar(context, unauthorizedAsUser);
+      return;
+    }
+
     setState(() => _isFetchingOrders = true);
 
     final result = await http.get('$baseUrl/history'.uri);
