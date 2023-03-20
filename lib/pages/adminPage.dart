@@ -308,12 +308,12 @@ class _AdminPageState extends State<AdminPage> {
     return list;
   }
 
-  void _uploadImageProxy() {
+  void _uploadImage() {
     final controller = TextEditingController();
-    _uploadImage(controller);
+    _askFilename(controller, (filename) => _doUploadImage(filename));
   }
 
-  void _uploadImage(TextEditingController controller) => showModalBottomSheet(
+  void _askFilename(TextEditingController controller, void Function(String) action) => showModalBottomSheet(
     constraints: const BoxConstraints(maxWidth: 600), // TODO: extract constant
     context: context,
     builder: (context) => Container(
@@ -325,35 +325,33 @@ class _AdminPageState extends State<AdminPage> {
           offset: Offset(0, 0)
         )]
       ),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              const Padding( // TODO: extract template
-                padding: EdgeInsets.only(
-                  left: 5,
-                  top: 5,
-                  right: 5
-                ),
-                child: Text(
-                  orderHistory,
-                  style: TextStyle(fontSize: 20),
-                )
+      child: Column(children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            const Padding( // TODO: extract template
+              padding: EdgeInsets.only(
+                left: 5,
+                top: 5,
+                right: 5
               ),
-              TextButton(
-                onPressed: () => _doUploadImage(controller.text),
-                child: const Text( // TODO: extract template
-                  clear,
-                  style: TextStyle(fontSize: 18),
-                )
+              child: Text(
+                orderHistory,
+                style: TextStyle(fontSize: 20),
               )
-            ],
-          ),
-          makeTextField(controller: controller, hint: fileName)
-        ],
-      ),
+            ),
+            TextButton(
+              onPressed: () => action(controller.text),
+              child: const Text( // TODO: extract template
+                clear,
+                style: TextStyle(fontSize: 18),
+              )
+            )
+          ],
+        ),
+        const Divider(height: 1),
+        makeTextField(controller: controller, hint: fileName)
+      ]),
     )
   );
 
@@ -399,7 +397,12 @@ class _AdminPageState extends State<AdminPage> {
     uploadInput.click();
   }
 
-  void _deleteImage() async {
+  void _deleteImage() {
+    final controller = TextEditingController();
+    _askFilename(controller, (filename) => _doDeleteImage(filename));
+  }
+
+  void _doDeleteImage(String filename) async {
     final result = await http.delete('$baseUrl/file'.uri)
       .then((response) => response.statusCode == 200);
     if (mounted) showSnackBar(context, result ? operationSucceeded : operationFailed);
@@ -460,7 +463,7 @@ class _AdminPageState extends State<AdminPage> {
         ),
       footerWidgets: [
         TextButton(
-          onPressed: _uploadImageProxy,
+          onPressed: _uploadImage,
           child: const Text(uploadImage)
         ),
         TextButton(
