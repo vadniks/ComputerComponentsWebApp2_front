@@ -259,7 +259,7 @@ class _HomePageState extends State<HomePage> {
     http.post('$baseUrl/clearSelected'.uri);
   }
 
-  void _showOrders() async {
+  void _loadOrders() async {
     final result = await http.get('$baseUrl/history'.uri);
     if (!mounted) return;
 
@@ -284,7 +284,6 @@ class _HomePageState extends State<HomePage> {
               flex: 50,
               child: Text(
                 component.title,
-                style: const TextStyle(color: Colors.white70),
                 overflow: TextOverflow.ellipsis,
               )
             ),
@@ -345,6 +344,7 @@ class _HomePageState extends State<HomePage> {
                 style: TextStyle(fontSize: 20),
               )
             ),
+            const VerticalDivider(thickness: 1),
             TextButton(
               onPressed: () {}, // TODO 
               child: const Text(
@@ -413,7 +413,7 @@ class _HomePageState extends State<HomePage> {
       ).toList()),
       footerWidgets: [
         TextButton(
-          onPressed: _showOrders,
+          onPressed: _loadOrders,
           child: const Text(orders)
         ),
         Row(children: [
