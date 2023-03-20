@@ -308,9 +308,9 @@ class _AdminPageState extends State<AdminPage> {
     return list;
   }
 
-  void _uploadImage() {
+  void _uploadFile() {
     final controller = TextEditingController();
-    _askFilename(controller, upload, (filename) => _doUploadImage(filename));
+    _askFilename(controller, upload, (filename) => _doUploadFile(filename));
   }
 
   void _askFilename(
@@ -360,7 +360,7 @@ class _AdminPageState extends State<AdminPage> {
     )
   );
 
-  void _doUploadImage(String filename) {
+  void _doUploadFile(String filename) {
     if (filename.isEmpty) {
       showSnackBar(context, textEmpty);
       return;
@@ -402,15 +402,15 @@ class _AdminPageState extends State<AdminPage> {
     uploadInput.click();
   }
 
-  void _deleteImage() {
+  void _deleteFile() {
     final controller = TextEditingController();
-    _askFilename(controller, delete, (filename) => _doDeleteImage(filename));
+    _askFilename(controller, delete, (filename) => _doDeleteFile(filename));
   }
 
-  void _doDeleteImage(String filename) async {
+  void _doDeleteFile(String filename) async {
     final result = await http.delete('$baseUrl/file/$filename'.uri)
       .then((response) => response.statusCode == 200);
-    if (mounted) showSnackBar(context, result ? operationSucceeded : operationFailed);
+    if (mounted) showSnackBar(context, result ? operationSucceeded : operationFailed); // TODO: add file viewer
   }
 
   Widget _makeItem(int index) => Material(child: ListTile(
@@ -468,13 +468,17 @@ class _AdminPageState extends State<AdminPage> {
         ),
       footerWidgets: [
         TextButton(
-          onPressed: _uploadImage,
-          child: const Text(uploadImage)
+          onPressed: _uploadFile,
+          child: const Text(uploadFile)
         ),
         TextButton(
-          onPressed: _deleteImage,
-          child: const Text(deleteImage)
-        )
+          onPressed: _deleteFile,
+          child: const Text(deleteFile)
+        ),
+        TextButton(
+          onPressed: null,
+          child: const Text(viewFiles)
+        ),
       ]
     ),
     bottomNavigationBar: const BasicBottomBar(),
