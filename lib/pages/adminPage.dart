@@ -442,7 +442,10 @@ class _AdminPageState extends State<AdminPage> {
     for (final file in response.body.split(':'))
       files.add(Text(
         file,
-        style: const TextStyle(color: Colors.white70),
+        style: const TextStyle(
+          color: Colors.white70,
+          fontSize: 16
+        ),
       ));
 
     _doViewFiles(files);
@@ -472,6 +475,7 @@ class _AdminPageState extends State<AdminPage> {
             style: TextStyle(fontSize: 20),
           )
         ),
+        const Divider(height: 1),
         Expanded(child: ListView.separated(
           itemBuilder: (_, index) => files[index],
           separatorBuilder: (_, index) => const Divider(height: 1),
