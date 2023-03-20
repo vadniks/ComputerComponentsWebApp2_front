@@ -308,7 +308,51 @@ class _AdminPageState extends State<AdminPage> {
     return list;
   }
 
-  void _uploadImage() async {
+  void _uploadImage() => showModalBottomSheet(
+    constraints: const BoxConstraints(maxWidth: 600), // TODO: extract constant
+    context: context,
+    builder: (context) => Container(
+      decoration: const BoxDecoration( // TODO: extract as subroutine or as constant
+        color: Colors.black,
+        boxShadow: [BoxShadow(
+          color: darkSecondaryColor,
+          spreadRadius: 1,
+          offset: Offset(0, 0)
+        )]
+      ),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              const Padding( // TODO: extract template
+                padding: EdgeInsets.only(
+                  left: 5,
+                  top: 5,
+                  right: 5
+                ),
+                child: Text(
+                  orderHistory,
+                  style: TextStyle(fontSize: 20),
+                )
+              ),
+              TextButton(
+                onPressed: () => _doUploadImage(),
+                child: const Text( // TODO: extract template
+                  clear,
+                  style: TextStyle(fontSize: 18),
+                )
+              )
+            ],
+          ),
+          makeTextField(controller: controller, hint: hint)
+        ],
+      ),
+    )
+  );
+
+  void _doUploadImage(String filename) {
     final uploadInput = FileUploadInputElement();
     uploadInput.onChange.listen((event) {
       final files = uploadInput.files;
@@ -328,7 +372,7 @@ class _AdminPageState extends State<AdminPage> {
         }
 
         http.post(
-          '$baseUrl/file'.uri,
+          '$baseUrl/file/$filename'.uri,
           headers: {"Content-Type": "application/x-www-form-urlencoded"},
           body: result
         ).then((response) {
@@ -346,6 +390,7 @@ class _AdminPageState extends State<AdminPage> {
   }
 
   void _deleteImage() async {
+    final result = await http.delete('$baseUrl/file'.uri);
 
   }
 
